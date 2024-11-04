@@ -22,15 +22,12 @@ public class Entrada_Cardapio extends JFrame {
 		setSize(800, 600);
 		getContentPane().setLayout(null);
 		Centralizar();
-
-		getContentPane().setBackground(new Color(73, 71, 71));
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		
 		// Adiciona o painel com imagem de fundo
         PainelComFundo painel = new PainelComFundo();
         painel.setLayout(null); // Define o layout nulo para o painel
         setContentPane(painel);
-        
         BotaoEntrada(painel);
         Logo(painel);
 	}
@@ -100,6 +97,7 @@ public class Entrada_Cardapio extends JFrame {
                 b.setBackground(new Color(0, 0, 0)); 
             }
         });
+        
         
 		painel.add(b);
 	}
