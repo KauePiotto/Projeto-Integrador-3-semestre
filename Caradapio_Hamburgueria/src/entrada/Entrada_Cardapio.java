@@ -4,12 +4,15 @@ import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Font;
 import java.awt.Graphics;
+import java.awt.Graphics2D;
 import java.awt.Image;
+import java.awt.RenderingHints;
 import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.awt.geom.RoundRectangle2D;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JFrame;
@@ -23,16 +26,18 @@ public class Entrada_Cardapio extends JFrame {
 		setTitle("Entrada - Byell Hambúrgueria");
 		// Tamanho da Janela, primeiro largura depois Altura
 		setSize(800, 600);
+		setResizable(false);
 		getContentPane().setLayout(null);
 		Centralizar();
-		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-
+		
 		// Adiciona o painel com imagem de fundo
 		PainelComFundo painel = new PainelComFundo();
 		painel.setLayout(null); // Define o layout nulo para o painel
 		setContentPane(painel);
 		BotaoEntrada(painel);
 		Logo(painel);
+		
+		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 	}
 
 	public void Centralizar() {
@@ -77,8 +82,33 @@ public class Entrada_Cardapio extends JFrame {
 		painel.add(logoLabel);
 	}
 
+	class BotaoArredondado extends JButton {
+		private int raio;
+
+		public BotaoArredondado(String texto, int raio) {
+			super(texto);
+			this.raio = raio; // Define o raio das bordas arredondadas
+			setFocusPainted(false);
+			setContentAreaFilled(false);
+			setBorderPainted(false);
+		}
+
+		@Override
+		protected void paintComponent(Graphics g) {
+			Graphics2D g2 = (Graphics2D) g.create();
+			g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
+
+			// Desenha o fundo do botão com bordas arredondadas
+			g2.setColor(getBackground());
+			g2.fill(new RoundRectangle2D.Double(0, 0, getWidth(), getHeight(), raio, raio));
+
+			super.paintComponent(g);
+			g2.dispose();
+		}
+	}
+
 	public void BotaoEntrada(JPanel painel) {
-		JButton b = new JButton();
+		BotaoArredondado b = new BotaoArredondado("Ver Cardápio", 30);
 
 		b.setText("Ver Cardápio");
 		b.setForeground(Color.white);
@@ -100,8 +130,18 @@ public class Entrada_Cardapio extends JFrame {
 			}
 		});
 
-		// Adiciona um MouseListener para gerenciar o comportamento do botão
+		// Configurações do MouseListener para mudar a cor e o cursor
 		b.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mouseEntered(MouseEvent e) {
+				b.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR)); // Muda o cursor para ícone de mão
+			}
+
+			@Override
+			public void mouseExited(MouseEvent e) {
+				b.setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR)); // Restaura o cursor padrão
+			}
+
 			@Override
 			public void mousePressed(MouseEvent e) {
 				b.setBackground(new Color(0, 0, 0));
