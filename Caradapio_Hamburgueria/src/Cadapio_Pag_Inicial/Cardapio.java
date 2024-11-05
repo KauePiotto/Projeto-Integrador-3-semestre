@@ -23,6 +23,8 @@ import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
+import javax.swing.JPopupMenu;
+
 import LoginECadastrar.Cadastrar;
 import LoginECadastrar.Login;
 
@@ -37,17 +39,17 @@ public class Cardapio extends JFrame {
 		Logo();
 		BotaoLogin();
 		BotaoCadastrar();
-		FotoFundo();
-		CriarMenu();
 		CriarFiltros();
-
+		BotaoMenu();
+		FotoFundo();
+		
 		itemPainel = new JPanel();
 		itemPainel.setLayout(new FlowLayout(FlowLayout.CENTER));
-		itemPainel.setBounds(50, 150, 700, 300);
+		itemPainel.setBounds(50, 170, 700, 300);
 		add(itemPainel);
 
 		NavigationPanel navPanel = new NavigationPanel();
-		navPanel.setBounds(250, 490, 300, 40);
+		navPanel.setBounds(250, 515, 300, 40);
 		add(navPanel);
 
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -209,33 +211,7 @@ public class Cardapio extends JFrame {
 				btnCadastrar.setBackground(new Color(0, 0, 0));
 			}
 		});
-
 		add(btnCadastrar);
-	}
-
-	public void CriarMenu() {
-		JMenuBar menuBar = new JMenuBar();
-
-		// Menu "Cardapio"
-		JMenu contaMenu = new JMenu("Cardápio");
-		JMenuItem CadastroProduto = new JMenuItem("Cadastrar Produto");
-		JMenuItem AlteraProduto = new JMenuItem("Alterar Produto");
-		JMenuItem BuscarProduto = new JMenuItem("Buscar Produto");
-		JMenuItem ExcluirProduto = new JMenuItem("Excluir Produto");
-
-		contaMenu.add(CadastroProduto);
-		contaMenu.addSeparator();
-		contaMenu.add(AlteraProduto);
-		contaMenu.addSeparator();
-		contaMenu.add(BuscarProduto);
-		contaMenu.addSeparator();
-		contaMenu.add(ExcluirProduto);
-
-		// Adiciona os menus à barra de menu
-		menuBar.add(contaMenu);
-
-		// Define a barra de menu na janela
-		setJMenuBar(menuBar);
 	}
 
 	class NavigationPanel extends JPanel {
@@ -381,6 +357,41 @@ public class Cardapio extends JFrame {
 
 		itemPainel.revalidate();
 		itemPainel.repaint();
+	}
+
+	public void BotaoMenu() {
+		ImageIcon menuIcon = new ImageIcon(
+			    "C:\\Users\\Kaue\\Desktop\\Projeto-Integrador-3-semestre\\Fotos\\menu-hamburguer.png");
+			Image img = menuIcon.getImage().getScaledInstance(32, 32, Image.SCALE_SMOOTH);
+			menuIcon = new ImageIcon(img);
+
+			JButton btnMenu = new JButton(menuIcon);
+			btnMenu.setBounds(50, 50, 50, 25);
+			btnMenu.setBackground(new Color(255, 255, 255));
+			btnMenu.setBorderPainted(false);
+			btnMenu.setContentAreaFilled(false);
+			btnMenu.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+
+			JPopupMenu menuPopup = new JPopupMenu();
+
+		JMenuItem op1 = new JMenuItem("Cadastrar");
+		JMenuItem op2 = new JMenuItem("Alterar");
+		JMenuItem op3 = new JMenuItem("Buscar");
+		JMenuItem op4 = new JMenuItem("Excluir");
+
+		op1.addActionListener(e -> JOptionPane.showMessageDialog(this, "Opção 1 selecionada"));
+		op2.addActionListener(e -> JOptionPane.showMessageDialog(this, "Opção 2 selecionada"));
+		op3.addActionListener(e -> JOptionPane.showMessageDialog(this, "Opção 3 selecionada"));
+		op4.addActionListener(e -> JOptionPane.showMessageDialog(this, "Opção 3 selecionada"));
+
+		menuPopup.add(op1);
+		menuPopup.add(op2);
+		menuPopup.add(op3);
+		menuPopup.add(op4);
+
+		btnMenu.addActionListener(e -> menuPopup.show(btnMenu, 0, btnMenu.getHeight()));
+
+		add(btnMenu);
 	}
 
 	public static void main(String[] args) {
