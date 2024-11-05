@@ -34,6 +34,8 @@ public class Entrada_Cardapio extends JFrame {
 		PainelComFundo painel = new PainelComFundo();
 		painel.setLayout(null); // Define o layout nulo para o painel
 		setContentPane(painel);
+		
+		//Adiciona Botao
 		BotaoEntrada(painel);
 		Logo(painel);
 		
@@ -59,7 +61,7 @@ public class Entrada_Cardapio extends JFrame {
 
 		public PainelComFundo() {
 			// Carrega a imagem de fundo
-			imagemFundo = new ImageIcon("C:\\Users\\User\\Desktop\\Projeto-Integrador-3-semestre\\Fotos\\Fundo.png")
+			imagemFundo = new ImageIcon("C:\\Users\\Kaue\\Desktop\\Projeto-Integrador-3-semestre\\Fotos\\Fundo.png")
 					.getImage();
 		}
 
@@ -72,7 +74,7 @@ public class Entrada_Cardapio extends JFrame {
 	}
 
 	public void Logo(JPanel painel) {
-		ImageIcon logoIcon = new ImageIcon("C:\\Users\\User\\Desktop\\Projeto-Integrador-3-semestre\\Fotos\\Logo2.png");
+		ImageIcon logoIcon = new ImageIcon("C:\\Users\\Kaue\\Desktop\\Projeto-Integrador-3-semestre\\Fotos\\Logo2.png");
 
 		Image logoImage = logoIcon.getImage().getScaledInstance(500, 250, Image.SCALE_SMOOTH);
 		ImageIcon resizedLogoIcon = new ImageIcon(logoImage);

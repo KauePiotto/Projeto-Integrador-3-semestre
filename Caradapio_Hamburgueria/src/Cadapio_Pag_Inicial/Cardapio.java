@@ -17,7 +17,13 @@ import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
+import javax.swing.JMenu;
+import javax.swing.JMenuBar;
+import javax.swing.JMenuItem;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
+import LoginECadastrar.Cadastrar;
+import LoginECadastrar.Login;
 
 public class Cardapio extends JFrame {
 	public Cardapio() {
@@ -31,6 +37,7 @@ public class Cardapio extends JFrame {
 		BotaoLogin();
 		BotaoCadastrar();
 		FotoFundo();
+		CriarMenu();
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 	}
 
@@ -54,7 +61,8 @@ public class Cardapio extends JFrame {
 			@Override
 			protected void paintComponent(Graphics g) {
 				super.paintComponent(g);
-				ImageIcon imagemFundo = new ImageIcon("C:\\Users\\User\\\\Desktop\\Projeto-Integrador-3-semestre\\Fotos\\Fundo.png");
+				ImageIcon imagemFundo = new ImageIcon(
+						"C:\\Users\\Kaue\\Desktop\\Projeto-Integrador-3-semestre\\Fotos\\Fundo.png");
 				g.drawImage(imagemFundo.getImage(), 0, 0, getWidth(), getHeight(), this);
 			}
 		};
@@ -64,7 +72,7 @@ public class Cardapio extends JFrame {
 	}
 
 	public void Logo() {
-		ImageIcon logoIcon = new ImageIcon("C:\\Users\\User\\Desktop\\Projeto-Integrador-3-semestre\\Fotos\\Logo2.png");
+		ImageIcon logoIcon = new ImageIcon("C:\\Users\\Kaue\\Desktop\\Projeto-Integrador-3-semestre\\Fotos\\Logo2.png");
 
 		Image logoImage = logoIcon.getImage().getScaledInstance(500, 250, Image.SCALE_SMOOTH);
 		ImageIcon resizedLogoIcon = new ImageIcon(logoImage);
@@ -112,7 +120,8 @@ public class Cardapio extends JFrame {
 		btnLogin.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
-
+				Login login = new Login();
+				login.setVisible(true);
 				dispose();
 			}
 		});
@@ -158,7 +167,8 @@ public class Cardapio extends JFrame {
 		btnCadastrar.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
-
+				Cadastrar cadastrar = new Cadastrar();
+				cadastrar.setVisible(true);
 				dispose();
 			}
 		});
@@ -191,6 +201,41 @@ public class Cardapio extends JFrame {
 		add(btnCadastrar);
 	}
 
+	public void CriarMenu() {
+		JMenuBar menuBar = new JMenuBar();
+
+		// Menu "Cardapio"
+		JMenu contaMenu = new JMenu("Cardápio");
+		JMenuItem CadastroProduto = new JMenuItem("Cadastrar Produto");
+		JMenuItem AlteraProduto = new JMenuItem("Alterar Produto");
+		JMenuItem BuscarProduto = new JMenuItem("Buscar Produto");
+		JMenuItem ExcluirProduto = new JMenuItem("Excluir Produto");
+
+		contaMenu.add(CadastroProduto);
+		contaMenu.addSeparator();
+		contaMenu.add(AlteraProduto);
+		contaMenu.addSeparator();
+		contaMenu.add(BuscarProduto);
+		contaMenu.addSeparator();
+		contaMenu.add(ExcluirProduto);
+
+		// Menu "Ajuda"
+		JMenu ajudaMenu = new JMenu("Ajuda");
+		JMenuItem sobreItem = new JMenuItem("Sobre");
+
+		sobreItem.addActionListener(e -> JOptionPane.showMessageDialog(this, "Bem-vindo ao Byell Hambúrgueria!"));
+
+		ajudaMenu.add(sobreItem);
+
+		// Adiciona os menus à barra de menu
+		menuBar.add(contaMenu);
+		menuBar.add(ajudaMenu);
+
+		// Define a barra de menu na janela
+		setJMenuBar(menuBar);
+	}
+
+	
 	public static void main(String[] args) {
 		Cardapio cardapio = new Cardapio();
 		cardapio.setVisible(true);
