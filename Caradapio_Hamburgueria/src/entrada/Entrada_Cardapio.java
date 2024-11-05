@@ -6,6 +6,8 @@ import java.awt.Font;
 import java.awt.Graphics;
 import java.awt.Image;
 import java.awt.Toolkit;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import javax.swing.ImageIcon;
@@ -13,6 +15,7 @@ import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
+import Cadapio_Pag_Inicial.Cardapio;
 
 public class Entrada_Cardapio extends JFrame {
 
@@ -23,13 +26,13 @@ public class Entrada_Cardapio extends JFrame {
 		getContentPane().setLayout(null);
 		Centralizar();
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		
+
 		// Adiciona o painel com imagem de fundo
-        PainelComFundo painel = new PainelComFundo();
-        painel.setLayout(null); // Define o layout nulo para o painel
-        setContentPane(painel);
-        BotaoEntrada(painel);
-        Logo(painel);
+		PainelComFundo painel = new PainelComFundo();
+		painel.setLayout(null); // Define o layout nulo para o painel
+		setContentPane(painel);
+		BotaoEntrada(painel);
+		Logo(painel);
 	}
 
 	public void Centralizar() {
@@ -46,21 +49,22 @@ public class Entrada_Cardapio extends JFrame {
 	}
 
 	// Classe interna para o painel com fundo
-    class PainelComFundo extends JPanel {
-        private Image imagemFundo;
+	class PainelComFundo extends JPanel {
+		private Image imagemFundo;
 
-        public PainelComFundo() {
-            // Carrega a imagem de fundo
-            imagemFundo = new ImageIcon("C:\\Users\\Kaue\\Desktop\\Projeto-Integrador-3-semestre\\Fotos\\Fundo.png").getImage();
-        }
+		public PainelComFundo() {
+			// Carrega a imagem de fundo
+			imagemFundo = new ImageIcon("C:\\Users\\Kaue\\Desktop\\Projeto-Integrador-3-semestre\\Fotos\\Fundo.png")
+					.getImage();
+		}
 
-        @Override
-        protected void paintComponent(Graphics g) {
-            super.paintComponent(g);
-            // Desenha a imagem de fundo
-            g.drawImage(imagemFundo, 0, 0, getWidth(), getHeight(), this); 
-        }
-    }
+		@Override
+		protected void paintComponent(Graphics g) {
+			super.paintComponent(g);
+			// Desenha a imagem de fundo
+			g.drawImage(imagemFundo, 0, 0, getWidth(), getHeight(), this);
+		}
+	}
 
 	public void Logo(JPanel painel) {
 		ImageIcon logoIcon = new ImageIcon("C:\\Users\\Kaue\\Desktop\\Projeto-Integrador-3-semestre\\Fotos\\Logo2.png");
@@ -76,7 +80,7 @@ public class Entrada_Cardapio extends JFrame {
 	public void BotaoEntrada(JPanel painel) {
 		JButton b = new JButton();
 
-		b.setText("Entrar");
+		b.setText("Ver Cardápio");
 		b.setForeground(Color.white);
 		b.setFont(new Font("Arial", Font.BOLD, 16));
 		b.setBounds(280, 270, 250, 35);
@@ -84,21 +88,30 @@ public class Entrada_Cardapio extends JFrame {
 
 		b.setBorderPainted(false);
 		b.setFocusPainted(false);
-		
-		// Adiciona um MouseListener para gerenciar o comportamento do botão
-        b.addMouseListener(new MouseAdapter() {
-            @Override
-            public void mousePressed(MouseEvent e) {
-                b.setBackground(new Color(0, 0, 0)); 
-            }
 
-            @Override
-         public void mouseReleased(MouseEvent e) {
-                b.setBackground(new Color(0, 0, 0)); 
-            }
-        });
-        
-        
+		// Adiciona o ActionListener para abrir a tela Cardapio
+		b.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				Cardapio cardapio = new Cardapio();
+				cardapio.setVisible(true);
+
+				dispose();
+			}
+		});
+
+		// Adiciona um MouseListener para gerenciar o comportamento do botão
+		b.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mousePressed(MouseEvent e) {
+				b.setBackground(new Color(0, 0, 0));
+			}
+
+			@Override
+			public void mouseReleased(MouseEvent e) {
+				b.setBackground(new Color(0, 0, 0));
+			}
+		});
 		painel.add(b);
 	}
 
