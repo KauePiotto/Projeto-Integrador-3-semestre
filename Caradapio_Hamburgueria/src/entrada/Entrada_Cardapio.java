@@ -24,24 +24,22 @@ public class Entrada_Cardapio extends JFrame {
 
 	public Entrada_Cardapio() {
 		setTitle("Entrada - Byell Hambúrgueria");
-		// Tamanho da Janela, primeiro largura depois Altura
 		setSize(800, 600);
 		setResizable(false);
 		getContentPane().setLayout(null);
 		Centralizar();
-		
-		// Adiciona o painel com imagem de fundo
+
 		PainelComFundo painel = new PainelComFundo();
-		painel.setLayout(null); // Define o layout nulo para o painel
+		painel.setLayout(null);
 		setContentPane(painel);
-		
-		//Adiciona Botao
+
 		BotaoEntrada(painel);
 		Logo(painel);
-		
+
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 	}
 
+	// Metodo para centralizar o JFrame
 	public void Centralizar() {
 		Dimension screen = Toolkit.getDefaultToolkit().getScreenSize();
 		Dimension janela = getSize();
@@ -60,7 +58,6 @@ public class Entrada_Cardapio extends JFrame {
 		private Image imagemFundo;
 
 		public PainelComFundo() {
-			// Carrega a imagem de fundo
 			imagemFundo = new ImageIcon("C:\\Users\\Kaue\\Desktop\\Projeto-Integrador-3-semestre\\Fotos\\Fundo.png")
 					.getImage();
 		}
@@ -68,11 +65,11 @@ public class Entrada_Cardapio extends JFrame {
 		@Override
 		protected void paintComponent(Graphics g) {
 			super.paintComponent(g);
-			// Desenha a imagem de fundo
 			g.drawImage(imagemFundo, 0, 0, getWidth(), getHeight(), this);
 		}
 	}
 
+	// Metodo para colocar a Logo Arredondada no JFrame
 	public void Logo(JPanel painel) {
 		ImageIcon logoIcon = new ImageIcon("C:\\Users\\Kaue\\Desktop\\Projeto-Integrador-3-semestre\\Fotos\\Logo2.png");
 
@@ -84,12 +81,13 @@ public class Entrada_Cardapio extends JFrame {
 		painel.add(logoLabel);
 	}
 
+	// Classe interna para arredondar o Botao
 	class BotaoArredondado extends JButton {
 		private int raio;
 
 		public BotaoArredondado(String texto, int raio) {
 			super(texto);
-			this.raio = raio; // Define o raio das bordas arredondadas
+			this.raio = raio;
 			setFocusPainted(false);
 			setContentAreaFilled(false);
 			setBorderPainted(false);
@@ -99,8 +97,6 @@ public class Entrada_Cardapio extends JFrame {
 		protected void paintComponent(Graphics g) {
 			Graphics2D g2 = (Graphics2D) g.create();
 			g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
-
-			// Desenha o fundo do botão com bordas arredondadas
 			g2.setColor(getBackground());
 			g2.fill(new RoundRectangle2D.Double(0, 0, getWidth(), getHeight(), raio, raio));
 
@@ -109,6 +105,7 @@ public class Entrada_Cardapio extends JFrame {
 		}
 	}
 
+	// Metodo para adicionar o botao no JFrame
 	public void BotaoEntrada(JPanel painel) {
 		BotaoArredondado b = new BotaoArredondado("Ver Cardápio", 30);
 
@@ -121,13 +118,11 @@ public class Entrada_Cardapio extends JFrame {
 		b.setBorderPainted(false);
 		b.setFocusPainted(false);
 
-		// Adiciona o ActionListener para abrir a tela Cardapio
 		b.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				Cardapio cardapio = new Cardapio();
 				cardapio.setVisible(true);
-
 				dispose();
 			}
 		});
@@ -136,12 +131,12 @@ public class Entrada_Cardapio extends JFrame {
 		b.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseEntered(MouseEvent e) {
-				b.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR)); // Muda o cursor para ícone de mão
+				b.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
 			}
 
 			@Override
 			public void mouseExited(MouseEvent e) {
-				b.setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR)); // Restaura o cursor padrão
+				b.setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
 			}
 
 			@Override
