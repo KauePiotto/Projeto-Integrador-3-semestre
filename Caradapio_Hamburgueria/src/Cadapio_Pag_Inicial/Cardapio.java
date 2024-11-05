@@ -2,6 +2,7 @@ package Cadapio_Pag_Inicial;
 
 import java.awt.Color;
 import java.awt.Dimension;
+import java.awt.FlowLayout;
 import java.awt.Font;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
@@ -38,6 +39,17 @@ public class Cardapio extends JFrame {
 		BotaoCadastrar();
 		FotoFundo();
 		CriarMenu();
+		CriarFiltros();
+
+		itemPainel = new JPanel();
+		itemPainel.setLayout(new FlowLayout(FlowLayout.CENTER));
+		itemPainel.setBounds(50, 150, 700, 300);
+		add(itemPainel);
+
+		NavigationPanel navPanel = new NavigationPanel();
+		navPanel.setBounds(250, 490, 300, 40);
+		add(navPanel);
+
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 	}
 
@@ -219,23 +231,158 @@ public class Cardapio extends JFrame {
 		contaMenu.addSeparator();
 		contaMenu.add(ExcluirProduto);
 
-		// Menu "Ajuda"
-		JMenu ajudaMenu = new JMenu("Ajuda");
-		JMenuItem sobreItem = new JMenuItem("Sobre");
-
-		sobreItem.addActionListener(e -> JOptionPane.showMessageDialog(this, "Bem-vindo ao Byell Hambúrgueria!"));
-
-		ajudaMenu.add(sobreItem);
-
 		// Adiciona os menus à barra de menu
 		menuBar.add(contaMenu);
-		menuBar.add(ajudaMenu);
 
 		// Define a barra de menu na janela
 		setJMenuBar(menuBar);
 	}
 
-	
+	class NavigationPanel extends JPanel {
+		private Color backgorund = new Color(73, 71, 71);
+		private int BorderRadius = 30;
+
+		public NavigationPanel() {
+			setLayout(new FlowLayout());
+
+			// Cria o botão para voltar à página principal
+			JButton btnHome = createIconButton(
+					"C:\\Users\\Kaue\\Desktop\\Projeto-Integrador-3-semestre\\Fotos\\casa.png", "Página Principal");
+			btnHome.addActionListener(e -> {
+				// Lógica para voltar à página principal
+				JOptionPane.showMessageDialog(this, "Voltando à página principal...");
+			});
+
+			// Cria o botão para ir ao carrinho
+			JButton btnCart = createIconButton(
+					"C:\\Users\\Kaue\\Desktop\\Projeto-Integrador-3-semestre\\Fotos\\carrinho-de-compras.png",
+					"Carrinho");
+			btnCart.addActionListener(e -> {
+				// Lógica para ir ao carrinho
+				JOptionPane.showMessageDialog(this, "Abrindo o carrinho...");
+			});
+
+			// Cria o botão para mostrar a conta do usuário
+			JButton btnAccount = createIconButton(
+					"C:\\Users\\Kaue\\Desktop\\Projeto-Integrador-3-semestre\\Fotos\\perfil.png", "Conta");
+			btnAccount.addActionListener(e -> {
+				// Lógica para mostrar a conta do usuário
+				JOptionPane.showMessageDialog(this, "Mostrando informações da conta...");
+			});
+
+			// Adiciona os botões ao painel
+			add(btnHome);
+			add(btnCart);
+			add(btnAccount);
+		}
+
+		@Override
+		protected void paintComponent(Graphics g) {
+			super.paintComponent(g);
+
+			Graphics2D g2 = (Graphics2D) g.create();
+			g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
+			g2.setColor(backgorund);
+			g2.fill(new RoundRectangle2D.Double(0, 0, getWidth(), getHeight(), BorderRadius, BorderRadius));
+
+			g2.dispose();
+		}
+
+		// Método para mudar a cor de fundo, se necessário
+		public void setBackgroundColor(Color color) {
+			this.backgorund = color;
+			repaint();
+		}
+
+		// Método para alterar o raio do arredondamento, se necessário
+		public void setCornerRadius(int radius) {
+			this.BorderRadius = radius;
+			repaint();
+		}
+
+		// Método auxiliar para criar um botão com ícone
+		private JButton createIconButton(String iconPath, String tooltip) {
+			JButton button = new JButton();
+			ImageIcon icon = new ImageIcon(iconPath);
+
+			button.setToolTipText(tooltip);
+			button.setContentAreaFilled(false);
+			button.setBorderPainted(false);
+			button.setPreferredSize(new Dimension(90, 30));
+
+			// Redimensiona a imagem
+			Image img = icon.getImage().getScaledInstance(30, 30, Image.SCALE_SMOOTH);
+			button.setIcon(new ImageIcon(img));
+
+			return button;
+		}
+	}
+
+	private JPanel itemPainel;
+	private String[] lanches = { "Hamburguer", "Cheeseburguer", "Vegetariano" };
+	private String[] bebidas = { "Refrigerante", "Suco", "Água" };
+	private String[] porcoes = { "Batata Frita", "Batata Rústica" };
+
+	public void CriarFiltros() {
+		JButton btnAll = new JButton("Todos");
+		JButton btnLanches = new JButton("Lanches");
+		JButton btnBebidas = new JButton("Bebidas");
+		JButton btnPorcoes = new JButton("Porções");
+
+		// Definindo ação para cada botão
+		btnAll.addActionListener(e -> updateItems("all"));
+		btnLanches.addActionListener(e -> updateItems("lanches"));
+		btnBebidas.addActionListener(e -> updateItems("bebidas"));
+		btnPorcoes.addActionListener(e -> updateItems("porcoes"));
+
+		// Posicionamento e adição ao JFrame
+		btnLanches.setBounds(170, 115, 100, 30);
+		btnBebidas.setBounds(286, 115, 100, 30);
+		btnPorcoes.setBounds(400, 115, 100, 30);
+		btnAll.setBounds(510, 115, 100, 30);
+
+		add(btnAll);
+		add(btnLanches);
+		add(btnBebidas);
+		add(btnPorcoes);
+	}
+
+	private void updateItems(String filter) {
+		itemPainel.removeAll();
+
+		switch (filter) {
+		case "lanches":
+			for (String lanche : lanches) {
+				itemPainel.add(new JLabel(lanche));
+			}
+			break;
+		case "bebidas":
+			for (String bebida : bebidas) {
+				itemPainel.add(new JLabel(bebida));
+			}
+			break;
+		case "porcoes":
+			for (String porcao : porcoes) {
+				itemPainel.add(new JLabel(porcao));
+			}
+			break;
+		default:
+			for (String lanche : lanches) {
+				itemPainel.add(new JLabel(lanche));
+			}
+			for (String bebida : bebidas) {
+				itemPainel.add(new JLabel(bebida));
+			}
+			for (String porcao : porcoes) {
+				itemPainel.add(new JLabel(porcao));
+			}
+			break;
+		}
+
+		itemPainel.revalidate();
+		itemPainel.repaint();
+	}
+
 	public static void main(String[] args) {
 		Cardapio cardapio = new Cardapio();
 		cardapio.setVisible(true);
