@@ -54,8 +54,7 @@ public class Cardapio extends JFrame {
 			@Override
 			protected void paintComponent(Graphics g) {
 				super.paintComponent(g);
-				ImageIcon imagemFundo = new ImageIcon(
-						"C:\\Users\\Kaue\\Desktop\\Projeto-Integrador-3-semestre\\Fotos\\Fundo.png");
+				ImageIcon imagemFundo = new ImageIcon("C:\\Users\\User\\\\Desktop\\Projeto-Integrador-3-semestre\\Fotos\\Fundo.png");
 				g.drawImage(imagemFundo.getImage(), 0, 0, getWidth(), getHeight(), this);
 			}
 		};
@@ -65,7 +64,7 @@ public class Cardapio extends JFrame {
 	}
 
 	public void Logo() {
-		ImageIcon logoIcon = new ImageIcon("C:\\Users\\Kaue\\Desktop\\Projeto-Integrador-3-semestre\\Fotos\\Logo2.png");
+		ImageIcon logoIcon = new ImageIcon("C:\\Users\\User\\Desktop\\Projeto-Integrador-3-semestre\\Fotos\\Logo2.png");
 
 		Image logoImage = logoIcon.getImage().getScaledInstance(500, 250, Image.SCALE_SMOOTH);
 		ImageIcon resizedLogoIcon = new ImageIcon(logoImage);
