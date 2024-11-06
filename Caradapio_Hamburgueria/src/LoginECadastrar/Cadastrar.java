@@ -29,6 +29,10 @@ public class Cadastrar extends JFrame {
 		}
 		setLocation((screen.width - janela.width) / 2, (screen.height - janela.height) / 2);
 	}
+	
+	public void aa() {
+		
+	}
 
 	public static void main(String[] args) {
 		Cadastrar cadastrar = new Cadastrar();
