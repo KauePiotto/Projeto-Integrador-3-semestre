@@ -233,7 +233,8 @@ public class Cardapio extends JFrame {
 					"C:\\Users\\Kaue\\Desktop\\Projeto-Integrador-3-semestre\\Fotos\\casa2.png", "Página Principal");
 			btnHome.addActionListener(e -> {
 				// Lógica para voltar à página principal
-				JOptionPane.showMessageDialog(this, "Voltando à página principal...");
+				Cardapio cardapio = new Cardapio();
+				cardapio.setVisible(true);
 			});
 
 			// Cria o botão para ir ao carrinho
