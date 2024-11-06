@@ -54,7 +54,7 @@ public class Login extends JFrame {
 	}
 
 	public void Logo() {
-		ImageIcon logoIcon = new ImageIcon("C:\\Users\\User\\Desktop\\Projeto-Integrador-3-semestre\\Fotos\\Logo2.png");
+		ImageIcon logoIcon = new ImageIcon("C:\\Users\\Kaue\\Desktop\\Projeto-Integrador-3-semestre\\Fotos\\Logo2.png");
 
 		Image logoImage = logoIcon.getImage().getScaledInstance(500, 250, Image.SCALE_SMOOTH);
 		ImageIcon resizedLogoIcon = new ImageIcon(logoImage);
@@ -68,7 +68,7 @@ public class Login extends JFrame {
 		private Image imagemFundo;
 
 		public PainelComFundo() {
-			imagemFundo = new ImageIcon("C:\\Users\\User\\Desktop\\Projeto-Integrador-3-semestre\\Fotos\\Fundo.png")
+			imagemFundo = new ImageIcon("C:\\Users\\Kaue\\Desktop\\Projeto-Integrador-3-semestre\\Fotos\\Fundo.png")
 					.getImage();
 		}
 
