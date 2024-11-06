@@ -43,7 +43,7 @@ public class Cardapio extends JFrame {
 		BotaoCadastrar();
 		CriarFiltros();
 		BotaoMenu();
-		
+
 		FotoFundo();
 		itemPainel = new JPanel();
 		itemPainel.setLayout(new FlowLayout(FlowLayout.CENTER));
@@ -332,7 +332,7 @@ public class Cardapio extends JFrame {
 
 	private void updateItems(String filter) {
 		itemPainel.removeAll();
-
+		
 		switch (filter) {
 		case "lanches":
 			for (String lanche : lanches) {
