@@ -25,7 +25,6 @@ import javax.swing.JMenuItem;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JPopupMenu;
-
 import LoginECadastrar.Cadastrar;
 import LoginECadastrar.Login;
 
@@ -44,8 +43,8 @@ public class Cardapio extends JFrame {
 		BotaoCadastrar();
 		CriarFiltros();
 		BotaoMenu();
+		
 		FotoFundo();
-
 		itemPainel = new JPanel();
 		itemPainel.setLayout(new FlowLayout(FlowLayout.CENTER));
 		itemPainel.setBounds(50, 170, 700, 300);
@@ -77,7 +76,7 @@ public class Cardapio extends JFrame {
 	}
 
 	public void Logo() {
-		ImageIcon logoIcon = new ImageIcon("C:\\Users\\Kaue\\Desktop\\Projeto-Integrador-3-semestre\\Fotos\\Logo2.png");
+		ImageIcon logoIcon = new ImageIcon("C:\\Users\\User\\Desktop\\Projeto-Integrador-3-semestre\\Fotos\\Logo2.png");
 
 		Image logoImage = logoIcon.getImage().getScaledInstance(500, 250, Image.SCALE_SMOOTH);
 		ImageIcon resizedLogoIcon = new ImageIcon(logoImage);
@@ -95,7 +94,7 @@ public class Cardapio extends JFrame {
 			protected void paintComponent(Graphics g) {
 				super.paintComponent(g);
 				ImageIcon imagemFundo = new ImageIcon(
-						"C:\\Users\\Kaue\\Desktop\\Projeto-Integrador-3-semestre\\Fotos\\Fundo.png");
+						"C:\\Users\\User\\Desktop\\Projeto-Integrador-3-semestre\\Fotos\\Fundo.png");
 				g.drawImage(imagemFundo.getImage(), 0, 0, getWidth(), getHeight(), this);
 			}
 		};
@@ -231,7 +230,7 @@ public class Cardapio extends JFrame {
 
 			// Cria o botão para voltar à página principal
 			JButton btnHome = createIconButton(
-					"C:\\Users\\Kaue\\Desktop\\Projeto-Integrador-3-semestre\\Fotos\\casa2.png", "Página Principal");
+					"C:\\Users\\User\\Desktop\\Projeto-Integrador-3-semestre\\Fotos\\casa2.png", "Página Principal");
 			btnHome.addActionListener(e -> {
 				// Lógica para voltar à página principal
 				JOptionPane.showMessageDialog(this, "Voltando à página principal...");
@@ -239,7 +238,7 @@ public class Cardapio extends JFrame {
 
 			// Cria o botão para ir ao carrinho
 			JButton btnCart = createIconButton(
-					"C:\\Users\\Kaue\\Desktop\\Projeto-Integrador-3-semestre\\Fotos\\carrinho-de-compras2.png",
+					"C:\\Users\\User\\Desktop\\Projeto-Integrador-3-semestre\\Fotos\\carrinho-de-compras2.png",
 					"Carrinho");
 			btnCart.addActionListener(e -> {
 				// Lógica para ir ao carrinho
@@ -248,7 +247,7 @@ public class Cardapio extends JFrame {
 
 			// Cria o botão para mostrar a conta do usuário
 			JButton btnAccount = createIconButton(
-					"C:\\Users\\Kaue\\Desktop\\Projeto-Integrador-3-semestre\\Fotos\\perfil2.png", "Conta");
+					"C:\\Users\\User\\Desktop\\Projeto-Integrador-3-semestre\\Fotos\\perfil2.png", "Conta");
 			btnAccount.addActionListener(e -> {
 				// Lógica para mostrar a conta do usuário
 				JOptionPane.showMessageDialog(this, "Mostrando informações da conta...");
@@ -369,7 +368,7 @@ public class Cardapio extends JFrame {
 
 	public void BotaoMenu() {
 		ImageIcon menuIcon = new ImageIcon(
-				"C:\\Users\\Kaue\\Desktop\\Projeto-Integrador-3-semestre\\Fotos\\menu-hamburguer2.png");
+				"C:\\Users\\User\\Desktop\\Projeto-Integrador-3-semestre\\Fotos\\menu-hamburguer2.png");
 		Image img = menuIcon.getImage().getScaledInstance(32, 32, Image.SCALE_SMOOTH);
 		menuIcon = new ImageIcon(img);
 
