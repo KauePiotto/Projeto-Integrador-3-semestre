@@ -164,12 +164,12 @@ public class Cardapio extends JFrame {
 
 			@Override
 			public void mousePressed(MouseEvent e) {
-				btnLogin.setBackground(new Color(0, 0, 0));
+				btnLogin.setBackground(new Color(73, 71, 71));
 			}
 
 			@Override
 			public void mouseReleased(MouseEvent e) {
-				btnLogin.setBackground(new Color(0, 0, 0));
+				btnLogin.setBackground(new Color(73, 71, 71));
 			}
 		});
 
@@ -211,12 +211,12 @@ public class Cardapio extends JFrame {
 
 			@Override
 			public void mousePressed(MouseEvent e) {
-				btnCadastrar.setBackground(new Color(0, 0, 0));
+				btnCadastrar.setBackground(new Color(73, 71, 71));
 			}
 
 			@Override
 			public void mouseReleased(MouseEvent e) {
-				btnCadastrar.setBackground(new Color(0, 0, 0));
+				btnCadastrar.setBackground(new Color(73, 71, 71));
 			}
 		});
 		add(btnCadastrar);

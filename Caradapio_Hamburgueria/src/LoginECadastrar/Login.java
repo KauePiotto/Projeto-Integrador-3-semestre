@@ -35,6 +35,7 @@ public class Login extends JFrame {
 		setContentPane(painel);
 
 		Logo();
+		BotaoVoltar();
 		CampoLogin();
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 	}
@@ -152,6 +153,30 @@ public class Login extends JFrame {
 					JOptionPane.showMessageDialog(null, "Email ou senha incorretos.", "Erro de Login",
 							JOptionPane.ERROR_MESSAGE);
 				}
+			}
+		});
+	}
+
+	public void BotaoVoltar() {
+		ImageIcon voltarIcon = new ImageIcon(
+				"C:\\Users\\Kaue\\Desktop\\Projeto-Integrador-3-semestre\\Fotos\\seta-pequena-esquerda2.png");
+		Image img = voltarIcon.getImage().getScaledInstance(35, 35, Image.SCALE_SMOOTH);
+		voltarIcon = new ImageIcon(img);
+
+		JButton voltarButton = new JButton(voltarIcon);
+		voltarButton.setBounds(35, 20, 30, 30); 
+		voltarButton.setBorderPainted(false);
+		voltarButton.setFocusPainted(false);
+		voltarButton.setContentAreaFilled(false);
+
+		add(voltarButton);
+
+		voltarButton.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				Cardapio cardapio = new Cardapio();
+				cardapio.setVisible(true);
+				dispose();
 			}
 		});
 	}
