@@ -27,6 +27,7 @@ import javax.swing.JPanel;
 import javax.swing.JPopupMenu;
 import LoginECadastrar.Cadastrar;
 import LoginECadastrar.Login;
+import HubDeBaixo.*;
 
 public class Cardapio extends JFrame {
 	private JButton loginButton;
@@ -235,6 +236,7 @@ public class Cardapio extends JFrame {
 				// Lógica para voltar à página principal
 				Cardapio cardapio = new Cardapio();
 				cardapio.setVisible(true);
+				dispose();
 			});
 
 			// Cria o botão para ir ao carrinho
@@ -242,8 +244,9 @@ public class Cardapio extends JFrame {
 					"C:\\Users\\Kaue\\Desktop\\Projeto-Integrador-3-semestre\\Fotos\\carrinho-de-compras2.png",
 					"Carrinho");
 			btnCart.addActionListener(e -> {
-				// Lógica para ir ao carrinho
-				JOptionPane.showMessageDialog(this, "Abrindo o carrinho...");
+				Carrinho carrinho = new Carrinho();
+				carrinho.setVisible(true);
+				dispose();
 			});
 
 			// Cria o botão para mostrar a conta do usuário
@@ -251,7 +254,9 @@ public class Cardapio extends JFrame {
 					"C:\\Users\\Kaue\\Desktop\\Projeto-Integrador-3-semestre\\Fotos\\perfil2.png", "Conta");
 			btnAccount.addActionListener(e -> {
 				// Lógica para mostrar a conta do usuário
-				JOptionPane.showMessageDialog(this, "Mostrando informações da conta...");
+				Perfil perfil = new Perfil();
+				perfil.setVisible(true);
+				dispose();
 			});
 
 			// Adiciona os botões ao painel
@@ -333,7 +338,7 @@ public class Cardapio extends JFrame {
 
 	private void updateItems(String filter) {
 		itemPainel.removeAll();
-		
+
 		switch (filter) {
 		case "lanches":
 			for (String lanche : lanches) {

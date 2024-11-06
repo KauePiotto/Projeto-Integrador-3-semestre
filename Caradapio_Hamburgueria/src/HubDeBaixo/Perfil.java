@@ -1,6 +1,8 @@
 package HubDeBaixo;
 
-public class Perfil {
+import javax.swing.JFrame;
+
+public class Perfil extends JFrame {
 	public Perfil() {
 
 	}
