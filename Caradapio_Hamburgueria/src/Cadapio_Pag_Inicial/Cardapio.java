@@ -16,6 +16,7 @@ import java.awt.event.MouseEvent;
 import java.awt.geom.RoundRectangle2D;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
+import javax.swing.JComponent;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JMenu;
@@ -29,12 +30,14 @@ import LoginECadastrar.Cadastrar;
 import LoginECadastrar.Login;
 
 public class Cardapio extends JFrame {
+	private JButton loginButton;
+	private JButton cadastrarButton;
+
 	public Cardapio() {
 		setTitle("Cardápio - Byell Hambúrgueria");
-		// Tamanho da Janela, primeiro largura depois Altura
-		setSize(800, 600);
 		setResizable(false);
 		getContentPane().setLayout(null);
+		setSize(800, 600);
 		Centralizar();
 		Logo();
 		BotaoLogin();
@@ -42,7 +45,7 @@ public class Cardapio extends JFrame {
 		CriarFiltros();
 		BotaoMenu();
 		FotoFundo();
-		
+
 		itemPainel = new JPanel();
 		itemPainel.setLayout(new FlowLayout(FlowLayout.CENTER));
 		itemPainel.setBounds(50, 170, 700, 300);
@@ -53,6 +56,11 @@ public class Cardapio extends JFrame {
 		add(navPanel);
 
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+	}
+
+	public void ocultarBotoesLoginECadastrar() {
+		loginButton.setVisible(false);
+		cadastrarButton.setVisible(false);
 	}
 
 	public void Centralizar() {
@@ -66,6 +74,17 @@ public class Cardapio extends JFrame {
 			setSize(screen.width, janela.height);
 		}
 		setLocation((screen.width - janela.width) / 2, (screen.height - janela.height) / 2);
+	}
+
+	public void Logo() {
+		ImageIcon logoIcon = new ImageIcon("C:\\Users\\Kaue\\Desktop\\Projeto-Integrador-3-semestre\\Fotos\\Logo2.png");
+
+		Image logoImage = logoIcon.getImage().getScaledInstance(500, 250, Image.SCALE_SMOOTH);
+		ImageIcon resizedLogoIcon = new ImageIcon(logoImage);
+		JLabel logoLabel = new JLabel(resizedLogoIcon);
+		logoLabel.setBounds(305, 3, 200, 100);
+
+		add(logoLabel);
 	}
 
 	public void FotoFundo() {
@@ -83,17 +102,6 @@ public class Cardapio extends JFrame {
 		painel.setBounds(0, 0, 800, 105);
 
 		add(painel);
-	}
-
-	public void Logo() {
-		ImageIcon logoIcon = new ImageIcon("C:\\Users\\Kaue\\Desktop\\Projeto-Integrador-3-semestre\\Fotos\\Logo2.png");
-
-		Image logoImage = logoIcon.getImage().getScaledInstance(500, 250, Image.SCALE_SMOOTH);
-		ImageIcon resizedLogoIcon = new ImageIcon(logoImage);
-		JLabel logoLabel = new JLabel(resizedLogoIcon);
-		logoLabel.setBounds(305, 3, 200, 100);
-
-		add(logoLabel);
 	}
 
 	class BotaoArredondado extends JButton {
@@ -361,18 +369,18 @@ public class Cardapio extends JFrame {
 
 	public void BotaoMenu() {
 		ImageIcon menuIcon = new ImageIcon(
-			    "C:\\Users\\Kaue\\Desktop\\Projeto-Integrador-3-semestre\\Fotos\\menu-hamburguer2.png");
-			Image img = menuIcon.getImage().getScaledInstance(32, 32, Image.SCALE_SMOOTH);
-			menuIcon = new ImageIcon(img);
+				"C:\\Users\\Kaue\\Desktop\\Projeto-Integrador-3-semestre\\Fotos\\menu-hamburguer2.png");
+		Image img = menuIcon.getImage().getScaledInstance(32, 32, Image.SCALE_SMOOTH);
+		menuIcon = new ImageIcon(img);
 
-			JButton btnMenu = new JButton(menuIcon);
-			btnMenu.setBounds(50, 50, 50, 25);
-			btnMenu.setBackground(new Color(255, 255, 255));
-			btnMenu.setBorderPainted(false);
-			btnMenu.setContentAreaFilled(false);
-			btnMenu.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+		JButton btnMenu = new JButton(menuIcon);
+		btnMenu.setBounds(50, 50, 50, 25);
+		btnMenu.setBackground(new Color(255, 255, 255));
+		btnMenu.setBorderPainted(false);
+		btnMenu.setContentAreaFilled(false);
+		btnMenu.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
 
-			JPopupMenu menuPopup = new JPopupMenu();
+		JPopupMenu menuPopup = new JPopupMenu();
 
 		JMenuItem op1 = new JMenuItem("Cadastrar Produto");
 		JMenuItem op2 = new JMenuItem("Alterar Produto");
