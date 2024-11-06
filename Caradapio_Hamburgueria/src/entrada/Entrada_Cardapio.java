@@ -110,7 +110,7 @@ public class Entrada_Cardapio extends JFrame {
 		BotaoArredondado b = new BotaoArredondado("Ver Cardápio", 30);
 
 		b.setText("Ver Cardápio");
-		b.setForeground(Color.white);
+		b.setForeground(Color.decode("#ffd96d"));
 		b.setFont(new Font("Arial", Font.BOLD, 16));
 		b.setBounds(280, 270, 250, 35);
 		b.setBackground(new Color(0, 0, 0));

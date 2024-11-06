@@ -125,7 +125,7 @@ public class Cardapio extends JFrame {
 		BotaoArredondado btnLogin = new BotaoArredondado("Login", 30);
 
 		btnLogin.setText("Login");
-		btnLogin.setForeground(Color.WHITE);
+		btnLogin.setForeground(Color.decode("#ffd96d"));
 		btnLogin.setFont(new Font("Arial", Font.BOLD, 16));
 		btnLogin.setBounds(565, 75, 100, 25);
 		btnLogin.setBackground(new Color(73, 71, 71));
@@ -172,7 +172,7 @@ public class Cardapio extends JFrame {
 		BotaoArredondado btnCadastrar = new BotaoArredondado("Cadastrar", 30);
 
 		btnCadastrar.setText("Cadastrar");
-		btnCadastrar.setForeground(Color.white);
+		btnCadastrar.setForeground(Color.decode("#ffd96d"));
 		btnCadastrar.setFont(new Font("Arial", Font.BOLD, 16));
 		btnCadastrar.setBounds(668, 75, 110, 25);
 		btnCadastrar.setBackground(new Color(73, 71, 71));
@@ -223,7 +223,7 @@ public class Cardapio extends JFrame {
 
 			// Cria o botão para voltar à página principal
 			JButton btnHome = createIconButton(
-					"C:\\Users\\Kaue\\Desktop\\Projeto-Integrador-3-semestre\\Fotos\\casa.png", "Página Principal");
+					"C:\\Users\\Kaue\\Desktop\\Projeto-Integrador-3-semestre\\Fotos\\casa2.png", "Página Principal");
 			btnHome.addActionListener(e -> {
 				// Lógica para voltar à página principal
 				JOptionPane.showMessageDialog(this, "Voltando à página principal...");
@@ -231,7 +231,7 @@ public class Cardapio extends JFrame {
 
 			// Cria o botão para ir ao carrinho
 			JButton btnCart = createIconButton(
-					"C:\\Users\\Kaue\\Desktop\\Projeto-Integrador-3-semestre\\Fotos\\carrinho-de-compras.png",
+					"C:\\Users\\Kaue\\Desktop\\Projeto-Integrador-3-semestre\\Fotos\\carrinho-de-compras2.png",
 					"Carrinho");
 			btnCart.addActionListener(e -> {
 				// Lógica para ir ao carrinho
@@ -240,7 +240,7 @@ public class Cardapio extends JFrame {
 
 			// Cria o botão para mostrar a conta do usuário
 			JButton btnAccount = createIconButton(
-					"C:\\Users\\Kaue\\Desktop\\Projeto-Integrador-3-semestre\\Fotos\\perfil.png", "Conta");
+					"C:\\Users\\Kaue\\Desktop\\Projeto-Integrador-3-semestre\\Fotos\\perfil2.png", "Conta");
 			btnAccount.addActionListener(e -> {
 				// Lógica para mostrar a conta do usuário
 				JOptionPane.showMessageDialog(this, "Mostrando informações da conta...");
@@ -361,7 +361,7 @@ public class Cardapio extends JFrame {
 
 	public void BotaoMenu() {
 		ImageIcon menuIcon = new ImageIcon(
-			    "C:\\Users\\Kaue\\Desktop\\Projeto-Integrador-3-semestre\\Fotos\\menu-hamburguer.png");
+			    "C:\\Users\\Kaue\\Desktop\\Projeto-Integrador-3-semestre\\Fotos\\menu-hamburguer2.png");
 			Image img = menuIcon.getImage().getScaledInstance(32, 32, Image.SCALE_SMOOTH);
 			menuIcon = new ImageIcon(img);
 
@@ -374,10 +374,10 @@ public class Cardapio extends JFrame {
 
 			JPopupMenu menuPopup = new JPopupMenu();
 
-		JMenuItem op1 = new JMenuItem("Cadastrar");
-		JMenuItem op2 = new JMenuItem("Alterar");
-		JMenuItem op3 = new JMenuItem("Buscar");
-		JMenuItem op4 = new JMenuItem("Excluir");
+		JMenuItem op1 = new JMenuItem("Cadastrar Produto");
+		JMenuItem op2 = new JMenuItem("Alterar Produto");
+		JMenuItem op3 = new JMenuItem("Buscar Produto");
+		JMenuItem op4 = new JMenuItem("Excluir Produto");
 
 		op1.addActionListener(e -> JOptionPane.showMessageDialog(this, "Opção 1 selecionada"));
 		op2.addActionListener(e -> JOptionPane.showMessageDialog(this, "Opção 2 selecionada"));
