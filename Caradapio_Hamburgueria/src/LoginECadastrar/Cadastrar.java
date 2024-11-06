@@ -8,18 +8,22 @@ import java.awt.Graphics2D;
 import java.awt.Image;
 import java.awt.RenderingHints;
 import java.awt.Toolkit;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.awt.geom.RoundRectangle2D;
 import java.text.ParseException;
-
+import javax.swing.AbstractButton;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JFormattedTextField;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.JPasswordField;
 import javax.swing.JSeparator;
 import javax.swing.JTextField;
 import javax.swing.text.MaskFormatter;
+import Cadapio_Pag_Inicial.Cardapio;
 
 public class Cadastrar extends JFrame {
 	public Cadastrar() {
@@ -32,6 +36,7 @@ public class Cadastrar extends JFrame {
 		Centralizar();
 		Logo();
 		CadastrarDados();
+		BotaoVoltar();
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 	}
 
@@ -64,7 +69,7 @@ public class Cadastrar extends JFrame {
 
 		public BotaoArredondado(String texto, int raio) {
 			super(texto);
-			this.raio = raio; // Define o raio das bordas arredondadas
+			this.raio = raio;
 			setFocusPainted(false);
 			setContentAreaFilled(false);
 			setBorderPainted(false);
@@ -273,9 +278,71 @@ public class Cadastrar extends JFrame {
 		Estalbl.setBounds(390, 340, 200, 25);
 		Estalbl.setFont(new Font("Arial", Font.BOLD, 16));
 		add(Estalbl);
-		
-		//Adiciona o Botao Cadastrar
-		
+
+		// Adiciona o Botao Cadastrar
+		BotaoArredondado btnCadastrar = new BotaoArredondado("Cadastrar", 30);
+
+		btnCadastrar.setText("Cadastrar");
+		btnCadastrar.setBounds(300, 430, 150, 30);
+		btnCadastrar.setFont(new Font("Arial", Font.BOLD, 16));
+		btnCadastrar.setBackground(Color.gray);
+		btnCadastrar.setForeground(Color.decode("#ffd96d"));
+		add(btnCadastrar);
+
+		btnCadastrar.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				// Pegando os valores dos campos
+				String nome = NoField.getText();
+				String sobrenome = SoField.getText();
+				String email = emaField.getText();
+				String senha = new String(passwordField.getPassword());
+				String cpf = CPFlbl.getText();
+				String telefone = Numlbl.getText();
+				String cep = Ceplbl.getText();
+				String rua = Rualbl2.getText();
+				String numero = Numlbl2.getText();
+				String bairro = Bailbl.getText();
+				String cidade = Cidlbl.getText();
+				String estado = Estalbl.getText();
+
+				if (nome.isEmpty() || sobrenome.isEmpty() || email.isEmpty() || senha.isEmpty() || cpf.isEmpty()
+						|| telefone.isEmpty() || cep.isEmpty() || rua.isEmpty() || numero.isEmpty() || bairro.isEmpty()
+						|| cidade.isEmpty() || estado.isEmpty()) {
+					JOptionPane.showMessageDialog(null, "Preencha todos os campos.", "Erro de Cadastro",
+							JOptionPane.ERROR_MESSAGE);
+				} else {
+					JOptionPane.showMessageDialog(null, "Cadastro bem-sucedido!");
+					dispose();
+
+					Cardapio cardapio = new Cardapio();
+					cardapio.setVisible(true);
+				}
+			}
+		});
+	}
+
+	public void BotaoVoltar() {
+		ImageIcon voltarIcon = new ImageIcon(
+				"C:\\Users\\Kaue\\Desktop\\Projeto-Integrador-3-semestre\\Fotos\\seta-pequena-esquerda2.png");
+		Image img = voltarIcon.getImage().getScaledInstance(35, 35, Image.SCALE_SMOOTH);
+		voltarIcon = new ImageIcon(img);
+
+		JButton voltarButton = new JButton(voltarIcon);
+		voltarButton.setBounds(35, 5, 30, 30);
+		voltarButton.setBorderPainted(false);
+		voltarButton.setFocusPainted(false);
+		voltarButton.setContentAreaFilled(false);
+
+		add(voltarButton);
+
+		voltarButton.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				Cardapio cardapio = new Cardapio();
+				cardapio.setVisible(true);
+				dispose();
+			}
+		});
 	}
 
 	public static void main(String[] args) {
