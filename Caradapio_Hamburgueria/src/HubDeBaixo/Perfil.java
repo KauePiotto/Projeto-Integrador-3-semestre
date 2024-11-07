@@ -29,6 +29,9 @@ public class Perfil extends JFrame {
 		setLocation((screen.width - janela.width) / 2, (screen.height - janela.height) / 2);
 	}
 
+	public void PerfilUsuario() {
+		
+	}
 	public static void main(String[] args) {
 		Perfil perfil = new Perfil();
 		perfil.setVisible(true);
