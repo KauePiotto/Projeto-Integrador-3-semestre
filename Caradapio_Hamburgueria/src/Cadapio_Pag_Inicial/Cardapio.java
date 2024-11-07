@@ -313,10 +313,14 @@ public class Cardapio extends JFrame {
 	private String[] porcoes = { "Batata Frita", "Batata Rústica" };
 
 	public void CriarFiltros() {
-		JButton btnAll = new JButton("Todos");
-		JButton btnLanches = new JButton("Lanches");
-		JButton btnBebidas = new JButton("Bebidas");
-		JButton btnPorcoes = new JButton("Porções");
+		JButton btnAll = createImageButton("C:\\Users\\Kaue\\Desktop\\Projeto-Integrador-3-semestre\\Fotos\\todos.png",
+				"Todos");
+		JButton btnLanches = createImageButton(
+				"C:\\Users\\Kaue\\Desktop\\Projeto-Integrador-3-semestre\\Fotos\\hamburguer.png", "Lanches");
+		JButton btnBebidas = createImageButton(
+				"C:\\Users\\Kaue\\Desktop\\Projeto-Integrador-3-semestre\\Fotos\\refrigerantes.png", "Bebidas");
+		JButton btnPorcoes = createImageButton(
+				"C:\\Users\\Kaue\\Desktop\\Projeto-Integrador-3-semestre\\Fotos\\batatas-fritas.png", "Porções");
 
 		// Definindo ação para cada botão
 		btnAll.addActionListener(e -> updateItems("all"));
@@ -334,6 +338,21 @@ public class Cardapio extends JFrame {
 		add(btnLanches);
 		add(btnBebidas);
 		add(btnPorcoes);
+	}
+
+	private JButton createImageButton(String imagePath, String tooltip) {
+		JButton button = new JButton();
+		button.setToolTipText(tooltip);
+		button.setContentAreaFilled(false);
+		button.setBorderPainted(false);
+		button.setFocusPainted(false);
+
+		// Carrega e redimensiona a imagem
+		ImageIcon icon = new ImageIcon(imagePath);
+		Image img = icon.getImage().getScaledInstance(30, 30, Image.SCALE_SMOOTH);
+		button.setIcon(new ImageIcon(img));
+
+		return button;
 	}
 
 	private void updateItems(String filter) {
@@ -392,7 +411,7 @@ public class Cardapio extends JFrame {
 		JMenuItem op3 = new JMenuItem("Buscar Produto");
 		JMenuItem op4 = new JMenuItem("Excluir Produto");
 
-		op1.addActionListener(e -> JOptionPane.showMessageDialog(this, "Opção 1 selecionada"));
+		op1.addActionListener(e -> JOptionPane.showMessageDialog(this, "Opção 2 selecionada"));
 		op2.addActionListener(e -> JOptionPane.showMessageDialog(this, "Opção 2 selecionada"));
 		op3.addActionListener(e -> JOptionPane.showMessageDialog(this, "Opção 3 selecionada"));
 		op4.addActionListener(e -> JOptionPane.showMessageDialog(this, "Opção 3 selecionada"));

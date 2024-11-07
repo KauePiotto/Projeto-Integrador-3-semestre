@@ -5,9 +5,9 @@ import java.awt.Toolkit;
 
 import javax.swing.JFrame;
 
-public class CadastroProduto extends JFrame {
-	public CadastroProduto() {
-		setTitle("Cadastro Produto - Byell Hambúrgueria");
+public class BuscarProduto extends JFrame {
+	public BuscarProduto() {
+		setTitle("Buscar Produto - Byell Hambúrgueria");
 		setResizable(false);
 		getContentPane().setLayout(null);
 		setSize(800, 600);
@@ -30,7 +30,7 @@ public class CadastroProduto extends JFrame {
 	}
 
 	public static void main(String[] args) {
-		CadastroProduto cadastro = new CadastroProduto();
-		cadastro.setVisible(true);
+		BuscarProduto buscar = new BuscarProduto();
+		buscar.setVisible(true);
 	}
 }

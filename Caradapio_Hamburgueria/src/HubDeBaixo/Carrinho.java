@@ -12,6 +12,8 @@ public class Carrinho extends JFrame {
 		getContentPane().setLayout(null);
 		setSize(800, 600);
 		Centralizar();
+		
+		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 	}
 
 	public void Centralizar() {
@@ -27,6 +29,7 @@ public class Carrinho extends JFrame {
 		setLocation((screen.width - janela.width) / 2, (screen.height - janela.height) / 2);
 	}
 
+	
 	public static void main(String[] args) {
 		Carrinho carrinho = new Carrinho();
 		carrinho.setVisible(true);
