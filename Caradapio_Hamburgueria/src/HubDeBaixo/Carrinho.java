@@ -47,7 +47,7 @@ public class Carrinho extends JFrame {
 	}
 
 	public void Logo() {
-		ImageIcon logoIcon = new ImageIcon("C:\\Users\\Kaue\\Desktop\\Projeto-Integrador-3-semestre\\Fotos\\Logo2.png");
+		ImageIcon logoIcon = new ImageIcon("C:\\Users\\User\\Desktop\\Projeto-Integrador-3-semestre\\Fotos\\Logo2.png");
 
 		Image logoImage = logoIcon.getImage().getScaledInstance(500, 250, Image.SCALE_SMOOTH);
 		ImageIcon resizedLogoIcon = new ImageIcon(logoImage);
@@ -59,7 +59,7 @@ public class Carrinho extends JFrame {
 
 	public void BotaoVoltar() {
 		ImageIcon voltarIcon = new ImageIcon(
-				"C:\\Users\\Kaue\\Desktop\\Projeto-Integrador-3-semestre\\Fotos\\seta-pequena-esquerda2.png");
+				"C:\\Users\\User\\Desktop\\Projeto-Integrador-3-semestre\\Fotos\\seta-pequena-esquerda2.png");
 		Image img = voltarIcon.getImage().getScaledInstance(35, 35, Image.SCALE_SMOOTH);
 		voltarIcon = new ImageIcon(img);
 
@@ -85,7 +85,7 @@ public class Carrinho extends JFrame {
 		PainelArredondado rightPanel = new PainelArredondado();
 		rightPanel.setLayout(null);
 		rightPanel.setBackground(Color.BLACK);
-		rightPanel.setBounds(550, 350, 220, 190);
+		rightPanel.setBounds(550, 400, 220, 150);
 
 		add(rightPanel);
 
@@ -94,26 +94,26 @@ public class Carrinho extends JFrame {
 		valorLabel.setForeground(Color.white);
 		valorLabel.setBounds(10, 30, 200, 30);
 
-		JLabel taxaEntregaLabel = new JLabel("Taxa de Entrega: R$ 5,00");
+		/*JLabel taxaEntregaLabel = new JLabel("Taxa de Entrega: R$ 5,00");
 		taxaEntregaLabel.setFont(new Font("Arial", Font.BOLD, 16));
 		taxaEntregaLabel.setForeground(Color.white);
-		taxaEntregaLabel.setBounds(10, 70, 200, 30);
+		taxaEntregaLabel.setBounds(10, 70, 200, 30);*/
 
-		BotaoArredondado botao = new BotaoArredondado("Fazer Pedido", 30);
+		BotaoArredondado botao = new BotaoArredondado("Enviar Pedido", 30);
 
 		botao.setFont(new Font("Arial", Font.BOLD, 16));
-		botao.setBounds(10, 120, 200, 40);
+		botao.setBounds(10, 90, 200, 40);
 		botao.setForeground(Color.WHITE);
 
 		rightPanel.add(valorLabel);
-		rightPanel.add(taxaEntregaLabel);
+		//rightPanel.add(taxaEntregaLabel);
 		rightPanel.add(botao);
 
 		botao.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				JOptionPane.showMessageDialog(null,
-						"         Pedido realizado com sucesso!" + "\n O tempo de espera é de 30 a 60 minutos",
+						"        Pedido enviado para cozinha!" + "\n O tempo de espera é de 30 a 60 minutos",
 						"Pedido", JOptionPane.INFORMATION_MESSAGE);
 			}
 		});
