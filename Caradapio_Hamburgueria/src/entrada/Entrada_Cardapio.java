@@ -58,7 +58,7 @@ public class Entrada_Cardapio extends JFrame {
 		private Image imagemFundo;
 
 		public PainelComFundo() {
-			imagemFundo = new ImageIcon("C:\\Users\\User\\Desktop\\Projeto-Integrador-3-semestre\\Fotos\\Fundo.png")
+			imagemFundo = new ImageIcon("C:\\Users\\Kaue\\Desktop\\Projeto-Integrador-3-semestre\\Fotos\\Fundo.png")
 					.getImage();
 		}
 
@@ -71,7 +71,7 @@ public class Entrada_Cardapio extends JFrame {
 
 	// Metodo para colocar a Logo Arredondada no JFrame
 	public void Logo(JPanel painel) {
-		ImageIcon logoIcon = new ImageIcon("C:\\Users\\User\\Desktop\\Projeto-Integrador-3-semestre\\Fotos\\Logo2.png");
+		ImageIcon logoIcon = new ImageIcon("C:\\Users\\Kaue\\Desktop\\Projeto-Integrador-3-semestre\\Fotos\\Logo2.png");
 
 		Image logoImage = logoIcon.getImage().getScaledInstance(500, 250, Image.SCALE_SMOOTH);
 		ImageIcon resizedLogoIcon = new ImageIcon(logoImage);
@@ -107,18 +107,18 @@ public class Entrada_Cardapio extends JFrame {
 
 	// Metodo para adicionar o botao no JFrame
 	public void BotaoEntrada(JPanel painel) {
-		BotaoArredondado b = new BotaoArredondado("Ver Cardápio", 30);
+		BotaoArredondado btnEntrada = new BotaoArredondado("Ver Cardápio", 30);
 
-		b.setText("Ver Cardápio");
-		b.setForeground(Color.decode("#ffd96d"));
-		b.setFont(new Font("Arial", Font.BOLD, 16));
-		b.setBounds(280, 270, 250, 35);
-		b.setBackground(new Color(0, 0, 0));
+		btnEntrada.setText("Ver Cardápio");
+		btnEntrada.setForeground(Color.decode("#ffd96d"));
+		btnEntrada.setFont(new Font("Arial", Font.BOLD, 16));
+		btnEntrada.setBounds(280, 270, 250, 35);
+		btnEntrada.setBackground(new Color(0, 0, 0));
 
-		b.setBorderPainted(false);
-		b.setFocusPainted(false);
+		btnEntrada.setBorderPainted(false);
+		btnEntrada.setFocusPainted(false);
 
-		b.addActionListener(new ActionListener() {
+		btnEntrada.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				Cardapio cardapio = new Cardapio();
@@ -128,28 +128,28 @@ public class Entrada_Cardapio extends JFrame {
 		});
 
 		// Configurações do MouseListener para mudar a cor e o cursor
-		b.addMouseListener(new MouseAdapter() {
+		btnEntrada.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseEntered(MouseEvent e) {
-				b.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+				btnEntrada.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
 			}
 
 			@Override
 			public void mouseExited(MouseEvent e) {
-				b.setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
+				btnEntrada.setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
 			}
 
 			@Override
 			public void mousePressed(MouseEvent e) {
-				b.setBackground(new Color(0, 0, 0));
+				btnEntrada.setBackground(new Color(0, 0, 0));
 			}
 
 			@Override
 			public void mouseReleased(MouseEvent e) {
-				b.setBackground(new Color(0, 0, 0));
+				btnEntrada.setBackground(new Color(0, 0, 0));
 			}
 		});
-		painel.add(b);
+		painel.add(btnEntrada);
 	}
 
 	public static void main(String[] args) {

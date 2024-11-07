@@ -44,7 +44,6 @@ public class Cardapio extends JFrame {
 		BotaoCadastrar();
 		CriarFiltros();
 		BotaoMenu();
-
 		FotoFundo();
 		itemPainel = new JPanel();
 		itemPainel.setLayout(new FlowLayout(FlowLayout.CENTER));
@@ -77,7 +76,7 @@ public class Cardapio extends JFrame {
 	}
 
 	public void Logo() {
-		ImageIcon logoIcon = new ImageIcon("C:\\Users\\User\\Desktop\\Projeto-Integrador-3-semestre\\Fotos\\Logo2.png");
+		ImageIcon logoIcon = new ImageIcon("C:\\Users\\Kaue\\Desktop\\Projeto-Integrador-3-semestre\\Fotos\\Logo2.png");
 
 		Image logoImage = logoIcon.getImage().getScaledInstance(500, 250, Image.SCALE_SMOOTH);
 		ImageIcon resizedLogoIcon = new ImageIcon(logoImage);
@@ -95,7 +94,7 @@ public class Cardapio extends JFrame {
 			protected void paintComponent(Graphics g) {
 				super.paintComponent(g);
 				ImageIcon imagemFundo = new ImageIcon(
-						"C:\\Users\\User\\Desktop\\Projeto-Integrador-3-semestre\\Fotos\\Fundo.png");
+						"C:\\Users\\Kaue\\Desktop\\Projeto-Integrador-3-semestre\\Fotos\\Fundo.png");
 				g.drawImage(imagemFundo.getImage(), 0, 0, getWidth(), getHeight(), this);
 			}
 		};
@@ -231,7 +230,7 @@ public class Cardapio extends JFrame {
 
 			// Cria o botão para voltar à página principal
 			JButton btnHome = createIconButton(
-					"C:\\Users\\User\\Desktop\\Projeto-Integrador-3-semestre\\Fotos\\casa2.png", "Página Principal");
+					"C:\\Users\\Kaue\\Desktop\\Projeto-Integrador-3-semestre\\Fotos\\casa2.png", "Página Principal");
 			btnHome.addActionListener(e -> {
 				// Lógica para voltar à página principal
 				Cardapio cardapio = new Cardapio();
@@ -241,7 +240,7 @@ public class Cardapio extends JFrame {
 
 			// Cria o botão para ir ao carrinho
 			JButton btnCart = createIconButton(
-					"C:\\Users\\User\\Desktop\\Projeto-Integrador-3-semestre\\Fotos\\carrinho-de-compras2.png",
+					"C:\\Users\\Kaue\\Desktop\\Projeto-Integrador-3-semestre\\Fotos\\carrinho-de-compras2.png",
 					"Carrinho");
 			btnCart.addActionListener(e -> {
 				Carrinho carrinho = new Carrinho();
@@ -251,7 +250,7 @@ public class Cardapio extends JFrame {
 
 			// Cria o botão para mostrar a conta do usuário
 			JButton btnAccount = createIconButton(
-					"C:\\Users\\User\\Desktop\\Projeto-Integrador-3-semestre\\Fotos\\perfil2.png", "Conta");
+					"C:\\Users\\Kaue\\Desktop\\Projeto-Integrador-3-semestre\\Fotos\\perfil2.png", "Conta");
 			btnAccount.addActionListener(e -> {
 				// Lógica para mostrar a conta do usuário
 				Perfil perfil = new Perfil();
@@ -313,14 +312,14 @@ public class Cardapio extends JFrame {
 	private String[] porcoes = { "Batata Frita", "Batata Rústica" };
 
 	public void CriarFiltros() {
-		JButton btnAll = createImageButton("C:\\Users\\User\\Desktop\\Projeto-Integrador-3-semestre\\Fotos\\todos.png",
+		JButton btnAll = createImageButton("C:\\Users\\Kaue\\Desktop\\Projeto-Integrador-3-semestre\\Fotos\\todos.png",
 				"Todos");
 		JButton btnLanches = createImageButton(
-				"C:\\Users\\User\\Desktop\\Projeto-Integrador-3-semestre\\Fotos\\hamburguer.png", "Lanches");
+				"C:\\Users\\Kaue\\Desktop\\Projeto-Integrador-3-semestre\\Fotos\\hamburguer.png", "Lanches");
 		JButton btnBebidas = createImageButton(
-				"C:\\Users\\User\\Desktop\\Projeto-Integrador-3-semestre\\Fotos\\refrigerantes.png", "Bebidas");
+				"C:\\Users\\Kaue\\Desktop\\Projeto-Integrador-3-semestre\\Fotos\\refrigerantes.png", "Bebidas");
 		JButton btnPorcoes = createImageButton(
-				"C:\\Users\\User\\Desktop\\Projeto-Integrador-3-semestre\\Fotos\\porcoes.png", "Porções");
+				"C:\\Users\\Kaue\\Desktop\\Projeto-Integrador-3-semestre\\Fotos\\porcoes.png", "Porções");
 
 		// Definindo ação para cada botão
 		btnAll.addActionListener(e -> updateItems("all"));
@@ -366,7 +365,7 @@ public class Cardapio extends JFrame {
 		switch (filter) {
 		case "lanches":
 			
-			imageIcon = new ImageIcon("C:\\Users\\User\\Desktop\\Projeto-Integrador-3-semestre\\Fotos\\hamburguer.png");
+			imageIcon = new ImageIcon("C:\\Users\\Kaue\\Desktop\\Projeto-Integrador-3-semestre\\Fotos\\hamburguer.png");
 			img = imageIcon.getImage().getScaledInstance(50, 50, Image.SCALE_SMOOTH);
 			imageLabel.setIcon(new ImageIcon(img));
 			itemPainel.add(imageLabel);
@@ -378,7 +377,7 @@ public class Cardapio extends JFrame {
 			break;
 		case "bebidas":
 			
-			imageIcon = new ImageIcon("C:\\Users\\User\\Desktop\\Projeto-Integrador-3-semestre\\Fotos\\refrigerantes.png");
+			imageIcon = new ImageIcon("C:\\Users\\Kaue\\Desktop\\Projeto-Integrador-3-semestre\\Fotos\\refrigerantes.png");
 			img = imageIcon.getImage().getScaledInstance(50, 50, Image.SCALE_SMOOTH);
 			imageLabel.setIcon(new ImageIcon(img));
 			
@@ -391,7 +390,7 @@ public class Cardapio extends JFrame {
 			break;
 		case "porcoes":
 			
-			imageIcon = new ImageIcon("C:\\Users\\User\\Desktop\\Projeto-Integrador-3-semestre\\Fotos\\porcoes.png");
+			imageIcon = new ImageIcon("C:\\Users\\Kaue\\Desktop\\Projeto-Integrador-3-semestre\\Fotos\\porcoes.png");
 			img = imageIcon.getImage().getScaledInstance(50, 50, Image.SCALE_SMOOTH);
 			imageLabel.setIcon(new ImageIcon(img));
 			
@@ -404,7 +403,7 @@ public class Cardapio extends JFrame {
 			break;
 		default:
 			
-			imageIcon = new ImageIcon("C:\\Users\\User\\Desktop\\Projeto-Integrador-3-semestre\\Fotos\\todos.png");
+			imageIcon = new ImageIcon("C:\\Users\\Kaue\\Desktop\\Projeto-Integrador-3-semestre\\Fotos\\todos.png");
 			img = imageIcon.getImage().getScaledInstance(50, 50, Image.SCALE_SMOOTH);
 			imageLabel.setIcon(new ImageIcon(img));
 			
@@ -430,7 +429,7 @@ public class Cardapio extends JFrame {
 
 	public void BotaoMenu() {
 		ImageIcon menuIcon = new ImageIcon(
-				"C:\\Users\\User\\Desktop\\Projeto-Integrador-3-semestre\\Fotos\\menu-hamburguer2.png");
+				"C:\\Users\\Kaue\\Desktop\\Projeto-Integrador-3-semestre\\Fotos\\menu-hamburguer2.png");
 		Image img = menuIcon.getImage().getScaledInstance(32, 32, Image.SCALE_SMOOTH);
 		menuIcon = new ImageIcon(img);
 

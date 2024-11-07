@@ -310,7 +310,7 @@ public class Perfil extends JFrame {
 
 	public void BotaoVoltar() {
 		ImageIcon voltarIcon = new ImageIcon(
-				"C:\\Users\\User\\Desktop\\Projeto-Integrador-3-semestre\\Fotos\\seta-pequena-esquerda2.png");
+				"C:\\Users\\Kaue\\Desktop\\Projeto-Integrador-3-semestre\\Fotos\\seta-pequena-esquerda2.png");
 		Image img = voltarIcon.getImage().getScaledInstance(35, 35, Image.SCALE_SMOOTH);
 		voltarIcon = new ImageIcon(img);
 
@@ -327,6 +327,7 @@ public class Perfil extends JFrame {
 			public void actionPerformed(ActionEvent e) {
 				Cardapio cardapio = new Cardapio();
 				cardapio.setVisible(true);
+				dispose();
 			}
 		});
 	}
