@@ -320,7 +320,7 @@ public class Cardapio extends JFrame {
 		JButton btnBebidas = createImageButton(
 				"C:\\Users\\Kaue\\Desktop\\Projeto-Integrador-3-semestre\\Fotos\\refrigerantes.png", "Bebidas");
 		JButton btnPorcoes = createImageButton(
-				"C:\\Users\\Kaue\\Desktop\\Projeto-Integrador-3-semestre\\Fotos\\batatas-fritas.png", "Porções");
+				"C:\\Users\\Kaue\\Desktop\\Projeto-Integrador-3-semestre\\Fotos\\porcoes.png", "Porções");
 
 		// Definindo ação para cada botão
 		btnAll.addActionListener(e -> updateItems("all"));
@@ -358,35 +358,72 @@ public class Cardapio extends JFrame {
 	private void updateItems(String filter) {
 		itemPainel.removeAll();
 
+		JLabel imageLabel = new JLabel();
+
+		ImageIcon imageIcon = null;
+		Image img = null;
+
 		switch (filter) {
 		case "lanches":
+			
+			imageIcon = new ImageIcon("C:\\Users\\Kaue\\Desktop\\Projeto-Integrador-3-semestre\\Fotos\\hamburguer.png");
+			img = imageIcon.getImage().getScaledInstance(50, 50, Image.SCALE_SMOOTH);
+			imageLabel.setIcon(new ImageIcon(img));
+			itemPainel.add(imageLabel);
+			
 			for (String lanche : lanches) {
-				itemPainel.add(new JLabel(lanche));
+				JLabel lancheLabel = new JLabel(lanche);
+				itemPainel.add(lancheLabel);
 			}
 			break;
 		case "bebidas":
+			
+			imageIcon = new ImageIcon("C:\\Users\\Kaue\\Desktop\\Projeto-Integrador-3-semestre\\Fotos\\refrigerantes.png");
+			img = imageIcon.getImage().getScaledInstance(50, 50, Image.SCALE_SMOOTH);
+			imageLabel.setIcon(new ImageIcon(img));
+			
+			itemPainel.add(imageLabel);
+			
 			for (String bebida : bebidas) {
-				itemPainel.add(new JLabel(bebida));
+				JLabel bebidaLabel = new JLabel(bebida);
+				itemPainel.add(bebidaLabel);
 			}
 			break;
 		case "porcoes":
+			
+			imageIcon = new ImageIcon("C:\\Users\\Kaue\\Desktop\\Projeto-Integrador-3-semestre\\Fotos\\porcoes.png");
+			img = imageIcon.getImage().getScaledInstance(50, 50, Image.SCALE_SMOOTH);
+			imageLabel.setIcon(new ImageIcon(img));
+			
+			itemPainel.add(imageLabel);
+			
 			for (String porcao : porcoes) {
-				itemPainel.add(new JLabel(porcao));
+				JLabel porcaoLabel = new JLabel(porcao);
+				itemPainel.add(porcaoLabel);
 			}
 			break;
 		default:
+			
+			imageIcon = new ImageIcon("C:\\Users\\Kaue\\Desktop\\Projeto-Integrador-3-semestre\\Fotos\\todos.png");
+			img = imageIcon.getImage().getScaledInstance(50, 50, Image.SCALE_SMOOTH);
+			imageLabel.setIcon(new ImageIcon(img));
+			
+			itemPainel.add(imageLabel);
+			
 			for (String lanche : lanches) {
-				itemPainel.add(new JLabel(lanche));
+				JLabel lancheLabel = new JLabel(lanche);
+				itemPainel.add(lancheLabel);
 			}
 			for (String bebida : bebidas) {
-				itemPainel.add(new JLabel(bebida));
+				JLabel bebidaLabel = new JLabel(bebida);
+				itemPainel.add(bebidaLabel);
 			}
 			for (String porcao : porcoes) {
-				itemPainel.add(new JLabel(porcao));
+				JLabel porcaoLabel = new JLabel(porcao);
+				itemPainel.add(porcaoLabel);
 			}
 			break;
 		}
-
 		itemPainel.revalidate();
 		itemPainel.repaint();
 	}
