@@ -53,7 +53,7 @@ public class Cadastrar extends JFrame {
 	}
 
 	public void Logo() {
-		ImageIcon logoIcon = new ImageIcon("C:\\Users\\Kaue\\Desktop\\Projeto-Integrador-3-semestre\\Fotos\\Logo2.png");
+		ImageIcon logoIcon = new ImageIcon("imagens\\Logo2.png");
 
 		Image logoImage = logoIcon.getImage().getScaledInstance(500, 250, Image.SCALE_SMOOTH);
 		ImageIcon resizedLogoIcon = new ImageIcon(logoImage);
@@ -321,8 +321,7 @@ public class Cadastrar extends JFrame {
 	}
 
 	public void BotaoVoltar() {
-		ImageIcon voltarIcon = new ImageIcon(
-				"C:\\Users\\Kaue\\Desktop\\Projeto-Integrador-3-semestre\\Fotos\\seta-pequena-esquerda2.png");
+		ImageIcon voltarIcon = new ImageIcon("imagens\\seta-pequena-esquerda2.png");
 		Image img = voltarIcon.getImage().getScaledInstance(35, 35, Image.SCALE_SMOOTH);
 		voltarIcon = new ImageIcon(img);
 

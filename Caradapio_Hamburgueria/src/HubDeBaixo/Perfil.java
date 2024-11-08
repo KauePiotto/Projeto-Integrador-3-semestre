@@ -309,8 +309,7 @@ public class Perfil extends JFrame {
 	}
 
 	public void BotaoVoltar() {
-		ImageIcon voltarIcon = new ImageIcon(
-				"C:\\Users\\kaue.plfreire\\Desktop\\Projeto-Integrador-3-semestre\\Fotos\\seta-pequena-esquerda2.png");
+		ImageIcon voltarIcon = new ImageIcon("imagens\\seta-pequena-esquerda2.png");
 		Image img = voltarIcon.getImage().getScaledInstance(35, 35, Image.SCALE_SMOOTH);
 		voltarIcon = new ImageIcon(img);
 

@@ -47,7 +47,7 @@ public class Carrinho extends JFrame {
 	}
 
 	public void Logo() {
-		ImageIcon logoIcon = new ImageIcon("C:\\Users\\kaue.plfreire\\Desktop\\Projeto-Integrador-3-semestre\\Fotos\\Logo2.png");
+		ImageIcon logoIcon = new ImageIcon("imagens\\Logo2.png");
 
 		Image logoImage = logoIcon.getImage().getScaledInstance(500, 250, Image.SCALE_SMOOTH);
 		ImageIcon resizedLogoIcon = new ImageIcon(logoImage);
@@ -58,8 +58,7 @@ public class Carrinho extends JFrame {
 	}
 
 	public void BotaoVoltar() {
-		ImageIcon voltarIcon = new ImageIcon(
-				"C:\\Users\\kaue.plfreire\\Desktop\\Projeto-Integrador-3-semestre\\Fotos\\seta-pequena-esquerda2.png");
+		ImageIcon voltarIcon = new ImageIcon("imagens\\seta-pequena-esquerda2.png");
 		Image img = voltarIcon.getImage().getScaledInstance(35, 35, Image.SCALE_SMOOTH);
 		voltarIcon = new ImageIcon(img);
 
@@ -95,21 +94,20 @@ public class Carrinho extends JFrame {
 		valorLabel.setBounds(10, 30, 200, 30);
 
 		BotaoArredondado botao = new BotaoArredondado("Enviar Pedido", 30);
-		
+
 		botao.setFont(new Font("Arial", Font.BOLD, 16));
 		botao.setBounds(10, 90, 200, 40);
 		botao.setForeground(Color.WHITE);
 
 		rightPanel.add(valorLabel);
-		//rightPanel.add(taxaEntregaLabel);
 		rightPanel.add(botao);
 
 		botao.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				JOptionPane.showMessageDialog(null,
-						"        Pedido enviado para cozinha!" + "\n O tempo de espera é de 30 a 60 minutos",
-						"Pedido", JOptionPane.INFORMATION_MESSAGE);
+						"        Pedido enviado para cozinha!" + "\n O tempo de espera é de 30 a 60 minutos", "Pedido",
+						JOptionPane.INFORMATION_MESSAGE);
 			}
 		});
 	}
@@ -138,25 +136,22 @@ public class Carrinho extends JFrame {
 
 	class PainelArredondado extends JPanel {
 
-		private int arcWidth = 20; 
-		private int arcHeight = 20; 
+		private int arcWidth = 20;
+		private int arcHeight = 20;
 
 		public PainelArredondado() {
-			setOpaque(false); 
+			setOpaque(false);
 		}
 
 		@Override
 		protected void paintComponent(Graphics g) {
 			super.paintComponent(g);
 
-			
 			Graphics2D g2d = (Graphics2D) g;
 			g2d.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
 
-			
 			g2d.setColor(Color.GRAY);
 
-			
 			g2d.fill(new RoundRectangle2D.Double(0, 0, getWidth(), getHeight(), arcWidth, arcHeight));
 		}
 	}
