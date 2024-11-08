@@ -12,7 +12,7 @@ public class BuscarProduto extends JFrame {
 		getContentPane().setLayout(null);
 		setSize(800, 600);
 		Centralizar();
-		
+		Buscar();
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 	}
 
@@ -29,6 +29,9 @@ public class BuscarProduto extends JFrame {
 		setLocation((screen.width - janela.width) / 2, (screen.height - janela.height) / 2);
 	}
 
+	public void Buscar() {
+		
+	}
 	public static void main(String[] args) {
 		BuscarProduto buscar = new BuscarProduto();
 		buscar.setVisible(true);
