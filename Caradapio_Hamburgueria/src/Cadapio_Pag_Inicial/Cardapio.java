@@ -30,8 +30,9 @@ import LoginECadastrar.Login;
 import HubDeBaixo.*;
 
 public class Cardapio extends JFrame {
-	private JButton loginButton;
-	private JButton cadastrarButton;
+	private JButton btnLogin;
+	private JButton btnCadastrar;
+	private JButton btnMenu;
 
 	public Cardapio() {
 		setTitle("Cardápio - Byell Hambúrgueria");
@@ -58,8 +59,8 @@ public class Cardapio extends JFrame {
 	}
 
 	public void ocultarBotoesLoginECadastrar() {
-		loginButton.setVisible(false);
-		cadastrarButton.setVisible(false);
+		btnLogin.setVisible(false);
+		btnCadastrar.setVisible(false);
 	}
 
 	public void Centralizar() {
@@ -128,7 +129,7 @@ public class Cardapio extends JFrame {
 	}
 
 	public void BotaoLogin() {
-		BotaoArredondado btnLogin = new BotaoArredondado("Login", 30);
+		btnCadastrar = new BotaoArredondado("Login", 30);
 
 		btnLogin.setText("Login");
 		btnLogin.setForeground(Color.decode("#ffd96d"));
@@ -175,7 +176,7 @@ public class Cardapio extends JFrame {
 	}
 
 	public void BotaoCadastrar() {
-		BotaoArredondado btnCadastrar = new BotaoArredondado("Cadastrar", 30);
+		btnCadastrar = new BotaoArredondado("Cadastrar", 30);
 
 		btnCadastrar.setText("Cadastrar");
 		btnCadastrar.setForeground(Color.decode("#ffd96d"));
@@ -423,12 +424,15 @@ public class Cardapio extends JFrame {
 		Image img = menuIcon.getImage().getScaledInstance(32, 32, Image.SCALE_SMOOTH);
 		menuIcon = new ImageIcon(img);
 
-		JButton btnMenu = new JButton(menuIcon);
+		btnMenu = new JButton(menuIcon);
 		btnMenu.setBounds(50, 50, 50, 25);
 		btnMenu.setBackground(new Color(255, 255, 255));
 		btnMenu.setBorderPainted(false);
 		btnMenu.setContentAreaFilled(false);
 		btnMenu.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+
+		// Comeca com o botao invisivel
+		btnMenu.setVisible(false);
 
 		JPopupMenu menuPopup = new JPopupMenu();
 
@@ -450,6 +454,11 @@ public class Cardapio extends JFrame {
 		btnMenu.addActionListener(e -> menuPopup.show(btnMenu, 0, btnMenu.getHeight()));
 
 		add(btnMenu);
+	}
+
+	// Método para tornar o botão de menu visível após o login do adm
+	public void mostrarMenu() {
+		btnMenu.setVisible(true);
 	}
 
 	public static void main(String[] args) {

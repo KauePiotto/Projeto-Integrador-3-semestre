@@ -141,14 +141,23 @@ public class Login extends JFrame {
 				String email = emaField.getText();
 				String password = new String(passwordField.getPassword());
 
-				if (email.equals("usuario@exemplo.com") && password.equals("123456")) {
+				if (email.equals("admin@admin.com") && password.equals("123456")) {
 					JOptionPane.showMessageDialog(null, "Login bem-sucedido!");
 					dispose();
 
 					Cardapio cardapio = new Cardapio();
 					cardapio.setVisible(true);
+					cardapio.mostrarMenu();
+					cardapio.ocultarBotoesLoginECadastrar();
+				} else if (email.equals("exemplo@exmeploema.com") && password.equals("12345")) {
+					JOptionPane.showMessageDialog(null, "Login bem-sucedido!");
+					dispose();
 
+					Cardapio cardapio = new Cardapio();
+					cardapio.setVisible(true);
+					cardapio.ocultarBotoesLoginECadastrar();
 				} else {
+
 					JOptionPane.showMessageDialog(null, "Email ou senha incorretos.", "Erro de Login",
 							JOptionPane.ERROR_MESSAGE);
 				}
