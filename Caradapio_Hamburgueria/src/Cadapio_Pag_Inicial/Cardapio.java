@@ -129,7 +129,7 @@ public class Cardapio extends JFrame {
 	}
 
 	public void BotaoLogin() {
-		btnCadastrar = new BotaoArredondado("Login", 30);
+		btnLogin = new BotaoArredondado("Login", 30);
 
 		btnLogin.setText("Login");
 		btnLogin.setForeground(Color.decode("#ffd96d"));

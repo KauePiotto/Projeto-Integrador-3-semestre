@@ -29,6 +29,7 @@ public class AlterarProduto extends JFrame {
 		setLocation((screen.width - janela.width) / 2, (screen.height - janela.height) / 2);
 	}
 
+	
 	public static void main(String[] args) {
 		AlterarProduto alterar = new AlterarProduto();
 		alterar.setVisible(true);
