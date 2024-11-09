@@ -148,7 +148,7 @@ public class BuscarProduto extends JFrame {
 			public void actionPerformed(ActionEvent e) {
 				JOptionPane.showMessageDialog(null, "Produto encontrardo com sucesso!", "Busca Produto",
 						JOptionPane.INFORMATION_MESSAGE);
-				AlterarProduto alterarPro = new AlterarProduto();
+				Alterar_E_Excluir_Produto alterarPro = new Alterar_E_Excluir_Produto();
 				alterarPro.setVisible(true);
 			}
 		});

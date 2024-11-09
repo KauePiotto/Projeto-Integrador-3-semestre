@@ -5,8 +5,8 @@ import java.awt.Toolkit;
 
 import javax.swing.JFrame;
 
-public class AlterarProduto extends JFrame {
-	public AlterarProduto() {
+public class Alterar_E_Excluir_Produto extends JFrame {
+	public Alterar_E_Excluir_Produto() {
 		setTitle("Aletrar Produto - Byell Hambúrgueria");
 		setResizable(false);
 		getContentPane().setLayout(null);
@@ -31,7 +31,7 @@ public class AlterarProduto extends JFrame {
 
 	
 	public static void main(String[] args) {
-		AlterarProduto alterar = new AlterarProduto();
+		Alterar_E_Excluir_Produto alterar = new Alterar_E_Excluir_Produto();
 		alterar.setVisible(true);
 	}
 }
