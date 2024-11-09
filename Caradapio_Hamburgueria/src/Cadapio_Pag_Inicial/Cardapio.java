@@ -16,11 +16,8 @@ import java.awt.event.MouseEvent;
 import java.awt.geom.RoundRectangle2D;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
-import javax.swing.JComponent;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
-import javax.swing.JMenu;
-import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
@@ -33,6 +30,30 @@ public class Cardapio extends JFrame {
 	private JButton btnLogin;
 	private JButton btnCadastrar;
 	private JButton btnMenu;
+	private Dimension screen;
+	private Dimension janela;
+	private ImageIcon logoIcon;
+	private ImageIcon ImagemFundo;
+	private Image logoImage;
+	private ImageIcon resizedLogoIcon;
+	private JLabel lblLogo;
+	private JPanel painel;
+	private JPanel itemPainel;
+	private String[] lanches = { "Hamburguer", "Cheeseburguer", "Vegetariano" };
+	private String[] bebidas = { "Refrigerante", "Suco", "Água" };
+	private String[] porcoes = { "Batata Frita", "Batata Rústica" };
+	private JButton btnAll;
+	private JButton btnLanches;
+	private JButton btnBebidas;
+	private JButton btnPorcoes;
+	private JButton button;
+	private ImageIcon menuicon;
+	private Image img;
+	private JPopupMenu menuPopup;
+	private JMenuItem op1;
+	private JMenuItem op2;
+	private JMenuItem op3;
+	private JMenuItem op4;
 
 	public Cardapio() {
 		setTitle("Cardápio - Byell Hambúrgueria");
@@ -46,6 +67,7 @@ public class Cardapio extends JFrame {
 		CriarFiltros();
 		BotaoMenu();
 		FotoFundo();
+
 		itemPainel = new JPanel();
 		itemPainel.setLayout(new FlowLayout(FlowLayout.CENTER));
 		itemPainel.setBounds(50, 170, 700, 300);
@@ -64,8 +86,8 @@ public class Cardapio extends JFrame {
 	}
 
 	public void Centralizar() {
-		Dimension screen = Toolkit.getDefaultToolkit().getScreenSize();
-		Dimension janela = getSize();
+		screen = Toolkit.getDefaultToolkit().getScreenSize();
+		janela = getSize();
 
 		if (janela.height > screen.height) {
 			setSize(janela.height, screen.height);
@@ -77,25 +99,25 @@ public class Cardapio extends JFrame {
 	}
 
 	public void Logo() {
-		ImageIcon logoIcon = new ImageIcon("imagens\\Logo2.png");
+		logoIcon = new ImageIcon("imagens\\Logo2.png");
 
-		Image logoImage = logoIcon.getImage().getScaledInstance(500, 250, Image.SCALE_SMOOTH);
-		ImageIcon resizedLogoIcon = new ImageIcon(logoImage);
-		JLabel logoLabel = new JLabel(resizedLogoIcon);
-		logoLabel.setBounds(305, 3, 200, 100);
+		logoImage = logoIcon.getImage().getScaledInstance(500, 250, Image.SCALE_SMOOTH);
+		resizedLogoIcon = new ImageIcon(logoImage);
+		lblLogo = new JLabel(resizedLogoIcon);
+		lblLogo.setBounds(305, 3, 200, 100);
 
-		add(logoLabel);
+		add(lblLogo);
 	}
 
 	public void FotoFundo() {
 		// Cria um JPanel com uma imagem de fundo
-		JPanel painel = new JPanel() {
+		painel = new JPanel() {
 			// Sobrescreve o método paintComponent para desenhar a imagem
 			@Override
 			protected void paintComponent(Graphics g) {
 				super.paintComponent(g);
-				ImageIcon imagemFundo = new ImageIcon("imagens\\Fundo.png");
-				g.drawImage(imagemFundo.getImage(), 0, 0, getWidth(), getHeight(), this);
+				ImagemFundo = new ImageIcon("imagens\\Fundo.png");
+				g.drawImage(ImagemFundo.getImage(), 0, 0, getWidth(), getHeight(), this);
 			}
 		};
 		painel.setBounds(0, 0, 800, 105);
@@ -224,12 +246,18 @@ public class Cardapio extends JFrame {
 	class NavigationPanel extends JPanel {
 		private Color backgorund = new Color(73, 71, 71);
 		private int BorderRadius = 30;
+		private JButton btnHome;
+		private JButton btnCart;
+		private JButton btnAccount;
+		private JButton button;
+		private ImageIcon icon;
+		private Image img;
 
 		public NavigationPanel() {
 			setLayout(new FlowLayout());
 
 			// Cria o botão para voltar à página principal
-			JButton btnHome = createIconButton("imagens\\casa2.png", "Página Principal");
+			btnHome = createIconButton("imagens\\casa2.png", "Página Principal");
 			btnHome.addActionListener(e -> {
 				// Lógica para voltar à página principal
 				Cardapio cardapio = new Cardapio();
@@ -238,7 +266,7 @@ public class Cardapio extends JFrame {
 			});
 
 			// Cria o botão para ir ao carrinho
-			JButton btnCart = createIconButton("imagens\\carrinho-de-compras2.png", "Carrinho");
+			btnCart = createIconButton("imagens\\carrinho-de-compras2.png", "Carrinho");
 			btnCart.addActionListener(e -> {
 				Carrinho carrinho = new Carrinho();
 				carrinho.setVisible(true);
@@ -246,7 +274,7 @@ public class Cardapio extends JFrame {
 			});
 
 			// Cria o botão para mostrar a conta do usuário
-			JButton btnAccount = createIconButton("imagens\\perfil2.png", "Conta");
+			btnAccount = createIconButton("imagens\\perfil2.png", "Conta");
 			btnAccount.addActionListener(e -> {
 				// Lógica para mostrar a conta do usuário
 				Perfil perfil = new Perfil();
@@ -286,8 +314,8 @@ public class Cardapio extends JFrame {
 
 		// Método auxiliar para criar um botão com ícone
 		private JButton createIconButton(String iconPath, String tooltip) {
-			JButton button = new JButton();
-			ImageIcon icon = new ImageIcon(iconPath);
+			button = new JButton();
+			icon = new ImageIcon(iconPath);
 
 			button.setToolTipText(tooltip);
 			button.setContentAreaFilled(false);
@@ -295,23 +323,18 @@ public class Cardapio extends JFrame {
 			button.setPreferredSize(new Dimension(90, 30));
 
 			// Redimensiona a imagem
-			Image img = icon.getImage().getScaledInstance(30, 30, Image.SCALE_SMOOTH);
+			img = icon.getImage().getScaledInstance(30, 30, Image.SCALE_SMOOTH);
 			button.setIcon(new ImageIcon(img));
 
 			return button;
 		}
 	}
 
-	private JPanel itemPainel;
-	private String[] lanches = { "Hamburguer", "Cheeseburguer", "Vegetariano" };
-	private String[] bebidas = { "Refrigerante", "Suco", "Água" };
-	private String[] porcoes = { "Batata Frita", "Batata Rústica" };
-
 	public void CriarFiltros() {
-		JButton btnAll = createImageButton("imagens\\todos.png", "Todos");
-		JButton btnLanches = createImageButton("imagens\\hamburguer.png", "Lanches");
-		JButton btnBebidas = createImageButton("imagens\\refrigerantes.png", "Bebidas");
-		JButton btnPorcoes = createImageButton("imagens\\porcoes.png", "Porções");
+		btnAll = createImageButton("imagens\\todos.png", "Todos");
+		btnLanches = createImageButton("imagens\\hamburguer.png", "Lanches");
+		btnBebidas = createImageButton("imagens\\refrigerantes.png", "Bebidas");
+		btnPorcoes = createImageButton("imagens\\porcoes.png", "Porções");
 
 		// Definindo ação para cada botão
 		btnAll.addActionListener(e -> updateItems("all"));
@@ -332,7 +355,8 @@ public class Cardapio extends JFrame {
 	}
 
 	private JButton createImageButton(String imagePath, String tooltip) {
-		JButton button = new JButton();
+		button = new JButton();
+
 		button.setToolTipText(tooltip);
 		button.setContentAreaFilled(false);
 		button.setBorderPainted(false);
@@ -420,11 +444,11 @@ public class Cardapio extends JFrame {
 	}
 
 	public void BotaoMenu() {
-		ImageIcon menuIcon = new ImageIcon("imagens\\menu-hamburguer2.png");
-		Image img = menuIcon.getImage().getScaledInstance(32, 32, Image.SCALE_SMOOTH);
-		menuIcon = new ImageIcon(img);
+		menuicon = new ImageIcon("imagens\\menu-hamburguer2.png");
+		img = menuicon.getImage().getScaledInstance(32, 32, Image.SCALE_SMOOTH);
+		menuicon = new ImageIcon(img);
 
-		btnMenu = new JButton(menuIcon);
+		btnMenu = new JButton(menuicon);
 		btnMenu.setBounds(50, 50, 50, 25);
 		btnMenu.setBackground(new Color(255, 255, 255));
 		btnMenu.setBorderPainted(false);
@@ -434,12 +458,12 @@ public class Cardapio extends JFrame {
 		// Comeca com o botao invisivel
 		btnMenu.setVisible(false);
 
-		JPopupMenu menuPopup = new JPopupMenu();
+		menuPopup = new JPopupMenu();
 
-		JMenuItem op1 = new JMenuItem("Cadastrar Produto");
-		JMenuItem op2 = new JMenuItem("Alterar Produto");
-		JMenuItem op3 = new JMenuItem("Buscar Produto");
-		JMenuItem op4 = new JMenuItem("Excluir Produto");
+		op1 = new JMenuItem("Cadastrar Produto");
+		op2 = new JMenuItem("Alterar Produto");
+		op3 = new JMenuItem("Buscar Produto");
+		op4 = new JMenuItem("Excluir Produto");
 
 		op1.addActionListener(e -> JOptionPane.showMessageDialog(this, "Opção 2 selecionada"));
 		op2.addActionListener(e -> JOptionPane.showMessageDialog(this, "Opção 2 selecionada"));

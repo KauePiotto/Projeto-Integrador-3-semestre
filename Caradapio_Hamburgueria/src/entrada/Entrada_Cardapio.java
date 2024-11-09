@@ -22,6 +22,13 @@ import Cadapio_Pag_Inicial.Cardapio;
 
 public class Entrada_Cardapio extends JFrame {
 	private Image imagemFundo;
+	private Dimension screen;
+	private Dimension janela;
+	private ImageIcon logoIcon;
+	private Image logoImage;
+	private ImageIcon resizedLogoIcon;
+	private JLabel lblLogo;
+	private BotaoArredondado botaoArredondado;
 
 	public Entrada_Cardapio() {
 		setTitle("Entrada - Byell Hambúrgueria");
@@ -42,8 +49,8 @@ public class Entrada_Cardapio extends JFrame {
 
 	// Metodo para centralizar o JFrame
 	public void Centralizar() {
-		Dimension screen = Toolkit.getDefaultToolkit().getScreenSize();
-		Dimension janela = getSize();
+		screen = Toolkit.getDefaultToolkit().getScreenSize();
+		janela = getSize();
 
 		if (janela.height > screen.height) {
 			setSize(janela.height, screen.height);
@@ -69,14 +76,14 @@ public class Entrada_Cardapio extends JFrame {
 
 	// Metodo para colocar a Logo Arredondada no JFrame
 	public void Logo(JPanel painel) {
-		ImageIcon logoIcon = new ImageIcon("imagens\\Logo2.png");
+		logoIcon = new ImageIcon("imagens\\Logo2.png");
 
-		Image logoImage = logoIcon.getImage().getScaledInstance(500, 250, Image.SCALE_SMOOTH);
-		ImageIcon resizedLogoIcon = new ImageIcon(logoImage);
-		JLabel logoLabel = new JLabel(resizedLogoIcon);
-		logoLabel.setBounds(305, 155, 200, 100);
+		logoImage = logoIcon.getImage().getScaledInstance(500, 250, Image.SCALE_SMOOTH);
+		resizedLogoIcon = new ImageIcon(logoImage);
+		lblLogo = new JLabel(resizedLogoIcon);
+		lblLogo.setBounds(305, 155, 200, 100);
 
-		painel.add(logoLabel);
+		painel.add(lblLogo);
 	}
 
 	// Classe interna para arredondar o Botao
@@ -105,18 +112,18 @@ public class Entrada_Cardapio extends JFrame {
 
 	// Metodo para adicionar o botao no JFrame
 	public void BotaoEntrada(JPanel painel) {
-		BotaoArredondado btnEntrada = new BotaoArredondado("Ver Cardápio", 30);
+		botaoArredondado = new BotaoArredondado("Ver Cardápio", 30);
 
-		btnEntrada.setText("Ver Cardápio");
-		btnEntrada.setForeground(Color.decode("#ffd96d"));
-		btnEntrada.setFont(new Font("Arial", Font.BOLD, 16));
-		btnEntrada.setBounds(280, 270, 250, 35);
-		btnEntrada.setBackground(new Color(0, 0, 0));
+		botaoArredondado.setText("Ver Cardápio");
+		botaoArredondado.setForeground(Color.decode("#ffd96d"));
+		botaoArredondado.setFont(new Font("Arial", Font.BOLD, 16));
+		botaoArredondado.setBounds(280, 270, 250, 35);
+		botaoArredondado.setBackground(new Color(0, 0, 0));
 
-		btnEntrada.setBorderPainted(false);
-		btnEntrada.setFocusPainted(false);
+		botaoArredondado.setBorderPainted(false);
+		botaoArredondado.setFocusPainted(false);
 
-		btnEntrada.addActionListener(new ActionListener() {
+		botaoArredondado.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				Cardapio cardapio = new Cardapio();
@@ -126,28 +133,28 @@ public class Entrada_Cardapio extends JFrame {
 		});
 
 		// Configurações do MouseListener para mudar a cor e o cursor
-		btnEntrada.addMouseListener(new MouseAdapter() {
+		botaoArredondado.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseEntered(MouseEvent e) {
-				btnEntrada.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+				botaoArredondado.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
 			}
 
 			@Override
 			public void mouseExited(MouseEvent e) {
-				btnEntrada.setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
+				botaoArredondado.setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
 			}
 
 			@Override
 			public void mousePressed(MouseEvent e) {
-				btnEntrada.setBackground(new Color(0, 0, 0));
+				botaoArredondado.setBackground(new Color(0, 0, 0));
 			}
 
 			@Override
 			public void mouseReleased(MouseEvent e) {
-				btnEntrada.setBackground(new Color(0, 0, 0));
+				botaoArredondado.setBackground(new Color(0, 0, 0));
 			}
 		});
-		painel.add(btnEntrada);
+		painel.add(botaoArredondado);
 	}
 
 	public static void main(String[] args) {
