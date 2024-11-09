@@ -21,6 +21,7 @@ import javax.swing.JPanel;
 import Cadapio_Pag_Inicial.Cardapio;
 
 public class Entrada_Cardapio extends JFrame {
+	private Image imagemFundo;
 
 	public Entrada_Cardapio() {
 		setTitle("Entrada - Byell Hambúrgueria");
@@ -55,11 +56,8 @@ public class Entrada_Cardapio extends JFrame {
 
 	// Classe interna para o painel com fundo
 	class PainelComFundo extends JPanel {
-		private Image imagemFundo;
-
 		public PainelComFundo() {
-			imagemFundo = new ImageIcon("imagens\\Fundo.png")
-					.getImage();
+			imagemFundo = new ImageIcon("imagens\\Fundo.png").getImage();
 		}
 
 		@Override

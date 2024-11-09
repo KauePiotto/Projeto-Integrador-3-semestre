@@ -134,22 +134,24 @@ public class BuscarProduto extends JFrame {
 		cmbTipoProduto.setBounds(180, 170, 225, 25);
 		cmbTipoProduto.setFont(new Font("Arial", Font.PLAIN, 16));
 		add(cmbTipoProduto);
-		
-		//Adiciona o botão para buscar o produto
+
+		// Adiciona o botão para buscar o produto
 		BotaoArredondado btnBucarProduto = new BotaoArredondado("Buscar Produto", 30);
-		
+
 		btnBucarProduto.setFont(new Font("Arial", Font.BOLD, 16));
 		btnBucarProduto.setBounds(300, 230, 200, 40);
-		
+
 		add(btnBucarProduto);
-		
+
 		btnBucarProduto.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				JOptionPane.showMessageDialog(null, "Produto encontrardo com sucesso!", "Busca Produto",
 						JOptionPane.INFORMATION_MESSAGE);
-				Alterar_E_Excluir_Produto alterarPro = new Alterar_E_Excluir_Produto();
-				alterarPro.setVisible(true);
+
+				Alterar_E_Excluir_Produto AeEPro = new Alterar_E_Excluir_Produto();
+				AeEPro.setVisible(true);
+				dispose();
 			}
 		});
 	}
