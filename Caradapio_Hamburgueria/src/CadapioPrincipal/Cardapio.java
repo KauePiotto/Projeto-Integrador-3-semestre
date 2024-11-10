@@ -15,11 +15,13 @@ import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JMenuItem;
-import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JPopupMenu;
 import LoginECadastrar.Cadastrar;
 import LoginECadastrar.Login;
+import Produtos.Alterar_E_Excluir_Produto;
+import Produtos.BuscarProduto;
+import Produtos.CadastroProduto;
 import entrada.BotaoArredondado;
 import entrada.PainelComFundo;
 
@@ -27,29 +29,27 @@ public class Cardapio extends JFrame {
 	private JButton btnLogin;
 	private JButton btnCadastrar;
 	private JButton btnMenu;
-	private Dimension screen;
-	private Dimension janela;
-	private ImageIcon logoIcon;
-	private ImageIcon ImagemFundo;
-	private Image logoImage;
-	private ImageIcon resizedLogoIcon;
-	private JLabel lblLogo;
-	private JPanel itemPainel;
-	private ImageIcon icon;
-	private JLabel imageLabel;
-	private ImageIcon imageIcon;
 	private JButton btnAll;
 	private JButton btnLanches;
 	private JButton btnBebidas;
 	private JButton btnPorcoes;
 	private JButton button;
-	private ImageIcon menuicon;
-	private Image img;
-	private JPopupMenu menuPopup;
+	private JLabel lblLogo;
+	private JLabel imageLabel;
+	private JPanel itemPainel;
 	private JMenuItem op1;
 	private JMenuItem op2;
 	private JMenuItem op3;
-	private JMenuItem op4;
+	private JPopupMenu menuPopup;
+	private Dimension screen;
+	private Dimension janela;
+	private ImageIcon logoIcon;
+	private ImageIcon resizedLogoIcon;
+	private ImageIcon icon;
+	private ImageIcon imageIcon;
+	private ImageIcon menuicon;
+	private Image logoImage;
+	private Image img;
 	private PainelComFundo painel;
 	private NavigationPanel NavPanel;
 
@@ -57,6 +57,7 @@ public class Cardapio extends JFrame {
 	private String[] bebidas = { "Refrigerante", "Suco", "Água" };
 	private String[] porcoes = { "Batata Frita", "Batata Rústica" };
 
+	
 	public Cardapio() {
 		setTitle("Cardápio - Byell Hambúrgueria");
 		setResizable(false);
@@ -121,7 +122,7 @@ public class Cardapio extends JFrame {
 
 		painel.setLayout(null);
 		painel.setBounds(0, 0, 800, 105);
-		ImagemFundo = new ImageIcon("imagens/Fundo.png");
+		new ImageIcon("imagens/Fundo.png");
 
 		add(painel);
 	}
@@ -326,25 +327,24 @@ public class Cardapio extends JFrame {
 		btnMenu.setContentAreaFilled(false);
 		btnMenu.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
 
-		// Comeca com o botao invisivel
 		btnMenu.setVisible(false);
 
 		menuPopup = new JPopupMenu();
 
 		op1 = new JMenuItem("Cadastrar Produto");
-		op2 = new JMenuItem("Alterar Produto");
+		op2 = new JMenuItem("Alterar Produto ou Excluir");
 		op3 = new JMenuItem("Buscar Produto");
-		op4 = new JMenuItem("Excluir Produto");
 
-		op1.addActionListener(e -> JOptionPane.showMessageDialog(this, "Opção 2 selecionada"));
-		op2.addActionListener(e -> JOptionPane.showMessageDialog(this, "Opção 2 selecionada"));
-		op3.addActionListener(e -> JOptionPane.showMessageDialog(this, "Opção 3 selecionada"));
-		op4.addActionListener(e -> JOptionPane.showMessageDialog(this, "Opção 3 selecionada"));
+		CadastroProduto cadastro = new CadastroProduto();
+		BuscarProduto buscar = new BuscarProduto();
+		Alterar_E_Excluir_Produto altEecl = new Alterar_E_Excluir_Produto();
+		op1.addActionListener(e -> cadastro.setVisible(true));
+		op2.addActionListener(e -> buscar.setVisible(true));
+		op3.addActionListener(e -> altEecl.setVisible(true));
 
 		menuPopup.add(op1);
 		menuPopup.add(op2);
 		menuPopup.add(op3);
-		menuPopup.add(op4);
 
 		btnMenu.addActionListener(e -> menuPopup.show(btnMenu, 0, btnMenu.getHeight()));
 

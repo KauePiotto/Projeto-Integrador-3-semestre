@@ -16,6 +16,7 @@ import javax.swing.text.AbstractDocument;
 import javax.swing.text.DocumentFilter;
 
 import CadapioPrincipal.Cardapio;
+import LoginECadastrar.Login.BotaoArredondado;
 
 import javax.swing.text.AttributeSet;
 import javax.swing.text.BadLocationException;
@@ -98,7 +99,6 @@ public class CadastroProduto extends JFrame {
 			public void actionPerformed(ActionEvent e) {
 				Cardapio cardapio = new Cardapio();
 				cardapio.setVisible(true);
-				dispose();
 			}
 		});
 	}
@@ -223,19 +223,21 @@ public class CadastroProduto extends JFrame {
 		});
 
 		// Adiciona o Botao Cadastrar Porduto
-		botaoArredondado.setText("CadastrarProduto");
-		botaoArredondado.setFont(new Font("Arial", Font.BOLD, 16));
-		botaoArredondado.setBounds(300, 330, 200, 40);
-
-		add(botaoArredondado);
-
-		botaoArredondado.addActionListener(new ActionListener() {
-			@Override
-			public void actionPerformed(ActionEvent e) {
-				JOptionPane.showMessageDialog(null, "Produto cadastrado com sucesso!", "Cadastro Produto",
-						JOptionPane.INFORMATION_MESSAGE);
-			}
-		});
+		/*
+		 * botaoArredondado = new
+		 * Produtos.Alterar_E_Excluir_Produto.BotaoArredondado("Login", 30);
+		 * 
+		 * botaoArredondado.setFont(new Font("Arial", Font.BOLD, 16));
+		 * botaoArredondado.setBounds(300, 330, 200, 40);
+		 * 
+		 * add(botaoArredondado);
+		 * 
+		 * botaoArredondado.addActionListener(new ActionListener() {
+		 * 
+		 * @Override public void actionPerformed(ActionEvent e) {
+		 * JOptionPane.showMessageDialog(null, "Produto cadastrado com sucesso!",
+		 * "Cadastro Produto", JOptionPane.INFORMATION_MESSAGE); } });
+		 */
 	}
 
 	public static void main(String[] args) {

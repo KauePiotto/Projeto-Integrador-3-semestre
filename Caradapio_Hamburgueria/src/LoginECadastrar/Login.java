@@ -38,6 +38,7 @@ public class Login extends JFrame {
 		Logo();
 		BotaoVoltar();
 		CampoLogin();
+		
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 	}
 
@@ -79,7 +80,7 @@ public class Login extends JFrame {
 		}
 	}
 
-	class BotaoArredondado extends JButton {
+	public class BotaoArredondado extends JButton {
 		private int raio;
 
 		public BotaoArredondado(String texto, int raio) {
