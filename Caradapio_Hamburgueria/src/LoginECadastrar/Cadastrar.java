@@ -341,11 +341,6 @@ public class Cadastrar extends JFrame {
 					JOptionPane.showMessageDialog(null, "Preencha todos os campos.", "Erro de Alteração",
 							JOptionPane.ERROR_MESSAGE);
 				} else {
-					conexao = new ConectaMySQL();
-					conexao.openDB();
-					conexao.inserirUsuario(nome, sobrenome, email, senha, cpf, telefone, cep, rua, numero, bairro,
-							cidade, estado);
-					conexao.closeDB();
 					JOptionPane.showMessageDialog(null, "Cadastro realizado com bem-sucedida!");
 					dispose();
 
