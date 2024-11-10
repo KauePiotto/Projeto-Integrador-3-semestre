@@ -20,6 +20,7 @@ import javax.swing.JTextField;
 import javax.swing.text.MaskFormatter;
 import entrada.BotaoArredondado;
 import CadapioPrincipal.Cardapio;
+import dao.ConectaDao;
 
 public class Cadastrar extends JFrame {
 	private Dimension screen;
@@ -75,6 +76,7 @@ public class Cadastrar extends JFrame {
 	private String estado;
 	private ImageIcon voltarIcon;
 	private BotaoArredondado btnCadastrar;
+	private ConectaDao conexao;
 
 	public Cadastrar() {
 		setTitle("Cadastrar - Byell Hambúrgueria");
@@ -324,8 +326,8 @@ public class Cadastrar extends JFrame {
 				sobrenome = txtSobrenome.getText();
 				email = txtEmail.getText();
 				senha = new String(txtSenha.getPassword());
-				cpf = cepField.getText();
-				telefone = txtNum.getText();
+				cpf = cpfField.getText();
+				telefone = telefoneField.getText();
 				cep = cepField.getText();
 				rua = txtRua.getText();
 				numero = txtNum.getText();
@@ -339,6 +341,11 @@ public class Cadastrar extends JFrame {
 					JOptionPane.showMessageDialog(null, "Preencha todos os campos.", "Erro de Alteração",
 							JOptionPane.ERROR_MESSAGE);
 				} else {
+					conexao = new ConectaDao();
+					conexao.openDB();
+					conexao.inserirUsuario(nome, sobrenome, email, senha, cpf, telefone, cep, rua, numero, bairro,
+							cidade, estado);
+					conexao.closeDB();
 					JOptionPane.showMessageDialog(null, "Cadastro realizado com bem-sucedida!");
 					dispose();
 
