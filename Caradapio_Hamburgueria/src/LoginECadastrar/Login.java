@@ -19,7 +19,8 @@ import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JPasswordField;
 import javax.swing.JTextField;
-import Cadapio_Pag_Inicial.Cardapio;
+
+import CadapioPrincipal.Cardapio;
 
 public class Login extends JFrame {
 	public Login() {

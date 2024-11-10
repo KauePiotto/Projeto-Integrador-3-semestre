@@ -1,20 +1,15 @@
-package Cadapio_Pag_Inicial;
+package CadapioPrincipal;
 
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.FlowLayout;
 import java.awt.Font;
-import java.awt.Graphics;
-import java.awt.Graphics2D;
 import java.awt.Image;
-import java.awt.RenderingHints;
 import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
-import java.awt.geom.RoundRectangle2D;
-
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JFrame;
@@ -23,9 +18,6 @@ import javax.swing.JMenuItem;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JPopupMenu;
-
-import HubDeBaixo.Carrinho;
-import HubDeBaixo.Perfil;
 import LoginECadastrar.Cadastrar;
 import LoginECadastrar.Login;
 import entrada.BotaoArredondado;
@@ -43,11 +35,9 @@ public class Cardapio extends JFrame {
 	private ImageIcon resizedLogoIcon;
 	private JLabel lblLogo;
 	private JPanel itemPainel;
-
-	private String[] lanches = { "Hamburguer", "Cheeseburguer", "Vegetariano" };
-	private String[] bebidas = { "Refrigerante", "Suco", "Água" };
-	private String[] porcoes = { "Batata Frita", "Batata Rústica" };
-
+	private ImageIcon icon;
+	private JLabel imageLabel;
+	private ImageIcon imageIcon;
 	private JButton btnAll;
 	private JButton btnLanches;
 	private JButton btnBebidas;
@@ -61,6 +51,11 @@ public class Cardapio extends JFrame {
 	private JMenuItem op3;
 	private JMenuItem op4;
 	private PainelComFundo painel;
+	private NavigationPanel NavPanel;
+
+	private String[] lanches = { "Hamburguer", "Cheeseburguer", "Vegetariano" };
+	private String[] bebidas = { "Refrigerante", "Suco", "Água" };
+	private String[] porcoes = { "Batata Frita", "Batata Rústica" };
 
 	public Cardapio() {
 		setTitle("Cardápio - Byell Hambúrgueria");
@@ -75,12 +70,21 @@ public class Cardapio extends JFrame {
 		CriarFiltros();
 		BotaoMenu();
 		FotoFundo();
+		NavPainel();
 
-		NavigationPanel navPanel = new NavigationPanel();
-		navPanel.setBounds(250, 515, 300, 40);
-		add(navPanel);
+		itemPainel = new JPanel();
+		itemPainel.setLayout(new FlowLayout());
+		itemPainel.setBounds(50, 150, 700, 350);
+		add(itemPainel);
 
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+	}
+
+	public void NavPainel() {
+		NavPanel = new NavigationPanel(this);
+		NavPanel.setBounds(250, 515, 300, 40);
+
+		add(NavPanel);
 	}
 
 	public void ocultarBotoesLoginECadastrar() {
@@ -114,6 +118,7 @@ public class Cardapio extends JFrame {
 
 	public void FotoFundo() {
 		painel = new PainelComFundo();
+
 		painel.setLayout(null);
 		painel.setBounds(0, 0, 800, 105);
 		ImagemFundo = new ImageIcon("imagens/Fundo.png");
@@ -128,8 +133,6 @@ public class Cardapio extends JFrame {
 		btnLogin.setFont(new Font("Arial", Font.BOLD, 16));
 		btnLogin.setBounds(565, 75, 100, 25);
 		btnLogin.setBackground(new Color(73, 71, 71));
-
-		// Adiciona o ActionListener para abrir a tela Login
 		btnLogin.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
@@ -138,18 +141,14 @@ public class Cardapio extends JFrame {
 				dispose();
 			}
 		});
-
-		// Configurações do MouseListener para mudar a cor e o cursor
 		btnLogin.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseEntered(MouseEvent e) {
-				// Muda o cursor para ícone de mão
 				btnLogin.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
 			}
 
 			@Override
 			public void mouseExited(MouseEvent e) {
-				// Restaura o cursor padrão
 				btnLogin.setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
 			}
 
@@ -163,7 +162,6 @@ public class Cardapio extends JFrame {
 				btnLogin.setBackground(new Color(73, 71, 71));
 			}
 		});
-
 		add(btnLogin);
 	}
 
@@ -175,8 +173,6 @@ public class Cardapio extends JFrame {
 		btnCadastrar.setFont(new Font("Arial", Font.BOLD, 16));
 		btnCadastrar.setBounds(668, 75, 110, 25);
 		btnCadastrar.setBackground(new Color(73, 71, 71));
-
-		// Abrir a tela Cadastrar
 		btnCadastrar.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
@@ -185,18 +181,14 @@ public class Cardapio extends JFrame {
 				dispose();
 			}
 		});
-
-		// Configurações do MouseListener para mudar a cor e o cursor
 		btnCadastrar.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseEntered(MouseEvent e) {
-				// Muda o cursor para ícone de mão
 				btnCadastrar.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
 			}
 
 			@Override
 			public void mouseExited(MouseEvent e) {
-				// Restaura o cursor padrão
 				btnCadastrar.setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
 			}
 
@@ -213,106 +205,17 @@ public class Cardapio extends JFrame {
 		add(btnCadastrar);
 	}
 
-	class NavigationPanel extends JPanel {
-		private Color backgorund = new Color(73, 71, 71);
-		private int BorderRadius = 30;
-		private JButton btnHome;
-		private JButton btnCart;
-		private JButton btnAccount;
-		private JButton button;
-		private ImageIcon icon;
-		private Image img;
-
-		public NavigationPanel() {
-			setLayout(new FlowLayout());
-
-			// Cria o botão para voltar à página principal
-			btnHome = createIconButton("imagens\\casa2.png", "Página Principal");
-			btnHome.addActionListener(e -> {
-				// Lógica para voltar à página principal
-				Cardapio cardapio = new Cardapio();
-				cardapio.setVisible(true);
-				dispose();
-			});
-
-			// Cria o botão para ir ao carrinho
-			btnCart = createIconButton("imagens\\carrinho-de-compras2.png", "Carrinho");
-			btnCart.addActionListener(e -> {
-				Carrinho carrinho = new Carrinho();
-				carrinho.setVisible(true);
-				dispose();
-			});
-
-			// Cria o botão para mostrar a conta do usuário
-			btnAccount = createIconButton("imagens\\perfil2.png", "Conta");
-			btnAccount.addActionListener(e -> {
-				// Lógica para mostrar a conta do usuário
-				Perfil perfil = new Perfil();
-				perfil.setVisible(true);
-				dispose();
-			});
-
-			// Adiciona os botões ao painel
-			add(btnHome);
-			add(btnCart);
-			add(btnAccount);
-		}
-
-		@Override
-		protected void paintComponent(Graphics g) {
-			super.paintComponent(g);
-
-			Graphics2D g2 = (Graphics2D) g.create();
-			g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
-			g2.setColor(backgorund);
-			g2.fill(new RoundRectangle2D.Double(0, 0, getWidth(), getHeight(), BorderRadius, BorderRadius));
-
-			g2.dispose();
-		}
-
-		// Método para mudar a cor de fundo, se necessário
-		public void setBackgroundColor(Color color) {
-			this.backgorund = color;
-			repaint();
-		}
-
-		// Método para alterar o raio do arredondamento, se necessário
-		public void setCornerRadius(int radius) {
-			this.BorderRadius = radius;
-			repaint();
-		}
-
-		// Método auxiliar para criar um botão com ícone
-		private JButton createIconButton(String iconPath, String tooltip) {
-			button = new JButton();
-			icon = new ImageIcon(iconPath);
-
-			button.setToolTipText(tooltip);
-			button.setContentAreaFilled(false);
-			button.setBorderPainted(false);
-			button.setPreferredSize(new Dimension(90, 30));
-
-			// Redimensiona a imagem
-			img = icon.getImage().getScaledInstance(30, 30, Image.SCALE_SMOOTH);
-			button.setIcon(new ImageIcon(img));
-
-			return button;
-		}
-	}
-
 	public void CriarFiltros() {
-		btnAll = createImageButton("imagens\\todos.png", "Todos");
-		btnLanches = createImageButton("imagens\\hamburguer.png", "Lanches");
-		btnBebidas = createImageButton("imagens\\refrigerantes.png", "Bebidas");
-		btnPorcoes = createImageButton("imagens\\porcoes.png", "Porções");
+		btnAll = createImageButton("imagens/todos.png", "Todos");
+		btnLanches = createImageButton("imagens/hamburguer.png", "Lanches");
+		btnBebidas = createImageButton("imagens/refrigerantes.png", "Bebidas");
+		btnPorcoes = createImageButton("imagens/porcoes.png", "Porções");
 
-		// Definindo ação para cada botão
 		btnAll.addActionListener(e -> updateItems("all"));
 		btnLanches.addActionListener(e -> updateItems("lanches"));
 		btnBebidas.addActionListener(e -> updateItems("bebidas"));
 		btnPorcoes.addActionListener(e -> updateItems("porcoes"));
 
-		// Posicionamento e adição ao JFrame
 		btnLanches.setBounds(170, 115, 100, 30);
 		btnBebidas.setBounds(286, 115, 100, 30);
 		btnPorcoes.setBounds(400, 115, 100, 30);
@@ -332,9 +235,8 @@ public class Cardapio extends JFrame {
 		button.setBorderPainted(false);
 		button.setFocusPainted(false);
 
-		// Carrega e redimensiona a imagem
-		ImageIcon icon = new ImageIcon(imagePath);
-		Image img = icon.getImage().getScaledInstance(30, 30, Image.SCALE_SMOOTH);
+		icon = new ImageIcon(imagePath);
+		img = icon.getImage().getScaledInstance(30, 30, Image.SCALE_SMOOTH);
 		button.setIcon(new ImageIcon(img));
 
 		return button;
@@ -342,16 +244,15 @@ public class Cardapio extends JFrame {
 
 	private void updateItems(String filter) {
 		itemPainel.removeAll();
+		imageLabel = new JLabel();
 
-		JLabel imageLabel = new JLabel();
-
-		ImageIcon imageIcon = null;
-		Image img = null;
+		imageIcon = null;
+		img = null;
 
 		switch (filter) {
 		case "lanches":
 
-			imageIcon = new ImageIcon("imagens\\hamburguer.png");
+			imageIcon = new ImageIcon("imagens/hamburguer.png");
 			img = imageIcon.getImage().getScaledInstance(50, 50, Image.SCALE_SMOOTH);
 			imageLabel.setIcon(new ImageIcon(img));
 			itemPainel.add(imageLabel);
@@ -363,7 +264,7 @@ public class Cardapio extends JFrame {
 			break;
 		case "bebidas":
 
-			imageIcon = new ImageIcon("imagens\\refrigerantes.png");
+			imageIcon = new ImageIcon("imagens/refrigerantes.png");
 			img = imageIcon.getImage().getScaledInstance(50, 50, Image.SCALE_SMOOTH);
 			imageLabel.setIcon(new ImageIcon(img));
 
@@ -376,7 +277,7 @@ public class Cardapio extends JFrame {
 			break;
 		case "porcoes":
 
-			imageIcon = new ImageIcon("imagens\\porcoes.png");
+			imageIcon = new ImageIcon("imagens/porcoes.png");
 			img = imageIcon.getImage().getScaledInstance(50, 50, Image.SCALE_SMOOTH);
 			imageLabel.setIcon(new ImageIcon(img));
 
@@ -389,7 +290,7 @@ public class Cardapio extends JFrame {
 			break;
 		default:
 
-			imageIcon = new ImageIcon("imagens\\todos.png");
+			imageIcon = new ImageIcon("imagens/todos.png");
 			img = imageIcon.getImage().getScaledInstance(50, 50, Image.SCALE_SMOOTH);
 			imageLabel.setIcon(new ImageIcon(img));
 
@@ -414,7 +315,7 @@ public class Cardapio extends JFrame {
 	}
 
 	public void BotaoMenu() {
-		menuicon = new ImageIcon("imagens\\menu-hamburguer2.png");
+		menuicon = new ImageIcon("imagens/menu-hamburguer2.png");
 		img = menuicon.getImage().getScaledInstance(32, 32, Image.SCALE_SMOOTH);
 		menuicon = new ImageIcon(img);
 
@@ -450,7 +351,6 @@ public class Cardapio extends JFrame {
 		add(btnMenu);
 	}
 
-	// Método para tornar o botão de menu visível após o login do adm
 	public void mostrarMenu() {
 		btnMenu.setVisible(true);
 	}

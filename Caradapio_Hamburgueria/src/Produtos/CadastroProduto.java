@@ -14,6 +14,9 @@ import java.io.File;
 import java.io.IOException;
 import javax.swing.text.AbstractDocument;
 import javax.swing.text.DocumentFilter;
+
+import CadapioPrincipal.Cardapio;
+
 import javax.swing.text.AttributeSet;
 import javax.swing.text.BadLocationException;
 import javax.imageio.ImageIO;
@@ -26,7 +29,6 @@ import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JTextArea;
 import javax.swing.JTextField;
-import Cadapio_Pag_Inicial.Cardapio;
 
 public class CadastroProduto extends JFrame {
 	private Dimension screen;

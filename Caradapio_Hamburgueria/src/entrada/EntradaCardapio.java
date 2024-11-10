@@ -13,7 +13,8 @@ import javax.swing.ImageIcon;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
-import Cadapio_Pag_Inicial.Cardapio;
+
+import CadapioPrincipal.Cardapio;
 
 public class EntradaCardapio extends JFrame {
 	private Dimension screen;

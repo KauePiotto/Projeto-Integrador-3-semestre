@@ -33,7 +33,7 @@ import javax.swing.text.BadLocationException;
 import javax.swing.text.DocumentFilter;
 import javax.swing.text.DocumentFilter.FilterBypass;
 
-import Cadapio_Pag_Inicial.Cardapio;
+import CadapioPrincipal.Cardapio;
 
 
 public class Alterar_E_Excluir_Produto extends JFrame{

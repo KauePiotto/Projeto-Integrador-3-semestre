@@ -19,7 +19,7 @@ import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JTextField;
 
-import Cadapio_Pag_Inicial.Cardapio;
+import CadapioPrincipal.Cardapio;
 
 public class BuscarProduto extends JFrame {
 	public BuscarProduto() {

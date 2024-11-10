@@ -17,7 +17,8 @@ import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
-import Cadapio_Pag_Inicial.Cardapio;
+
+import CadapioPrincipal.Cardapio;
 
 public class Carrinho extends JFrame {
 	public Carrinho() {

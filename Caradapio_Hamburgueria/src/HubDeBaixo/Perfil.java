@@ -22,7 +22,8 @@ import javax.swing.JPasswordField;
 import javax.swing.JSeparator;
 import javax.swing.JTextField;
 import javax.swing.text.MaskFormatter;
-import Cadapio_Pag_Inicial.Cardapio;
+
+import CadapioPrincipal.Cardapio;
 
 public class Perfil extends JFrame {
 	public Perfil() {
