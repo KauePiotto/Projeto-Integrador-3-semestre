@@ -16,35 +16,50 @@ import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
-import javax.swing.JPanel;
 import javax.swing.JPasswordField;
 import javax.swing.JTextField;
-
 import CadapioPrincipal.Cardapio;
+import entrada.BotaoArredondado;
+import entrada.PainelComFundo;
 
 public class Login extends JFrame {
+	private Dimension screen;
+	private Dimension janela;
+	private ImageIcon logoIcon;
+	private Image logoImage;
+	private ImageIcon resizedLogoIcon;
+	private JLabel logoLabel;
+	private PainelComFundo painel;
+	private BotaoArredondado btnLogin;
+	private JLabel lblEmail;
+	private JTextField txtEmail;
+	private JLabel lblSenha;
+	private JPasswordField txtSenha;
+	private String email;
+	private String senha;
+	private ImageIcon voltarIcon;
+	private Image img;
+	private JButton voltarButton;
+
 	public Login() {
 		setTitle("Login - Byell Hambúrgueria");
 		setFont(new Font("Arial", Font.BOLD, 16));
 		setResizable(false);
 		getContentPane().setLayout(null);
 		setSize(800, 600);
+
+		PainelFundo();
 		Centralizar();
-
-		PainelComFundo painel = new PainelComFundo();
-		painel.setLayout(null);
-		setContentPane(painel);
-
 		Logo();
 		BotaoVoltar();
 		CampoLogin();
-		
+
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 	}
 
 	public void Centralizar() {
-		Dimension screen = Toolkit.getDefaultToolkit().getScreenSize();
-		Dimension janela = getSize();
+		screen = Toolkit.getDefaultToolkit().getScreenSize();
+		janela = getSize();
 
 		if (janela.height > screen.height) {
 			setSize(janela.height, screen.height);
@@ -56,94 +71,60 @@ public class Login extends JFrame {
 	}
 
 	public void Logo() {
-		ImageIcon logoIcon = new ImageIcon("imagens\\Logo2.png");
+		logoIcon = new ImageIcon("imagens/Logo2.png");
 
-		Image logoImage = logoIcon.getImage().getScaledInstance(500, 250, Image.SCALE_SMOOTH);
-		ImageIcon resizedLogoIcon = new ImageIcon(logoImage);
-		JLabel logoLabel = new JLabel(resizedLogoIcon);
+		logoImage = logoIcon.getImage().getScaledInstance(500, 250, Image.SCALE_SMOOTH);
+		resizedLogoIcon = new ImageIcon(logoImage);
+		logoLabel = new JLabel(resizedLogoIcon);
 		logoLabel.setBounds(305, 70, 200, 100);
 
 		add(logoLabel);
 	}
 
-	class PainelComFundo extends JPanel {
-		private Image imagemFundo;
-
-		public PainelComFundo() {
-			imagemFundo = new ImageIcon("imagens\\Fundo.png").getImage();
-		}
-
-		@Override
-		protected void paintComponent(Graphics g) {
-			super.paintComponent(g);
-			g.drawImage(imagemFundo, 0, 0, getWidth(), getHeight(), this);
-		}
-	}
-
-	public class BotaoArredondado extends JButton {
-		private int raio;
-
-		public BotaoArredondado(String texto, int raio) {
-			super(texto);
-			this.raio = raio; // Define o raio das bordas arredondadas
-			setFocusPainted(false);
-			setContentAreaFilled(false);
-			setBorderPainted(false);
-		}
-
-		@Override
-		protected void paintComponent(Graphics g) {
-			Graphics2D g2 = (Graphics2D) g.create();
-			g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
-
-			// Desenha o fundo do botão com bordas arredondadas
-			g2.setColor(getBackground());
-			g2.fill(new RoundRectangle2D.Double(0, 0, getWidth(), getHeight(), raio, raio));
-
-			super.paintComponent(g);
-			g2.dispose();
-		}
+	public void PainelFundo() {
+		painel = new PainelComFundo();
+		painel.setLayout(null);
+		setContentPane(painel);
 	}
 
 	public void CampoLogin() {
 
-		JLabel emLabel = new JLabel("Email:");
-		emLabel.setBounds(250, 200, 80, 25);
-		emLabel.setForeground(Color.decode("#ffd96d"));
-		emLabel.setFont(new Font("Arial", Font.BOLD, 16));
-		add(emLabel);
+		lblEmail = new JLabel("Email:");
+		lblEmail.setBounds(250, 200, 80, 25);
+		lblEmail.setForeground(Color.decode("#ffd96d"));
+		lblEmail.setFont(new Font("Arial", Font.BOLD, 16));
+		add(lblEmail);
 
-		JTextField emaField = new JTextField();
-		emaField.setBounds(310, 200, 200, 25);
-		emaField.setFont(new Font("Arial", Font.BOLD, 16));
-		add(emaField);
+		txtEmail = new JTextField();
+		txtEmail.setBounds(310, 200, 200, 25);
+		txtEmail.setFont(new Font("Arial", Font.BOLD, 16));
+		add(txtEmail);
 
-		JLabel passwordLabel = new JLabel("Senha:");
-		passwordLabel.setBounds(250, 240, 80, 25);
-		passwordLabel.setForeground(Color.decode("#ffd96d"));
-		passwordLabel.setFont(new Font("Arial", Font.BOLD, 16));
-		add(passwordLabel);
+		lblSenha = new JLabel("Senha:");
+		lblSenha.setBounds(250, 240, 80, 25);
+		lblSenha.setForeground(Color.decode("#ffd96d"));
+		lblSenha.setFont(new Font("Arial", Font.BOLD, 16));
+		add(lblSenha);
 
-		JPasswordField passwordField = new JPasswordField();
-		passwordField.setBounds(310, 240, 200, 25);
-		passwordField.setFont(new Font("Arial", Font.BOLD, 16));
-		add(passwordField);
+		txtSenha = new JPasswordField();
+		txtSenha.setBounds(310, 240, 200, 25);
+		txtSenha.setFont(new Font("Arial", Font.BOLD, 16));
+		add(txtSenha);
 
-		BotaoArredondado CampoLogin = new BotaoArredondado("Login", 30);
+		btnLogin = new BotaoArredondado("Login", 30);
 
-		CampoLogin.setText("Login");
-		CampoLogin.setBounds(330, 290, 150, 30);
-		CampoLogin.setFont(new Font("Arial", Font.BOLD, 16));
-		CampoLogin.setBackground(Color.gray);
-		CampoLogin.setForeground(Color.decode("#ffd96d"));
-		add(CampoLogin);
+		btnLogin.setBounds(330, 290, 150, 30);
+		btnLogin.setFont(new Font("Arial", Font.BOLD, 16));
+		btnLogin.setBackground(Color.gray);
+		btnLogin.setForeground(Color.decode("#ffd96d"));
+		add(btnLogin);
 
-		CampoLogin.addActionListener(new ActionListener() {
+		btnLogin.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				String email = emaField.getText();
-				String password = new String(passwordField.getPassword());
+				email = txtEmail.getText();
+				senha = new String(txtSenha.getPassword());
 
-				if (email.equals("admin@admin.com") && password.equals("123456")) {
+				if (email.equals("admin@admin.com") && senha.equals("123456")) {
 					JOptionPane.showMessageDialog(null, "Login bem-sucedido!");
 					dispose();
 
@@ -151,7 +132,7 @@ public class Login extends JFrame {
 					cardapio.setVisible(true);
 					cardapio.mostrarMenu();
 					cardapio.ocultarBotoesLoginECadastrar();
-				} else if (email.equals("exemplo@exmeploema.com") && password.equals("12345")) {
+				} else if (email.equals("exemplo@exmeploema.com") && senha.equals("12345")) {
 					JOptionPane.showMessageDialog(null, "Login bem-sucedido!");
 					dispose();
 
@@ -168,11 +149,11 @@ public class Login extends JFrame {
 	}
 
 	public void BotaoVoltar() {
-		ImageIcon voltarIcon = new ImageIcon("imagens\\seta-pequena-esquerda2.png");
-		Image img = voltarIcon.getImage().getScaledInstance(35, 35, Image.SCALE_SMOOTH);
+		voltarIcon = new ImageIcon("imagens/seta-pequena-esquerda2.png");
+		img = voltarIcon.getImage().getScaledInstance(35, 35, Image.SCALE_SMOOTH);
 		voltarIcon = new ImageIcon(img);
 
-		JButton voltarButton = new JButton(voltarIcon);
+		voltarButton = new JButton(voltarIcon);
 		voltarButton.setBounds(35, 20, 30, 30);
 		voltarButton.setBorderPainted(false);
 		voltarButton.setFocusPainted(false);
