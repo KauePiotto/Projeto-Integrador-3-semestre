@@ -78,9 +78,11 @@ public class Perfil extends JFrame {
 		setResizable(false);
 		getContentPane().setLayout(null);
 		setSize(800, 600);
+
 		Centralizar();
 		PerfilUsuario();
 		BotaoVoltar();
+
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 	}
 

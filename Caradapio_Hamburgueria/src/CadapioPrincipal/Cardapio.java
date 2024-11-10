@@ -72,6 +72,7 @@ public class Cardapio extends JFrame {
 		FotoFundo();
 		NavPainel();
 		PainelItem();
+
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 	}
 

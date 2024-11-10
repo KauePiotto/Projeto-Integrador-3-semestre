@@ -33,10 +33,12 @@ public class Cadastrar extends JFrame {
 		setResizable(false);
 		getContentPane().setLayout(null);
 		setSize(800, 600);
+
 		Centralizar();
 		Logo();
 		CadastrarDados();
 		BotaoVoltar();
+
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 	}
 
