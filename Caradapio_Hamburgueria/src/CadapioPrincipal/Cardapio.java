@@ -57,7 +57,6 @@ public class Cardapio extends JFrame {
 	private String[] bebidas = { "Refrigerante", "Suco", "Água" };
 	private String[] porcoes = { "Batata Frita", "Batata Rústica" };
 
-	
 	public Cardapio() {
 		setTitle("Cardápio - Byell Hambúrgueria");
 		setResizable(false);
@@ -72,13 +71,15 @@ public class Cardapio extends JFrame {
 		BotaoMenu();
 		FotoFundo();
 		NavPainel();
+		PainelItem();
+		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+	}
 
+	public void PainelItem() {
 		itemPainel = new JPanel();
 		itemPainel.setLayout(new FlowLayout());
 		itemPainel.setBounds(50, 150, 700, 350);
 		add(itemPainel);
-
-		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 	}
 
 	public void NavPainel() {

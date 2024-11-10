@@ -3,14 +3,10 @@ package HubDeBaixo;
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Font;
-import java.awt.Graphics;
-import java.awt.Graphics2D;
 import java.awt.Image;
-import java.awt.RenderingHints;
 import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.awt.geom.RoundRectangle2D;
 import java.text.ParseException;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
@@ -22,10 +18,60 @@ import javax.swing.JPasswordField;
 import javax.swing.JSeparator;
 import javax.swing.JTextField;
 import javax.swing.text.MaskFormatter;
-
+import entrada.BotaoArredondado;
 import CadapioPrincipal.Cardapio;
 
 public class Perfil extends JFrame {
+	private Dimension screen;
+	private Dimension janela;
+	private BotaoArredondado btnAlterar;
+	private JLabel lblDados;
+	private JSeparator linha;
+	private JLabel lblNome;
+	private JTextField txtNome;
+	private JLabel lblSobrenome;
+	private JTextField txtSobrenome;
+	private JLabel lblEmail;
+	private JTextField txtEmail;
+	private JLabel lblSenha;
+	private JPasswordField txtSenha;
+	private JLabel lblTelefone;
+	private MaskFormatter mascaraTelefone;
+	private JFormattedTextField telefoneField;
+	private JLabel lblCPF;
+	private MaskFormatter mascaraCPF;
+	private JFormattedTextField cpfField;
+	private JLabel lblEndereco;
+	private JSeparator linha2;
+	private JLabel lblRua;
+	private JTextField txtRua;
+	private JLabel lblNum;
+	private JTextField txtNum;
+	private JLabel lblCEP;
+	private MaskFormatter mascaraCEP;
+	private JFormattedTextField cepField;
+	private JLabel lblBairro;
+	private JTextField txtBairro;
+	private JLabel lblCidade;
+	private JTextField txtCidade;
+	private JLabel lblEstado;
+	private JTextField txtEstado;
+	private String nome;
+	private String sobrenome;
+	private String email;
+	private String senha;
+	private String cpf;
+	private String telefone;
+	private String cep;
+	private String rua;
+	private String numero;
+	private String bairro;
+	private String cidade;
+	private String estado;
+	private ImageIcon voltarIcon;
+	private Image img;
+	private JButton btnVoltar;
+
 	public Perfil() {
 		setTitle("Perfil - Byell Hambúrgueria");
 		getContentPane().setBackground(Color.decode("#1e1e1e"));
@@ -39,8 +85,8 @@ public class Perfil extends JFrame {
 	}
 
 	public void Centralizar() {
-		Dimension screen = Toolkit.getDefaultToolkit().getScreenSize();
-		Dimension janela = getSize();
+		screen = Toolkit.getDefaultToolkit().getScreenSize();
+		janela = getSize();
 
 		if (janela.height > screen.height) {
 			setSize(janela.height, screen.height);
@@ -51,104 +97,79 @@ public class Perfil extends JFrame {
 		setLocation((screen.width - janela.width) / 2, (screen.height - janela.height) / 2);
 	}
 
-	class BotaoArredondado extends JButton {
-		private int raio;
-
-		public BotaoArredondado(String texto, int raio) {
-			super(texto);
-			this.raio = raio;
-			setFocusPainted(false);
-			setContentAreaFilled(false);
-			setBorderPainted(false);
-		}
-
-		@Override
-		protected void paintComponent(Graphics g) {
-			Graphics2D g2 = (Graphics2D) g.create();
-			g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
-
-			// Desenha o fundo do botão com bordas arredondadas
-			g2.setColor(getBackground());
-			g2.fill(new RoundRectangle2D.Double(0, 0, getWidth(), getHeight(), raio, raio));
-
-			super.paintComponent(g);
-			g2.dispose();
-		}
-	}
-
 	public void PerfilUsuario() {
 		// Adiciona o Titulo
-		JLabel DadosP = new JLabel("Dados Pessoais");
-		DadosP.setBounds(25, 45, 160, 50);
-		DadosP.setForeground(Color.decode("#ffd96d"));
-		DadosP.setFont(new Font("Arial", Font.BOLD, 20));
-		add(DadosP);
+		lblDados = new JLabel("Dados Pessoais");
+		lblDados.setBounds(25, 45, 160, 50);
+		lblDados.setForeground(Color.decode("#ffd96d"));
+		lblDados.setFont(new Font("Arial", Font.BOLD, 20));
+		add(lblDados);
 
 		// Adicionar uma linha em baixo da JLabel Dados Pessoais
-		JSeparator linha = new JSeparator();
+		linha = new JSeparator();
 		linha.setBounds(20, 80, 160, 2);
 		linha.setForeground(Color.decode("#ffd96d"));
 		add(linha);
 
 		// Adiciona o Nome
-		JLabel NoLabel = new JLabel("Nome");
-		NoLabel.setBounds(40, 100, 80, 25);
-		NoLabel.setForeground(Color.decode("#ffd96d"));
-		NoLabel.setFont(new Font("Arial", Font.BOLD, 16));
-		add(NoLabel);
+		lblNome = new JLabel("Nome");
+		lblNome.setBounds(40, 100, 80, 25);
+		lblNome.setForeground(Color.decode("#ffd96d"));
+		lblNome.setFont(new Font("Arial", Font.BOLD, 16));
+		add(lblNome);
 
-		JTextField NoField = new JTextField();
-		NoField.setBounds(90, 100, 200, 25);
-		NoField.setFont(new Font("Arial", Font.BOLD, 16));
-		add(NoField);
+		txtNome = new JTextField();
+		txtNome.setBounds(90, 100, 200, 25);
+		txtNome.setFont(new Font("Arial", Font.BOLD, 16));
+		add(txtNome);
 
 		// Adiciona o Sobrenome
-		JLabel SoLabel = new JLabel("Sobrenome");
-		SoLabel.setBounds(300, 100, 160, 25);
-		SoLabel.setForeground(Color.decode("#ffd96d"));
-		SoLabel.setFont(new Font("Arial", Font.BOLD, 16));
-		add(SoLabel);
+		lblSobrenome = new JLabel("Sobrenome");
+		lblSobrenome.setBounds(300, 100, 160, 25);
+		lblSobrenome.setForeground(Color.decode("#ffd96d"));
+		lblSobrenome.setFont(new Font("Arial", Font.BOLD, 16));
+		add(lblSobrenome);
 
-		JTextField SoField = new JTextField();
-		SoField.setBounds(395, 100, 250, 25);
-		SoField.setFont(new Font("Arial", Font.BOLD, 16));
-		add(SoField);
+		txtSobrenome = new JTextField();
+		txtSobrenome.setBounds(395, 100, 250, 25);
+		txtSobrenome.setFont(new Font("Arial", Font.BOLD, 16));
+		add(txtSobrenome);
 
 		// Adiciona o E-mail
-		JLabel emLabel = new JLabel("E-mail");
-		emLabel.setBounds(40, 150, 80, 25);
-		emLabel.setForeground(Color.decode("#ffd96d"));
-		emLabel.setFont(new Font("Arial", Font.BOLD, 16));
-		add(emLabel);
+		lblEmail = new JLabel("E-mail");
+		lblEmail.setBounds(40, 150, 80, 25);
+		lblEmail.setForeground(Color.decode("#ffd96d"));
+		lblEmail.setFont(new Font("Arial", Font.BOLD, 16));
+		add(lblEmail);
 
-		JTextField emaField = new JTextField();
-		emaField.setBounds(90, 150, 220, 25);
-		emaField.setFont(new Font("Arial", Font.BOLD, 16));
-		add(emaField);
+		txtEmail = new JTextField();
+		txtEmail.setBounds(90, 150, 220, 25);
+		txtEmail.setFont(new Font("Arial", Font.BOLD, 16));
+		add(txtEmail);
 
 		// Adiciona a senha
-		JLabel passwordLabel = new JLabel("Senha");
-		passwordLabel.setBounds(320, 150, 80, 25);
-		passwordLabel.setForeground(Color.decode("#ffd96d"));
-		passwordLabel.setFont(new Font("Arial", Font.BOLD, 16));
-		add(passwordLabel);
+		lblSenha = new JLabel("Senha");
+		lblSenha.setBounds(320, 150, 80, 25);
+		lblSenha.setForeground(Color.decode("#ffd96d"));
+		lblSenha.setFont(new Font("Arial", Font.BOLD, 16));
+		add(lblSenha);
 
-		JPasswordField passwordField = new JPasswordField();
-		passwordField.setBounds(380, 150, 265, 25);
-		passwordField.setFont(new Font("Arial", Font.BOLD, 16));
-		add(passwordField);
+		txtSenha = new JPasswordField();
+		txtSenha.setBounds(380, 150, 265, 25);
+		txtSenha.setFont(new Font("Arial", Font.BOLD, 16));
+		add(txtSenha);
 
 		// Adiciona o numero de telefone
-		JLabel Telelbl = new JLabel("Telefone");
-		Telelbl.setBounds(40, 200, 80, 25);
-		Telelbl.setForeground(Color.decode("#ffd96d"));
-		Telelbl.setFont(new Font("Arial", Font.BOLD, 16));
-		add(Telelbl);
+		lblTelefone = new JLabel("Telefone");
+		lblTelefone.setBounds(40, 200, 80, 25);
+		lblTelefone.setForeground(Color.decode("#ffd96d"));
+		lblTelefone.setFont(new Font("Arial", Font.BOLD, 16));
+		add(lblTelefone);
 
 		try {
-			MaskFormatter mascaraTelefone = new MaskFormatter("(##) #####-####");
+			mascaraTelefone = new MaskFormatter("(##) #####-####");
 			mascaraTelefone.setPlaceholderCharacter('_');
-			JFormattedTextField telefoneField = new JFormattedTextField(mascaraTelefone);
+			telefoneField = new JFormattedTextField(mascaraTelefone);
 			telefoneField.setBounds(110, 200, 250, 25);
 			telefoneField.setFont(new Font("Arial", Font.BOLD, 16));
 			add(telefoneField);
@@ -157,16 +178,16 @@ public class Perfil extends JFrame {
 		}
 
 		// Adiciona o CPF
-		JLabel CPFlbl = new JLabel("CPF");
-		CPFlbl.setBounds(370, 200, 80, 25);
-		CPFlbl.setForeground(Color.decode("#ffd96d"));
-		CPFlbl.setFont(new Font("Arial", Font.BOLD, 16));
-		add(CPFlbl);
+		lblCPF = new JLabel("CPF");
+		lblCPF.setBounds(370, 200, 80, 25);
+		lblCPF.setForeground(Color.decode("#ffd96d"));
+		lblCPF.setFont(new Font("Arial", Font.BOLD, 16));
+		add(lblCPF);
 
 		try {
-			MaskFormatter mascaraCPF = new MaskFormatter("###.###.###-##");
+			mascaraCPF = new MaskFormatter("###.###.###-##");
 			mascaraCPF.setPlaceholderCharacter('_');
-			JFormattedTextField cpfField = new JFormattedTextField(mascaraCPF);
+			cpfField = new JFormattedTextField(mascaraCPF);
 			cpfField.setBounds(410, 200, 235, 25);
 			cpfField.setFont(new Font("Arial", Font.BOLD, 16));
 			add(cpfField);
@@ -175,54 +196,54 @@ public class Perfil extends JFrame {
 		}
 
 		// Adiciona um SubTitulo
-		JLabel Ende = new JLabel("Endereço");
-		Ende.setBounds(25, 225, 160, 50);
-		Ende.setForeground(Color.decode("#ffd96d"));
-		Ende.setFont(new Font("Arial", Font.BOLD, 20));
-		add(Ende);
+		lblEndereco = new JLabel("Endereço");
+		lblEndereco.setBounds(25, 225, 160, 50);
+		lblEndereco.setForeground(Color.decode("#ffd96d"));
+		lblEndereco.setFont(new Font("Arial", Font.BOLD, 20));
+		add(lblEndereco);
 
 		// Adicionar uma linha em baixo da JLabel Endereco
-		JSeparator linha2 = new JSeparator();
+		linha2 = new JSeparator();
 		linha2.setBounds(20, 260, 110, 2);
 		linha2.setForeground(Color.decode("#ffd96d"));
 		add(linha2);
 
 		// Adiciona o nome da rua
-		JLabel Rualbl = new JLabel("Endereço");
-		Rualbl.setBounds(40, 300, 80, 25);
-		Rualbl.setForeground(Color.decode("#ffd96d"));
-		Rualbl.setFont(new Font("Arial", Font.BOLD, 16));
-		add(Rualbl);
+		lblRua = new JLabel("Endereço");
+		lblRua.setBounds(40, 300, 80, 25);
+		lblRua.setForeground(Color.decode("#ffd96d"));
+		lblRua.setFont(new Font("Arial", Font.BOLD, 16));
+		add(lblRua);
 
-		JTextField Rualbl2 = new JTextField();
-		Rualbl2.setBounds(120, 300, 250, 25);
-		Rualbl2.setFont(new Font("Arial", Font.BOLD, 16));
-		add(Rualbl2);
+		txtRua = new JTextField();
+		txtRua.setBounds(120, 300, 250, 25);
+		txtRua.setFont(new Font("Arial", Font.BOLD, 16));
+		add(txtRua);
 
-		// Adiciona o nome da rua
-		JLabel Numlbl = new JLabel("Número");
-		Numlbl.setBounds(390, 300, 80, 25);
-		Numlbl.setForeground(Color.decode("#ffd96d"));
-		Numlbl.setFont(new Font("Arial", Font.BOLD, 16));
-		add(Numlbl);
+		// Adiciona o numero da rua
+		lblNum = new JLabel("Número");
+		lblNum.setBounds(390, 300, 80, 25);
+		lblNum.setForeground(Color.decode("#ffd96d"));
+		lblNum.setFont(new Font("Arial", Font.BOLD, 16));
+		add(lblNum);
 
-		JTextField Numlbl2 = new JTextField();
-		Numlbl2.setBounds(460, 300, 100, 25);
-		Numlbl2.setFont(new Font("Arial", Font.BOLD, 16));
-		add(Numlbl2);
+		txtNum = new JTextField();
+		txtNum.setBounds(460, 300, 100, 25);
+		txtNum.setFont(new Font("Arial", Font.BOLD, 16));
+		add(txtNum);
 
 		// Adiciona o CEP
-		JLabel Ceplbl = new JLabel("Cep");
-		Ceplbl.setBounds(60, 350, 80, 25);
-		Ceplbl.setForeground(Color.decode("#ffd96d"));
-		Ceplbl.setFont(new Font("Arial", Font.BOLD, 16));
-		add(Ceplbl);
+		lblCEP = new JLabel("Cep");
+		lblCEP.setBounds(60, 350, 80, 25);
+		lblCEP.setForeground(Color.decode("#ffd96d"));
+		lblCEP.setFont(new Font("Arial", Font.BOLD, 16));
+		add(lblCEP);
 
 		try {
 			// Máscara para o CEP
-			MaskFormatter mascaraCEP = new MaskFormatter("#####-###");
+			mascaraCEP = new MaskFormatter("#####-###");
 			mascaraCEP.setPlaceholderCharacter('_');
-			JFormattedTextField cepField = new JFormattedTextField(mascaraCEP);
+			cepField = new JFormattedTextField(mascaraCEP);
 			cepField.setBounds(120, 350, 130, 25);
 			cepField.setFont(new Font("Arial", Font.BOLD, 16));
 			add(cepField);
@@ -231,43 +252,43 @@ public class Perfil extends JFrame {
 		}
 
 		// Adiciona o Bairro
-		JLabel Bairrolbl = new JLabel("Bairro");
-		Bairrolbl.setBounds(270, 350, 80, 25);
-		Bairrolbl.setForeground(Color.decode("#ffd96d"));
-		Bairrolbl.setFont(new Font("Arial", Font.BOLD, 16));
-		add(Bairrolbl);
+		lblBairro = new JLabel("Bairro");
+		lblBairro.setBounds(270, 350, 80, 25);
+		lblBairro.setForeground(Color.decode("#ffd96d"));
+		lblBairro.setFont(new Font("Arial", Font.BOLD, 16));
+		add(lblBairro);
 
-		JTextField Bailbl = new JTextField();
-		Bailbl.setBounds(330, 350, 200, 25);
-		Bailbl.setFont(new Font("Arial", Font.BOLD, 16));
-		add(Bailbl);
+		txtBairro = new JTextField();
+		txtBairro.setBounds(330, 350, 200, 25);
+		txtBairro.setFont(new Font("Arial", Font.BOLD, 16));
+		add(txtBairro);
 
 		// Adiciona a cidade
-		JLabel Cidadelbl = new JLabel("Cidade");
-		Cidadelbl.setBounds(45, 400, 80, 25);
-		Cidadelbl.setForeground(Color.decode("#ffd96d"));
-		Cidadelbl.setFont(new Font("Arial", Font.BOLD, 16));
-		add(Cidadelbl);
+		lblCidade = new JLabel("Cidade");
+		lblCidade.setBounds(45, 400, 80, 25);
+		lblCidade.setForeground(Color.decode("#ffd96d"));
+		lblCidade.setFont(new Font("Arial", Font.BOLD, 16));
+		add(lblCidade);
 
-		JTextField Cidlbl = new JTextField();
-		Cidlbl.setBounds(105, 400, 200, 25);
-		Cidlbl.setFont(new Font("Arial", Font.BOLD, 16));
-		add(Cidlbl);
+		txtCidade = new JTextField();
+		txtCidade.setBounds(105, 400, 200, 25);
+		txtCidade.setFont(new Font("Arial", Font.BOLD, 16));
+		add(txtCidade);
 
 		// Adiciona o Estado
-		JLabel Estadolbl = new JLabel("Estado");
-		Estadolbl.setBounds(320, 400, 80, 25);
-		Estadolbl.setForeground(Color.decode("#ffd96d"));
-		Estadolbl.setFont(new Font("Arial", Font.BOLD, 16));
-		add(Estadolbl);
+		lblEstado = new JLabel("Estado");
+		lblEstado.setBounds(320, 400, 80, 25);
+		lblEstado.setForeground(Color.decode("#ffd96d"));
+		lblEstado.setFont(new Font("Arial", Font.BOLD, 16));
+		add(lblEstado);
 
-		JTextField Estalbl = new JTextField();
-		Estalbl.setBounds(390, 400, 200, 25);
-		Estalbl.setFont(new Font("Arial", Font.BOLD, 16));
-		add(Estalbl);
+		txtEstado = new JTextField();
+		txtEstado.setBounds(390, 400, 200, 25);
+		txtEstado.setFont(new Font("Arial", Font.BOLD, 16));
+		add(txtEstado);
 
 		// Adiciona o Botao Cadastrar
-		BotaoArredondado btnAlterar = new BotaoArredondado("Alterar", 30);
+		btnAlterar = new BotaoArredondado("Alterar", 30);
 
 		btnAlterar.setText("Salvar");
 		btnAlterar.setBounds(300, 500, 150, 30);
@@ -278,19 +299,19 @@ public class Perfil extends JFrame {
 
 		btnAlterar.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				// Pegando os valores dos campos
-				String nome = NoField.getText();
-				String sobrenome = SoField.getText();
-				String email = emaField.getText();
-				String senha = new String(passwordField.getPassword());
-				String cpf = CPFlbl.getText();
-				String telefone = Numlbl.getText();
-				String cep = Ceplbl.getText();
-				String rua = Rualbl2.getText();
-				String numero = Numlbl2.getText();
-				String bairro = Bailbl.getText();
-				String cidade = Cidlbl.getText();
-				String estado = Estalbl.getText();
+
+				nome = txtNome.getText();
+				sobrenome = txtSobrenome.getText();
+				email = txtEmail.getText();
+				senha = new String(txtSenha.getPassword());
+				cpf = cepField.getText();
+				telefone = txtNum.getText();
+				cep = cepField.getText();
+				rua = txtRua.getText();
+				numero = txtNum.getText();
+				bairro = txtBairro.getText();
+				cidade = txtCidade.getText();
+				estado = txtEstado.getText();
 
 				if (nome.isEmpty() || sobrenome.isEmpty() || email.isEmpty() || senha.isEmpty() || cpf.isEmpty()
 						|| telefone.isEmpty() || cep.isEmpty() || rua.isEmpty() || numero.isEmpty() || bairro.isEmpty()
@@ -298,7 +319,6 @@ public class Perfil extends JFrame {
 					JOptionPane.showMessageDialog(null, "Preencha todos os campos.", "Erro de Alteração",
 							JOptionPane.ERROR_MESSAGE);
 				} else {
-					// Exibe uma mensagem de sucesso
 					JOptionPane.showMessageDialog(null, "Alteração bem-sucedida!");
 					dispose();
 
@@ -310,19 +330,19 @@ public class Perfil extends JFrame {
 	}
 
 	public void BotaoVoltar() {
-		ImageIcon voltarIcon = new ImageIcon("imagens\\seta-pequena-esquerda2.png");
-		Image img = voltarIcon.getImage().getScaledInstance(35, 35, Image.SCALE_SMOOTH);
+		voltarIcon = new ImageIcon("imagens\\seta-pequena-esquerda2.png");
+		img = voltarIcon.getImage().getScaledInstance(35, 35, Image.SCALE_SMOOTH);
 		voltarIcon = new ImageIcon(img);
 
-		JButton voltarButton = new JButton(voltarIcon);
-		voltarButton.setBounds(35, 15, 30, 30);
-		voltarButton.setBorderPainted(false);
-		voltarButton.setFocusPainted(false);
-		voltarButton.setContentAreaFilled(false);
+		btnVoltar = new JButton(voltarIcon);
+		btnVoltar.setBounds(35, 15, 30, 30);
+		btnVoltar.setBorderPainted(false);
+		btnVoltar.setFocusPainted(false);
+		btnVoltar.setContentAreaFilled(false);
 
-		add(voltarButton);
+		add(btnVoltar);
 
-		voltarButton.addActionListener(new ActionListener() {
+		btnVoltar.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				Cardapio cardapio = new Cardapio();
