@@ -24,6 +24,7 @@ import javax.swing.JPanel;
 import javax.swing.JPopupMenu;
 import LoginECadastrar.Cadastrar;
 import LoginECadastrar.Login;
+import entrada.BotaoArredondado;
 import HubDeBaixo.*;
 
 public class Cardapio extends JFrame {
@@ -39,9 +40,11 @@ public class Cardapio extends JFrame {
 	private JLabel lblLogo;
 	private JPanel painel;
 	private JPanel itemPainel;
+
 	private String[] lanches = { "Hamburguer", "Cheeseburguer", "Vegetariano" };
 	private String[] bebidas = { "Refrigerante", "Suco", "Água" };
 	private String[] porcoes = { "Batata Frita", "Batata Rústica" };
+
 	private JButton btnAll;
 	private JButton btnLanches;
 	private JButton btnBebidas;
@@ -110,9 +113,7 @@ public class Cardapio extends JFrame {
 	}
 
 	public void FotoFundo() {
-		// Cria um JPanel com uma imagem de fundo
 		painel = new JPanel() {
-			// Sobrescreve o método paintComponent para desenhar a imagem
 			@Override
 			protected void paintComponent(Graphics g) {
 				super.paintComponent(g);
@@ -125,35 +126,9 @@ public class Cardapio extends JFrame {
 		add(painel);
 	}
 
-	class BotaoArredondado extends JButton {
-		private int raio;
-
-		public BotaoArredondado(String texto, int raio) {
-			super(texto);
-			this.raio = raio; // Define o raio das bordas arredondadas
-			setFocusPainted(false);
-			setContentAreaFilled(false);
-			setBorderPainted(false);
-		}
-
-		@Override
-		protected void paintComponent(Graphics g) {
-			Graphics2D g2 = (Graphics2D) g.create();
-			g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
-
-			// Desenha o fundo do botão com bordas arredondadas
-			g2.setColor(getBackground());
-			g2.fill(new RoundRectangle2D.Double(0, 0, getWidth(), getHeight(), raio, raio));
-
-			super.paintComponent(g);
-			g2.dispose();
-		}
-	}
-
 	public void BotaoLogin() {
 		btnLogin = new BotaoArredondado("Login", 30);
 
-		btnLogin.setText("Login");
 		btnLogin.setForeground(Color.decode("#ffd96d"));
 		btnLogin.setFont(new Font("Arial", Font.BOLD, 16));
 		btnLogin.setBounds(565, 75, 100, 25);
@@ -199,7 +174,7 @@ public class Cardapio extends JFrame {
 
 	public void BotaoCadastrar() {
 		btnCadastrar = new BotaoArredondado("Cadastrar", 30);
-
+		
 		btnCadastrar.setText("Cadastrar");
 		btnCadastrar.setForeground(Color.decode("#ffd96d"));
 		btnCadastrar.setFont(new Font("Arial", Font.BOLD, 16));

@@ -3,16 +3,12 @@ package Produtos;
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Font;
-import java.awt.Graphics;
-import java.awt.Graphics2D;
 import java.awt.Image;
-import java.awt.RenderingHints;
 import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
-import java.awt.geom.RoundRectangle2D;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
@@ -30,10 +26,20 @@ import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JTextArea;
 import javax.swing.JTextField;
-
 import Cadapio_Pag_Inicial.Cardapio;
 
 public class CadastroProduto extends JFrame {
+	private Dimension screen;
+	private Dimension janela;
+	private ImageIcon logoIcon;
+	private Image logoImage;
+	private ImageIcon resizedLogoIcon;
+	private JLabel logoLabel;
+	private ImageIcon voltarIcon;
+	private Image img;
+	private JButton voltarButton;
+	private Produtos.Alterar_E_Excluir_Produto.BotaoArredondado botaoArredondado;
+
 	public CadastroProduto() {
 		setTitle("Cadastro Produto - Byell Hambúrgueria");
 		getContentPane().setBackground(Color.decode("#1e1e1e"));
@@ -49,8 +55,8 @@ public class CadastroProduto extends JFrame {
 	}
 
 	public void Centralizar() {
-		Dimension screen = Toolkit.getDefaultToolkit().getScreenSize();
-		Dimension janela = getSize();
+		screen = Toolkit.getDefaultToolkit().getScreenSize();
+		janela = getSize();
 
 		if (janela.height > screen.height) {
 			setSize(janela.height, screen.height);
@@ -62,22 +68,22 @@ public class CadastroProduto extends JFrame {
 	}
 
 	public void Logo() {
-		ImageIcon logoIcon = new ImageIcon("imagens\\Logo2.png");
+		logoIcon = new ImageIcon("imagens\\Logo2.png");
 
-		Image logoImage = logoIcon.getImage().getScaledInstance(500, 250, Image.SCALE_SMOOTH);
-		ImageIcon resizedLogoIcon = new ImageIcon(logoImage);
-		JLabel logoLabel = new JLabel(resizedLogoIcon);
+		logoImage = logoIcon.getImage().getScaledInstance(500, 250, Image.SCALE_SMOOTH);
+		resizedLogoIcon = new ImageIcon(logoImage);
+		logoLabel = new JLabel(resizedLogoIcon);
 		logoLabel.setBounds(615, 10, 200, 100);
 
 		add(logoLabel);
 	}
 
 	public void BotaoVoltar() {
-		ImageIcon voltarIcon = new ImageIcon("imagens\\seta-pequena-esquerda2.png");
-		Image img = voltarIcon.getImage().getScaledInstance(35, 35, Image.SCALE_SMOOTH);
+		voltarIcon = new ImageIcon("imagens\\seta-pequena-esquerda2.png");
+		img = voltarIcon.getImage().getScaledInstance(35, 35, Image.SCALE_SMOOTH);
 		voltarIcon = new ImageIcon(img);
 
-		JButton voltarButton = new JButton(voltarIcon);
+		voltarButton = new JButton(voltarIcon);
 		voltarButton.setBounds(35, 15, 30, 30);
 		voltarButton.setBorderPainted(false);
 		voltarButton.setFocusPainted(false);
@@ -93,31 +99,6 @@ public class CadastroProduto extends JFrame {
 				dispose();
 			}
 		});
-	}
-
-	class BotaoArredondado extends JButton {
-		private int raio;
-
-		public BotaoArredondado(String texto, int raio) {
-			super(texto);
-			this.raio = raio;
-			setFocusPainted(false);
-			setContentAreaFilled(false);
-			setBorderPainted(false);
-		}
-
-		@Override
-		protected void paintComponent(Graphics g) {
-			Graphics2D g2 = (Graphics2D) g.create();
-			g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
-
-			// Desenha o fundo do botão com bordas arredondadas
-			g2.setColor(getBackground());
-			g2.fill(new RoundRectangle2D.Double(0, 0, getWidth(), getHeight(), raio, raio));
-
-			super.paintComponent(g);
-			g2.dispose();
-		}
 	}
 
 	public void CadastrarProduto() {
@@ -240,13 +221,13 @@ public class CadastroProduto extends JFrame {
 		});
 
 		// Adiciona o Botao Cadastrar Porduto
-		BotaoArredondado btnCadastrarProduto = new BotaoArredondado("Cadastrar Produto", 30);
-		btnCadastrarProduto.setFont(new Font("Arial", Font.BOLD, 16));
-		btnCadastrarProduto.setBounds(300, 330, 200, 40);
+		botaoArredondado.setText("CadastrarProduto");
+		botaoArredondado.setFont(new Font("Arial", Font.BOLD, 16));
+		botaoArredondado.setBounds(300, 330, 200, 40);
 
-		add(btnCadastrarProduto);
+		add(botaoArredondado);
 
-		btnCadastrarProduto.addActionListener(new ActionListener() {
+		botaoArredondado.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				JOptionPane.showMessageDialog(null, "Produto cadastrado com sucesso!", "Cadastro Produto",
