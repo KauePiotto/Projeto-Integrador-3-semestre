@@ -14,6 +14,7 @@ import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.geom.RoundRectangle2D;
+
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JFrame;
@@ -22,10 +23,13 @@ import javax.swing.JMenuItem;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JPopupMenu;
+
+import HubDeBaixo.Carrinho;
+import HubDeBaixo.Perfil;
 import LoginECadastrar.Cadastrar;
 import LoginECadastrar.Login;
 import entrada.BotaoArredondado;
-import HubDeBaixo.*;
+import entrada.PainelComFundo;
 
 public class Cardapio extends JFrame {
 	private JButton btnLogin;
@@ -38,7 +42,6 @@ public class Cardapio extends JFrame {
 	private Image logoImage;
 	private ImageIcon resizedLogoIcon;
 	private JLabel lblLogo;
-	private JPanel painel;
 	private JPanel itemPainel;
 
 	private String[] lanches = { "Hamburguer", "Cheeseburguer", "Vegetariano" };
@@ -57,12 +60,14 @@ public class Cardapio extends JFrame {
 	private JMenuItem op2;
 	private JMenuItem op3;
 	private JMenuItem op4;
+	private PainelComFundo painel;
 
 	public Cardapio() {
 		setTitle("Cardápio - Byell Hambúrgueria");
 		setResizable(false);
 		getContentPane().setLayout(null);
 		setSize(800, 600);
+
 		Centralizar();
 		Logo();
 		BotaoLogin();
@@ -70,11 +75,6 @@ public class Cardapio extends JFrame {
 		CriarFiltros();
 		BotaoMenu();
 		FotoFundo();
-
-		itemPainel = new JPanel();
-		itemPainel.setLayout(new FlowLayout(FlowLayout.CENTER));
-		itemPainel.setBounds(50, 170, 700, 300);
-		add(itemPainel);
 
 		NavigationPanel navPanel = new NavigationPanel();
 		navPanel.setBounds(250, 515, 300, 40);
@@ -102,7 +102,7 @@ public class Cardapio extends JFrame {
 	}
 
 	public void Logo() {
-		logoIcon = new ImageIcon("imagens\\Logo2.png");
+		logoIcon = new ImageIcon("imagens/Logo2.png");
 
 		logoImage = logoIcon.getImage().getScaledInstance(500, 250, Image.SCALE_SMOOTH);
 		resizedLogoIcon = new ImageIcon(logoImage);
@@ -113,15 +113,10 @@ public class Cardapio extends JFrame {
 	}
 
 	public void FotoFundo() {
-		painel = new JPanel() {
-			@Override
-			protected void paintComponent(Graphics g) {
-				super.paintComponent(g);
-				ImagemFundo = new ImageIcon("imagens\\Fundo.png");
-				g.drawImage(ImagemFundo.getImage(), 0, 0, getWidth(), getHeight(), this);
-			}
-		};
+		painel = new PainelComFundo();
+		painel.setLayout(null);
 		painel.setBounds(0, 0, 800, 105);
+		ImagemFundo = new ImageIcon("imagens/Fundo.png");
 
 		add(painel);
 	}
@@ -174,7 +169,7 @@ public class Cardapio extends JFrame {
 
 	public void BotaoCadastrar() {
 		btnCadastrar = new BotaoArredondado("Cadastrar", 30);
-		
+
 		btnCadastrar.setText("Cadastrar");
 		btnCadastrar.setForeground(Color.decode("#ffd96d"));
 		btnCadastrar.setFont(new Font("Arial", Font.BOLD, 16));

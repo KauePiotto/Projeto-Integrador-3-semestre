@@ -53,7 +53,7 @@ public class EntradaCardapio extends JFrame {
 	}
 
 	public void Logo(JPanel painel) {
-		logoIcon = new ImageIcon("imagens\\Logo2.png");
+		logoIcon = new ImageIcon("imagens/Logo2.png");
 
 		logoImage = logoIcon.getImage().getScaledInstance(500, 250, Image.SCALE_SMOOTH);
 		resizedLogoIcon = new ImageIcon(logoImage);
@@ -71,7 +71,7 @@ public class EntradaCardapio extends JFrame {
 
 	public void BotaoEntrada(JPanel painel) {
 		btnCardapio = new BotaoArredondado("Ver Cardápio", 30);
-		
+
 		btnCardapio.setForeground(Color.decode("#ffd96d"));
 		btnCardapio.setFont(new Font("Arial", Font.BOLD, 16));
 		btnCardapio.setBounds(280, 270, 250, 35);

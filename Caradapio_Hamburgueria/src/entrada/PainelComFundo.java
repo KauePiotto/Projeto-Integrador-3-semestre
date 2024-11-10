@@ -9,7 +9,7 @@ public class PainelComFundo extends JPanel {
 	private Image imagemFundo;
 
 	public PainelComFundo() {
-		imagemFundo = new ImageIcon("imagens\\Fundo.png").getImage();
+		imagemFundo = new ImageIcon("imagens/Fundo.png").getImage();
 	}
 
 	@Override
