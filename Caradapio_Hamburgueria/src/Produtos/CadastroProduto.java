@@ -14,10 +14,8 @@ import java.io.File;
 import java.io.IOException;
 import javax.swing.text.AbstractDocument;
 import javax.swing.text.DocumentFilter;
-
 import CadapioPrincipal.Cardapio;
-import LoginECadastrar.Login.BotaoArredondado;
-
+import entrada.BotaoArredondado;
 import javax.swing.text.AttributeSet;
 import javax.swing.text.BadLocationException;
 import javax.imageio.ImageIO;
@@ -35,13 +33,28 @@ public class CadastroProduto extends JFrame {
 	private Dimension screen;
 	private Dimension janela;
 	private ImageIcon logoIcon;
-	private Image logoImage;
 	private ImageIcon resizedLogoIcon;
-	private JLabel logoLabel;
 	private ImageIcon voltarIcon;
+	private Image logoImage;
 	private Image img;
+	private Image scaledImage;
+	private JLabel logoLabel;
+	private JLabel lblFoto;
+	private JLabel lblDescricao;
+	private JLabel lblTipo;
+	private JLabel lblNomeProd;
+	private JLabel lblPreco;
 	private JButton voltarButton;
-	private Produtos.Alterar_E_Excluir_Produto.BotaoArredondado botaoArredondado;
+	private JTextField txtNome;
+	private JTextField txtPreco;
+	private JTextArea txtDescricao;
+	private JFileChooser fileChooser;
+	private File selectedFile;
+	private BufferedImage img2;
+	private int result;
+	private JComboBox<String> cmbTipoProduto;
+	private String[] TiposDeProduto = { "----------", "Lanche", "Bebida", "Porção" };
+	private BotaoArredondado btnCadastrarProduto;
 
 	public CadastroProduto() {
 		setTitle("Cadastro Produto - Byell Hambúrgueria");
@@ -50,10 +63,12 @@ public class CadastroProduto extends JFrame {
 		setResizable(false);
 		getContentPane().setLayout(null);
 		setSize(800, 600);
+
 		Centralizar();
 		Logo();
 		BotaoVoltar();
 		CadastrarProduto();
+
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 	}
 
@@ -71,7 +86,7 @@ public class CadastroProduto extends JFrame {
 	}
 
 	public void Logo() {
-		logoIcon = new ImageIcon("imagens\\Logo2.png");
+		logoIcon = new ImageIcon("imagens/Logo2.png");
 
 		logoImage = logoIcon.getImage().getScaledInstance(500, 250, Image.SCALE_SMOOTH);
 		resizedLogoIcon = new ImageIcon(logoImage);
@@ -82,7 +97,7 @@ public class CadastroProduto extends JFrame {
 	}
 
 	public void BotaoVoltar() {
-		voltarIcon = new ImageIcon("imagens\\seta-pequena-esquerda2.png");
+		voltarIcon = new ImageIcon("imagens/seta-pequena-esquerda2.png");
 		img = voltarIcon.getImage().getScaledInstance(35, 35, Image.SCALE_SMOOTH);
 		voltarIcon = new ImageIcon(img);
 
@@ -99,25 +114,26 @@ public class CadastroProduto extends JFrame {
 			public void actionPerformed(ActionEvent e) {
 				Cardapio cardapio = new Cardapio();
 				cardapio.setVisible(true);
+				dispose();
 			}
 		});
 	}
 
 	public void CadastrarProduto() {
 		// Adiciona o Label Nome
-		JLabel lblNomeProd = new JLabel("Nome");
+		lblNomeProd = new JLabel("Nome");
 		lblNomeProd.setBounds(50, 100, 80, 25);
 		lblNomeProd.setForeground(Color.decode("#ffd96d"));
 		lblNomeProd.setFont(new Font("Arial", Font.BOLD, 16));
 		add(lblNomeProd);
 
-		JTextField txtNome = new JTextField();
+		txtNome = new JTextField();
 		txtNome.setBounds(105, 100, 305, 25);
 		txtNome.setFont(new Font("Arial", Font.BOLD, 16));
 		add(txtNome);
 
 		// Adiciona a foto do produto
-		JLabel lblFoto = new JLabel("Foto");
+		lblFoto = new JLabel("Foto");
 		lblFoto.setBounds(450, 90, 200, 150);
 		lblFoto.setForeground(Color.decode("#ffd96d"));
 		lblFoto.setFont(new Font("Arial", Font.BOLD, 16));
@@ -128,15 +144,15 @@ public class CadastroProduto extends JFrame {
 		lblFoto.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseClicked(MouseEvent e) {
-				JFileChooser fileChooser = new JFileChooser();
-				int result = fileChooser.showOpenDialog(CadastroProduto.this);
+				fileChooser = new JFileChooser();
+				result = fileChooser.showOpenDialog(CadastroProduto.this);
 
 				if (result == JFileChooser.APPROVE_OPTION) {
-					File selectedFile = fileChooser.getSelectedFile();
+					selectedFile = fileChooser.getSelectedFile();
 
 					try {
-						BufferedImage img = ImageIO.read(selectedFile);
-						Image scaledImage = img.getScaledInstance(lblFoto.getWidth(), lblFoto.getHeight(),
+						img2 = ImageIO.read(selectedFile);
+						scaledImage = img2.getScaledInstance(lblFoto.getWidth(), lblFoto.getHeight(),
 								Image.SCALE_SMOOTH);
 						lblFoto.setIcon(new ImageIcon(scaledImage));
 						lblFoto.setText("");
@@ -150,39 +166,38 @@ public class CadastroProduto extends JFrame {
 		});
 
 		// Adiciona a descricao do produdo
-		JLabel lblDescricao = new JLabel("Descrição");
+		lblDescricao = new JLabel("Descrição");
 		lblDescricao.setBounds(50, 150, 80, 25);
 		lblDescricao.setForeground(Color.decode("#ffd96d"));
 		lblDescricao.setFont(new Font("Arial", Font.BOLD, 16));
 		add(lblDescricao);
 
-		JTextArea txtDescricao = new JTextArea();
+		txtDescricao = new JTextArea();
 		txtDescricao.setBounds(130, 150, 280, 90);
 		txtDescricao.setFont(new Font("Arial", Font.BOLD, 16));
 		txtDescricao.setLineWrap(true);
 		txtDescricao.setWrapStyleWord(true);
 		add(txtDescricao);
 		// Adiciona o tipo de Produto
-		JLabel lblTipo = new JLabel("Tipo de Produto");
+		lblTipo = new JLabel("Tipo de Produto");
 		lblTipo.setBounds(50, 260, 180, 25);
 		lblTipo.setForeground(Color.decode("#ffd96d"));
 		lblTipo.setFont(new Font("Arial", Font.BOLD, 16));
 		add(lblTipo);
 
-		String[] TiposDeProduto = { "----------", "Lanche", "Bebida", "Porção" };
-		JComboBox<String> cmbTipoProduto = new JComboBox<>(TiposDeProduto);
+		cmbTipoProduto = new JComboBox<>(TiposDeProduto);
 		cmbTipoProduto.setBounds(180, 260, 225, 25);
 		cmbTipoProduto.setFont(new Font("Arial", Font.PLAIN, 16));
 		add(cmbTipoProduto);
 
 		// Adiciona o Preco do Produto
-		JLabel lblPreco = new JLabel("Preço");
+		lblPreco = new JLabel("Preço");
 		lblPreco.setBounds(430, 260, 180, 25);
 		lblPreco.setForeground(Color.decode("#ffd96d"));
 		lblPreco.setFont(new Font("Arial", Font.BOLD, 16));
 		add(lblPreco);
 
-		JTextField txtPreco = new JTextField("R$ ");
+		txtPreco = new JTextField("R$ ");
 		txtPreco.setBounds(485, 260, 125, 25);
 		txtPreco.setFont(new Font("Arial", Font.BOLD, 16));
 		add(txtPreco);
@@ -223,21 +238,21 @@ public class CadastroProduto extends JFrame {
 		});
 
 		// Adiciona o Botao Cadastrar Porduto
-		/*
-		 * botaoArredondado = new
-		 * Produtos.Alterar_E_Excluir_Produto.BotaoArredondado("Login", 30);
-		 * 
-		 * botaoArredondado.setFont(new Font("Arial", Font.BOLD, 16));
-		 * botaoArredondado.setBounds(300, 330, 200, 40);
-		 * 
-		 * add(botaoArredondado);
-		 * 
-		 * botaoArredondado.addActionListener(new ActionListener() {
-		 * 
-		 * @Override public void actionPerformed(ActionEvent e) {
-		 * JOptionPane.showMessageDialog(null, "Produto cadastrado com sucesso!",
-		 * "Cadastro Produto", JOptionPane.INFORMATION_MESSAGE); } });
-		 */
+		btnCadastrarProduto = new BotaoArredondado("Cadastrar Produto", 30);
+
+		btnCadastrarProduto.setFont(new Font("Arial", Font.BOLD, 16));
+		btnCadastrarProduto.setBounds(300, 330, 200, 40);
+
+		add(btnCadastrarProduto);
+
+		btnCadastrarProduto.addActionListener(new ActionListener() {
+
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				JOptionPane.showMessageDialog(null, "Produto cadastrado com sucesso!", "Cadastro Produto",
+						JOptionPane.INFORMATION_MESSAGE);
+			}
+		});
 	}
 
 	public static void main(String[] args) {

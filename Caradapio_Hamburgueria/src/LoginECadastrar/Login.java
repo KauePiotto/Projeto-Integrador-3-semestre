@@ -3,14 +3,10 @@ package LoginECadastrar;
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Font;
-import java.awt.Graphics;
-import java.awt.Graphics2D;
 import java.awt.Image;
-import java.awt.RenderingHints;
 import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.awt.geom.RoundRectangle2D;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JFrame;
@@ -26,20 +22,21 @@ public class Login extends JFrame {
 	private Dimension screen;
 	private Dimension janela;
 	private ImageIcon logoIcon;
-	private Image logoImage;
 	private ImageIcon resizedLogoIcon;
+	private ImageIcon voltarIcon;
+	private Image logoImage;
+	private Image img;
 	private JLabel logoLabel;
-	private PainelComFundo painel;
-	private BotaoArredondado btnLogin;
 	private JLabel lblEmail;
-	private JTextField txtEmail;
 	private JLabel lblSenha;
+	private JTextField txtEmail;
 	private JPasswordField txtSenha;
 	private String email;
 	private String senha;
-	private ImageIcon voltarIcon;
-	private Image img;
 	private JButton voltarButton;
+	private PainelComFundo painel;
+	private BotaoArredondado btnLogin;
+	
 
 	public Login() {
 		setTitle("Login - Byell Hambúrgueria");
