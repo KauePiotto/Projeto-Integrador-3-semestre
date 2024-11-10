@@ -7,6 +7,11 @@ import java.awt.Image;
 import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JFrame;
@@ -135,32 +140,43 @@ public class Login extends JFrame {
 
 		btnLogin.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
+				conexao = new ConectaMySQL();
+				Connection conn = conexao.openDB();
+
 				email = txtEmail.getText();
 				senha = new String(txtSenha.getPassword());
 
-				if (email.equals("admin@admin.com") && senha.equals("123456")) {
-					JOptionPane.showMessageDialog(null, "Login bem-sucedido!");
-					dispose();
+				String sql = "SELECT * FROM usuarios WHERE email = ? AND senha = ?";
 
-					Cardapio cardapio = new Cardapio();
-					cardapio.setVisible(true);
-					cardapio.mostrarMenu();
-					cardapio.ocultarBotoesLoginECadastrar();
-					
-				} else if (email.equals("exemplo@exmeploema.com") && senha.equals("12345")) {
-					JOptionPane.showMessageDialog(null, "Login bem-sucedido!");
-					dispose();
+				try (PreparedStatement stmt = conn.prepareStatement(sql)) {
+					stmt.setString(1, email);
+					stmt.setString(2, senha);
 
-					Cardapio cardapio = new Cardapio();
-					cardapio.setVisible(true);
-					cardapio.ocultarBotoesLoginECadastrar();
-				} else {
+					try (ResultSet rs = stmt.executeQuery()) {
+						if (rs.next()) {
+							String perfil = rs.getString("perfil");
+							Cardapio cardapio = new Cardapio();
+							cardapio.setVisible(true);
 
-					JOptionPane.showMessageDialog(null, "Email ou senha incorretos.", "Erro de Login",
-							JOptionPane.ERROR_MESSAGE);
+							if ("admin".equals(perfil)) {
+								cardapio.setVisible(true);
+								cardapio.ocultarBotoesLoginECadastrar();
+								cardapio.mostrarMenu();
+							} else {
+								cardapio.ocultarBotoesLoginECadastrar();
+							}
+
+							dispose();
+						} else {
+							JOptionPane.showMessageDialog(null, "E-mail/Senha incorreta ou não existe");
+						}
+					}
+				} catch (SQLException ex) {
+					ex.printStackTrace();
 				}
 			}
 		});
+
 	}
 
 	public void BotaoVoltar() {

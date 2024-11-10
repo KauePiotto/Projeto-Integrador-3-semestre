@@ -37,6 +37,7 @@ public class Cardapio extends JFrame {
 	private JLabel lblLogo;
 	private JLabel imageLabel;
 	private JPanel itemPainel;
+	private JLabel lblBemVindo;
 	private JMenuItem op1;
 	private JMenuItem op2;
 	private JMenuItem op3;
@@ -69,9 +70,9 @@ public class Cardapio extends JFrame {
 		BotaoCadastrar();
 		CriarFiltros();
 		BotaoMenu();
-		FotoFundo();
 		NavPainel();
 		PainelItem();
+		FotoFundo();
 
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 	}

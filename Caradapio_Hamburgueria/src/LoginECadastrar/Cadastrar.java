@@ -456,7 +456,7 @@ public class Cadastrar extends JFrame {
 					try {
 						conn = conexao.openDB();
 
-						String sql = "INSERT INTO clientes (nome, sobrenome, email, senha, telefone, CPF, endereco, num_casa, cep, bairro, cidade, estado) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
+						String sql = "INSERT INTO usuarios (nome, sobrenome, email, senha, telefone, CPF, endereco, num_casa, cep, bairro, cidade, estado) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
 
 						stmt = conn.prepareStatement(sql);
 						stmt.setString(1, nome);
@@ -471,8 +471,9 @@ public class Cadastrar extends JFrame {
 						stmt.setString(10, bairro);
 						stmt.setString(11, cidade);
 						stmt.setString(12, estado);
-						stmt.executeUpdate();
 
+						stmt.executeUpdate();
+						
 						JOptionPane.showMessageDialog(null, "Cadastro realizado com sucesso!");
 						dispose();
 

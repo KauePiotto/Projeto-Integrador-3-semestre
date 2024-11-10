@@ -12,9 +12,14 @@ import java.awt.event.MouseEvent;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.SQLException;
+
 import javax.swing.text.AbstractDocument;
 import javax.swing.text.DocumentFilter;
 import CadapioPrincipal.Cardapio;
+import dao.ConectaMySQL;
 import entrada.BotaoArredondado;
 import javax.swing.text.AttributeSet;
 import javax.swing.text.BadLocationException;
@@ -55,6 +60,47 @@ public class CadastroProduto extends JFrame {
 	private JComboBox<String> cmbTipoProduto;
 	private String[] TiposDeProduto = { "----------", "Lanche", "Bebida", "Porção" };
 	private BotaoArredondado btnCadastrarProduto;
+	private ConectaMySQL conexao;
+
+	public JTextField getTxtNome() {
+		return txtNome;
+	}
+
+	public void setTxtNome(JTextField txtNome) {
+		this.txtNome = txtNome;
+	}
+
+	public File getSelectedFile() {
+		return selectedFile;
+	}
+
+	public void setSelectedFile(File selectedFile) {
+		this.selectedFile = selectedFile;
+	}
+
+	public JTextArea getTxtDescricao() {
+		return txtDescricao;
+	}
+
+	public void setTxtDescricao(JTextArea txtDescricao) {
+		this.txtDescricao = txtDescricao;
+	}
+
+	public JComboBox<String> getCmbTipoProduto() {
+		return cmbTipoProduto;
+	}
+
+	public void setCmbTipoProduto(JComboBox<String> cmbTipoProduto) {
+		this.cmbTipoProduto = cmbTipoProduto;
+	}
+
+	public JTextField getTxtPreco() {
+		return txtPreco;
+	}
+
+	public void setTxtPreco(JTextField txtPreco) {
+		this.txtPreco = txtPreco;
+	}
 
 	public CadastroProduto() {
 		setTitle("Cadastro Produto - Byell Hambúrgueria");
@@ -246,11 +292,37 @@ public class CadastroProduto extends JFrame {
 		add(btnCadastrarProduto);
 
 		btnCadastrarProduto.addActionListener(new ActionListener() {
-
 			@Override
 			public void actionPerformed(ActionEvent e) {
+				conexao = new ConectaMySQL();
+
 				JOptionPane.showMessageDialog(null, "Produto cadastrado com sucesso!", "Cadastro Produto",
 						JOptionPane.INFORMATION_MESSAGE);
+
+				Connection conn = null;
+				PreparedStatement stmt = null;
+				try {
+					conn = conexao.openDB();
+
+					String sql = "INSERT INTO produtos (nome, sobrenome, email, senha, telefone, CPF, endereco, num_casa, cep, bairro, cidade, estado) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
+
+					stmt = conn.prepareStatement(sql);
+
+					JOptionPane.showMessageDialog(null, "Cadastro realizado com sucesso!");
+					dispose();
+
+					Cardapio cardapio = new Cardapio();
+					cardapio.setVisible(true);
+				} catch (Exception ex) {
+					JOptionPane.showMessageDialog(null, "Erro ao conectar ao banco de dados: " + ex.getMessage(),
+							"Erro de Conexão", JOptionPane.ERROR_MESSAGE);
+				} finally {
+					try {
+						conexao.closeDB(conn, stmt, null);
+					} catch (SQLException ex) {
+						ex.printStackTrace();
+					}
+				}
 			}
 		});
 	}
