@@ -21,6 +21,7 @@ import javax.swing.text.MaskFormatter;
 import entrada.BotaoArredondado;
 import CadapioPrincipal.Cardapio;
 import dao.ConectaMySQL;
+import java.sql.*;
 
 public class Cadastrar extends JFrame {
 	private Dimension screen;
@@ -77,6 +78,114 @@ public class Cadastrar extends JFrame {
 	private ImageIcon voltarIcon;
 	private BotaoArredondado btnCadastrar;
 	private ConectaMySQL conexao;
+
+	public String getNome() {
+		return nome;
+	}
+
+	public void setNome(String nome) {
+		this.nome = nome;
+		txtNome.setText(nome);
+	}
+
+	public String getSobrenome() {
+		return sobrenome;
+	}
+
+	public void setSobrenome(String sobrenome) {
+		this.sobrenome = sobrenome;
+		txtSobrenome.setText(sobrenome);
+	}
+
+	public String getEmail() {
+		return email;
+	}
+
+	public void setEmail(String email) {
+		this.email = email;
+		txtEmail.setText(email);
+	}
+
+	public String getSenha() {
+		return senha;
+	}
+
+	public void setSenha(String senha) {
+		this.senha = senha;
+		txtSenha.setText(senha);
+	}
+
+	public String getCpf() {
+		return cpf;
+	}
+
+	public void setCpf(String cpf) {
+		this.cpf = cpf;
+		cpfField.setText(cpf);
+	}
+
+	public String getTelefone() {
+		return telefone;
+	}
+
+	public void setTelefone(String telefone) {
+		this.telefone = telefone;
+		telefoneField.setText(telefone);
+	}
+
+	public String getCep() {
+		return cep;
+	}
+
+	public void setCep(String cep) {
+		this.cep = cep;
+		cepField.setText(cep);
+	}
+
+	public String getRua() {
+		return rua;
+	}
+
+	public void setRua(String rua) {
+		this.rua = rua;
+		txtRua.setText(rua);
+	}
+
+	public String getNumero() {
+		return numero;
+	}
+
+	public void setNumero(String numero) {
+		this.numero = numero;
+		txtNum.setText(numero);
+	}
+
+	public String getBairro() {
+		return bairro;
+	}
+
+	public void setBairro(String bairro) {
+		this.bairro = bairro;
+		txtBairro.setText(bairro);
+	}
+
+	public String getCidade() {
+		return cidade;
+	}
+
+	public void setCidade(String cidade) {
+		this.cidade = cidade;
+		txtCidade.setText(cidade);
+	}
+
+	public String getEstado() {
+		return estado;
+	}
+
+	public void setEstado(String estado) {
+		this.estado = estado;
+		txtEstado.setText(estado);
+	}
 
 	public Cadastrar() {
 		setTitle("Cadastrar - Byell Hambúrgueria");
@@ -321,14 +430,15 @@ public class Cadastrar extends JFrame {
 		btnCadastrar.addActionListener(new ActionListener() {
 
 			public void actionPerformed(ActionEvent e) {
+				conexao = new ConectaMySQL();
 
 				nome = txtNome.getText();
 				sobrenome = txtSobrenome.getText();
 				email = txtEmail.getText();
 				senha = new String(txtSenha.getPassword());
-				cpf = cpfField.getText();
+				cpf = cpfField.getText().replaceAll("[^0-9]", "");
 				telefone = telefoneField.getText();
-				cep = cepField.getText();
+				cep = cepField.getText().replaceAll("[^0-9]", "");
 				rua = txtRua.getText();
 				numero = txtNum.getText();
 				bairro = txtBairro.getText();
@@ -338,14 +448,46 @@ public class Cadastrar extends JFrame {
 				if (nome.isEmpty() || sobrenome.isEmpty() || email.isEmpty() || senha.isEmpty() || cpf.isEmpty()
 						|| telefone.isEmpty() || cep.isEmpty() || rua.isEmpty() || numero.isEmpty() || bairro.isEmpty()
 						|| cidade.isEmpty() || estado.isEmpty()) {
-					JOptionPane.showMessageDialog(null, "Preencha todos os campos.", "Erro de Alteração",
+					JOptionPane.showMessageDialog(null, "Preencha todos os campos.", "Erro Cadastrado",
 							JOptionPane.ERROR_MESSAGE);
 				} else {
-					JOptionPane.showMessageDialog(null, "Cadastro realizado com bem-sucedida!");
-					dispose();
+					Connection conn = null;
+					PreparedStatement stmt = null;
+					try {
+						conn = conexao.openDB();
 
-					Cardapio cardapio = new Cardapio();
-					cardapio.setVisible(true);
+						String sql = "INSERT INTO clientes (nome, sobrenome, email, senha, telefone, CPF, endereco, num_casa, cep, bairro, cidade, estado) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
+
+						stmt = conn.prepareStatement(sql);
+						stmt.setString(1, nome);
+						stmt.setString(2, sobrenome);
+						stmt.setString(3, email);
+						stmt.setString(4, senha);
+						stmt.setString(5, telefone);
+						stmt.setString(6, cpf);
+						stmt.setString(7, rua);
+						stmt.setString(8, numero);
+						stmt.setString(9, cep);
+						stmt.setString(10, bairro);
+						stmt.setString(11, cidade);
+						stmt.setString(12, estado);
+						stmt.executeUpdate();
+
+						JOptionPane.showMessageDialog(null, "Cadastro realizado com sucesso!");
+						dispose();
+
+						Cardapio cardapio = new Cardapio();
+						cardapio.setVisible(true);
+					} catch (Exception ex) {
+						JOptionPane.showMessageDialog(null, "Erro ao conectar ao banco de dados: " + ex.getMessage(),
+								"Erro de Conexão", JOptionPane.ERROR_MESSAGE);
+					} finally {
+						try {
+							conexao.closeDB(conn, stmt, null);
+						} catch (SQLException ex) {
+							ex.printStackTrace();
+						}
+					}
 				}
 			}
 		});

@@ -15,6 +15,7 @@ import javax.swing.JOptionPane;
 import javax.swing.JPasswordField;
 import javax.swing.JTextField;
 import CadapioPrincipal.Cardapio;
+import dao.ConectaMySQL;
 import entrada.BotaoArredondado;
 import entrada.PainelComFundo;
 
@@ -36,7 +37,23 @@ public class Login extends JFrame {
 	private JButton voltarButton;
 	private PainelComFundo painel;
 	private BotaoArredondado btnLogin;
-	
+	private ConectaMySQL conexao;
+
+	public String getEmail() {
+		return email;
+	}
+
+	public void setEmail(String email) {
+		this.email = email;
+	}
+
+	public String getSenha() {
+		return senha;
+	}
+
+	public void setSenha(String senha) {
+		this.senha = senha;
+	}
 
 	public Login() {
 		setTitle("Login - Byell Hambúrgueria");
@@ -129,6 +146,7 @@ public class Login extends JFrame {
 					cardapio.setVisible(true);
 					cardapio.mostrarMenu();
 					cardapio.ocultarBotoesLoginECadastrar();
+					
 				} else if (email.equals("exemplo@exmeploema.com") && senha.equals("12345")) {
 					JOptionPane.showMessageDialog(null, "Login bem-sucedido!");
 					dispose();
