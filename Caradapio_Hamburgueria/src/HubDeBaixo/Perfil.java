@@ -72,6 +72,103 @@ public class Perfil extends JFrame {
 	private Image img;
 	private JButton btnVoltar;
 
+	
+	public JTextField getTxtNome() {
+		return txtNome;
+	}
+
+	public void setTxtNome(JTextField txtNome) {
+		this.txtNome = txtNome;
+	}
+
+	public JTextField getTxtSobrenome() {
+		return txtSobrenome;
+	}
+
+	public void setTxtSobrenome(JTextField txtSobrenome) {
+		this.txtSobrenome = txtSobrenome;
+	}
+
+	public JTextField getTxtEmail() {
+		return txtEmail;
+	}
+
+	public void setTxtEmail(JTextField txtEmail) {
+		this.txtEmail = txtEmail;
+	}
+
+	public JPasswordField getTxtSenha() {
+		return txtSenha;
+	}
+
+	public void setTxtSenha(JPasswordField txtSenha) {
+		this.txtSenha = txtSenha;
+	}
+
+	public JFormattedTextField getTelefoneField() {
+		return telefoneField;
+	}
+
+	public void setTelefoneField(JFormattedTextField telefoneField) {
+		this.telefoneField = telefoneField;
+	}
+
+	public JFormattedTextField getCpfField() {
+		return cpfField;
+	}
+
+	public void setCpfField(JFormattedTextField cpfField) {
+		this.cpfField = cpfField;
+	}
+
+	public JTextField getTxtRua() {
+		return txtRua;
+	}
+
+	public void setTxtRua(JTextField txtRua) {
+		this.txtRua = txtRua;
+	}
+
+	public JTextField getTxtNum() {
+		return txtNum;
+	}
+
+	public void setTxtNum(JTextField txtNum) {
+		this.txtNum = txtNum;
+	}
+
+	public JFormattedTextField getCepField() {
+		return cepField;
+	}
+
+	public void setCepField(JFormattedTextField cepField) {
+		this.cepField = cepField;
+	}
+
+	public JTextField getTxtBairro() {
+		return txtBairro;
+	}
+
+	public void setTxtBairro(JTextField txtBairro) {
+		this.txtBairro = txtBairro;
+	}
+
+	public JTextField getTxtCidade() {
+		return txtCidade;
+	}
+
+	public void setTxtCidade(JTextField txtCidade) {
+		this.txtCidade = txtCidade;
+	}
+
+	public JTextField getTxtEstado() {
+		return txtEstado;
+	}
+
+	public void setTxtEstado(JTextField txtEstado) {
+		this.txtEstado = txtEstado;
+	}
+
 	public Perfil() {
 		setTitle("Perfil - Byell Hambúrgueria");
 		getContentPane().setBackground(Color.decode("#1e1e1e"));

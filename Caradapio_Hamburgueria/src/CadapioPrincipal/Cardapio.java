@@ -75,6 +75,7 @@ public class Cardapio extends JFrame {
 		NavPainel();
 		PainelItem();
 		FotoFundo();
+		ocultarBotoesLoginECadastrar();
 
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 	}
