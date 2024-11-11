@@ -31,5 +31,3 @@ CREATE TABLE usuarios (
 );
 
 select * from usuarios;
-
-UPDATE usuarios SET perfil = 'admin' WHERE email = 'admin@dominio.com';

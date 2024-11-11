@@ -10,6 +10,7 @@ import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.image.BufferedImage;
+import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.IOException;
 import java.sql.Connection;
@@ -130,13 +131,14 @@ public class Alterar_E_Excluir_Produto extends JFrame {
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 	}
 
+	// Construtor para exibir dados do produto
 	public Alterar_E_Excluir_Produto(String id, String nome, String descricao, String tipo, String preco, byte[] logo) {
-		
-		this.getTxtIdProduto().setText(id);
+		this(); // Chama o construtor padrão para inicializar componentes
+		this.txtIdProduto.setText(id);
 		this.txtNome.setText(nome);
 		this.txtDescricao.setText(descricao);
 		this.cmbTipoProduto.setSelectedItem(tipo);
-		this.txtPreco.setText(preco);
+		this.txtPreco.setText("R$ " + preco);
 
 		// Exibindo a imagem, se houver
 		if (logo != null && logo.length > 0) {
@@ -207,6 +209,7 @@ public class Alterar_E_Excluir_Produto extends JFrame {
 
 		txtIdProduto.setBounds(105, 90, 100, 25);
 		txtIdProduto.setFont(new Font("Arial", Font.BOLD, 16));
+		txtIdProduto.setEditable(false);
 		add(txtIdProduto);
 
 		// Adiciona o Label Nome
@@ -333,35 +336,73 @@ public class Alterar_E_Excluir_Produto extends JFrame {
 
 		add(btnAlterarProduto);
 
+		btnAlterarProduto = new BotaoArredondado("Alterar Produto", 30);
+		btnAlterarProduto.setFont(new Font("Arial", Font.BOLD, 16));
+		btnAlterarProduto.setBounds(150, 400, 200, 40);
+		add(btnAlterarProduto);
+
 		btnAlterarProduto.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				String id = txtIdProduto.getText();
-				String nome = txtNome.getText();
-				String descricao = txtDescricao.getText();
+				String id = txtIdProduto.getText().trim();
+				String nome = txtNome.getText().trim();
+				String descricao = txtDescricao.getText().trim();
 				String tipo = (String) cmbTipoProduto.getSelectedItem();
-				String preco = txtPreco.getText().replace("R$ ", "");
+				String precoTexto = txtPreco.getText().replace("R$ ", "").trim();
 
-				try (Connection conn = conexao.openDB()) {
-					String sql = "UPDATE produto SET nome = ?, descricao = ?, tipo = ?, preco = ? WHERE id = ?";
-					PreparedStatement stmt = conn.prepareStatement(sql);
+				if (id.isEmpty() || nome.isEmpty() || descricao.isEmpty() || tipo.equals("----------")
+						|| precoTexto.isEmpty()) {
+					JOptionPane.showMessageDialog(Alterar_E_Excluir_Produto.this,
+							"Todos os campos devem ser preenchidos.", "Erro", JOptionPane.ERROR_MESSAGE);
+					return;
+				}
+
+				double preco;
+				try {
+					preco = Double.parseDouble(precoTexto);
+				} catch (NumberFormatException ex) {
+					JOptionPane.showMessageDialog(Alterar_E_Excluir_Produto.this,
+							"Preço inválido. Insira um número válido.", "Erro", JOptionPane.ERROR_MESSAGE);
+					return;
+				}
+
+				byte[] foto = null;
+				if (selectedFile != null) {
+					try {
+						BufferedImage img = ImageIO.read(selectedFile);
+						ByteArrayOutputStream baos = new ByteArrayOutputStream();
+						ImageIO.write(img, "png", baos);
+						foto = baos.toByteArray();
+					} catch (IOException ex) {
+						JOptionPane.showMessageDialog(Alterar_E_Excluir_Produto.this, "Erro ao processar a imagem.",
+								"Erro", JOptionPane.ERROR_MESSAGE);
+						ex.printStackTrace();
+						return;
+					}
+				}
+
+				try (Connection conn = conexao.openDB();
+						PreparedStatement stmt = conn.prepareStatement(
+								"UPDATE produtos SET nome = ?, descricao = ?, tipo = ?, preco = ?, logo = ? WHERE id = ?")) {
+
 					stmt.setString(1, nome);
 					stmt.setString(2, descricao);
 					stmt.setString(3, tipo);
-					stmt.setString(4, preco);
-					stmt.setString(5, id);
+					stmt.setDouble(4, preco);
+					stmt.setBytes(5, foto != null ? foto : null);
+					stmt.setString(6, id);
 
-					int rowsUpdated = stmt.executeUpdate();
-					if (rowsUpdated > 0) {
-						JOptionPane.showMessageDialog(null, "Produto alterado com sucesso!", "Alteração",
-								JOptionPane.INFORMATION_MESSAGE);
+					int affectedRows = stmt.executeUpdate();
+					if (affectedRows > 0) {
+						JOptionPane.showMessageDialog(Alterar_E_Excluir_Produto.this,
+								"Produto atualizado com sucesso.");
 					} else {
-						JOptionPane.showMessageDialog(null, "Erro ao alterar produto.", "Erro",
-								JOptionPane.ERROR_MESSAGE);
+						JOptionPane.showMessageDialog(Alterar_E_Excluir_Produto.this, "Produto não encontrado.");
 					}
 				} catch (SQLException ex) {
-					JOptionPane.showMessageDialog(null, "Erro ao alterar o produto: " + ex.getMessage(), "Erro",
-							JOptionPane.ERROR_MESSAGE);
+					JOptionPane.showMessageDialog(Alterar_E_Excluir_Produto.this,
+							"Ocorreu um erro ao atualizar o produto.", "Erro", JOptionPane.ERROR_MESSAGE);
+					ex.printStackTrace();
 				}
 			}
 		});
@@ -374,27 +415,28 @@ public class Alterar_E_Excluir_Produto extends JFrame {
 		add(btnExcluirProduto);
 
 		btnExcluirProduto.addActionListener(new ActionListener() {
-			String id = txtIdProduto.getText();
-
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				String id = txtIdProduto.getText();
-				try (Connection conn = conexao.openDB()) {
-					String sql = "DELETE FROM produto WHERE id = ?";
-					PreparedStatement stmt = conn.prepareStatement(sql);
-					stmt.setString(1, id);
+				if (id.isEmpty()) {
+					JOptionPane.showMessageDialog(Alterar_E_Excluir_Produto.this, "ID do produto está vazio.", "Erro",
+							JOptionPane.ERROR_MESSAGE);
+					return;
+				}
 
-					int rowsDeleted = stmt.executeUpdate();
-					if (rowsDeleted > 0) {
-						JOptionPane.showMessageDialog(null, "Produto excluído com sucesso!", "Exclusão",
-								JOptionPane.INFORMATION_MESSAGE);
+				try (Connection conn = conexao.openDB();
+						PreparedStatement stmt = conn.prepareStatement("DELETE FROM produtos WHERE id = ?")) {
+					stmt.setString(1, id);
+					int affectedRows = stmt.executeUpdate();
+					if (affectedRows > 0) {
+						JOptionPane.showMessageDialog(Alterar_E_Excluir_Produto.this, "Produto excluído com sucesso.");
 					} else {
-						JOptionPane.showMessageDialog(null, "Erro ao excluir produto.", "Erro",
-								JOptionPane.ERROR_MESSAGE);
+						JOptionPane.showMessageDialog(Alterar_E_Excluir_Produto.this, "Produto não encontrado.");
 					}
 				} catch (SQLException ex) {
-					JOptionPane.showMessageDialog(null, "Erro ao excluir o produto: " + ex.getMessage(), "Erro",
-							JOptionPane.ERROR_MESSAGE);
+					JOptionPane.showMessageDialog(Alterar_E_Excluir_Produto.this,
+							"Ocorreu um erro ao excluir o produto.", "Erro", JOptionPane.ERROR_MESSAGE);
+					ex.printStackTrace();
 				}
 			}
 		});
