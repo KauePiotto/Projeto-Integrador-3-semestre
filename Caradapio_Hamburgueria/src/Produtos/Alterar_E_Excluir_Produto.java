@@ -269,6 +269,7 @@ public class Alterar_E_Excluir_Produto extends JFrame {
 		txtDescricao.setLineWrap(true);
 		txtDescricao.setWrapStyleWord(true);
 		add(txtDescricao);
+		
 		// Adiciona o tipo de Produto
 		lblTipo = new JLabel("Tipo de Produto");
 		lblTipo.setBounds(50, 300, 180, 25);
@@ -333,7 +334,6 @@ public class Alterar_E_Excluir_Produto extends JFrame {
 		btnAlterarProduto = new BotaoArredondado("Alterar Produto", 30);
 		btnAlterarProduto.setFont(new Font("Arial", Font.BOLD, 16));
 		btnAlterarProduto.setBounds(150, 400, 200, 40);
-
 		add(btnAlterarProduto);
 
 		btnAlterarProduto = new BotaoArredondado("Alterar Produto", 30);
@@ -424,19 +424,31 @@ public class Alterar_E_Excluir_Produto extends JFrame {
 					return;
 				}
 
-				try (Connection conn = conexao.openDB();
-						PreparedStatement stmt = conn.prepareStatement("DELETE FROM produtos WHERE id = ?")) {
-					stmt.setString(1, id);
-					int affectedRows = stmt.executeUpdate();
-					if (affectedRows > 0) {
-						JOptionPane.showMessageDialog(Alterar_E_Excluir_Produto.this, "Produto excluído com sucesso.");
-					} else {
-						JOptionPane.showMessageDialog(Alterar_E_Excluir_Produto.this, "Produto não encontrado.");
+				try {
+					// Verifica se o ID é um número válido
+					int produtoId = Integer.parseInt(id); // Tenta converter para inteiro
+
+					try (Connection conn = conexao.openDB();
+							PreparedStatement stmt = conn.prepareStatement("DELETE FROM produtos WHERE id = ?")) {
+						stmt.setInt(1, produtoId); // Usa setInt para um campo INTEGER
+						int rowsAffected = stmt.executeUpdate();
+
+						if (rowsAffected > 0) {
+							JOptionPane.showMessageDialog(Alterar_E_Excluir_Produto.this,
+									"Produto excluído com sucesso.");
+						} else {
+							JOptionPane.showMessageDialog(Alterar_E_Excluir_Produto.this, "Produto não encontrado.",
+									"Erro", JOptionPane.ERROR_MESSAGE);
+						}
+					} catch (SQLException ex) {
+						JOptionPane.showMessageDialog(Alterar_E_Excluir_Produto.this,
+								"Ocorreu um erro ao excluir o produto.", "Erro", JOptionPane.ERROR_MESSAGE);
+						ex.printStackTrace();
 					}
-				} catch (SQLException ex) {
-					JOptionPane.showMessageDialog(Alterar_E_Excluir_Produto.this,
-							"Ocorreu um erro ao excluir o produto.", "Erro", JOptionPane.ERROR_MESSAGE);
-					ex.printStackTrace();
+				} catch (NumberFormatException ex) {
+					// Captura erro se o ID não for um número válido
+					JOptionPane.showMessageDialog(Alterar_E_Excluir_Produto.this, "ID deve ser um número válido.",
+							"Erro", JOptionPane.ERROR_MESSAGE);
 				}
 			}
 		});

@@ -7,6 +7,9 @@ import java.awt.Image;
 import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.text.ParseException;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
@@ -20,6 +23,7 @@ import javax.swing.JTextField;
 import javax.swing.text.MaskFormatter;
 import entrada.BotaoArredondado;
 import CadapioPrincipal.Cardapio;
+import dao.ConectaMySQL;
 
 public class Perfil extends JFrame {
 	private Dimension screen;
@@ -71,8 +75,8 @@ public class Perfil extends JFrame {
 	private ImageIcon voltarIcon;
 	private Image img;
 	private JButton btnVoltar;
+	private ConectaMySQL conn;
 
-	
 	public JTextField getTxtNome() {
 		return txtNome;
 	}
@@ -179,6 +183,7 @@ public class Perfil extends JFrame {
 		Centralizar();
 		PerfilUsuario();
 		BotaoVoltar();
+		recuperarDadosUsuario();
 
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 	}
@@ -194,6 +199,51 @@ public class Perfil extends JFrame {
 			setSize(screen.width, janela.height);
 		}
 		setLocation((screen.width - janela.width) / 2, (screen.height - janela.height) / 2);
+	}
+
+	private void recuperarDadosUsuario() {
+		conn = new ConectaMySQL();
+		conn.openDB();
+
+		String sql = "SELECT * FROM usuarios WHERE email = ?";
+
+		try (PreparedStatement stmt = conn.openDB().prepareStatement(sql)) {
+			stmt.setString(1, email); // Aqui, o email que é passado para o método Perfil é utilizado para buscar o
+										// usuário
+			ResultSet rs = stmt.executeQuery();
+
+			if (rs.next()) {
+				nome = rs.getString("nome");
+				sobrenome = rs.getString("sobrenome");
+				email = rs.getString("email");
+				senha = rs.getString("senha");
+				telefone = rs.getString("telefone");
+				cpf = rs.getString("CPF");
+				rua = rs.getString("endereco");
+				numero = rs.getString("num_casa");
+				cep = rs.getString("Cep");
+				bairro = rs.getString("bairro");
+				cidade = rs.getString("cidade");
+				estado = rs.getString("estado");
+
+				// Preencher os campos de texto com os dados do banco
+				txtNome.setText(nome);
+				txtSobrenome.setText(sobrenome);
+				txtEmail.setText(email);
+				txtSenha.setText(senha);
+				telefoneField.setText(telefone);
+				cpfField.setText(cpf);
+				cepField.setText(cep);
+				txtRua.setText(rua);
+				txtNum.setText(numero);
+				txtBairro.setText(bairro);
+				txtCidade.setText(cidade);
+				txtEstado.setText(estado);
+			}
+		} catch (SQLException e) {
+			JOptionPane.showMessageDialog(null, "Erro ao recuperar dados do usuário: " + e.getMessage(),
+					"Erro de Recuperação", JOptionPane.ERROR_MESSAGE);
+		}
 	}
 
 	public void PerfilUsuario() {
@@ -403,8 +453,8 @@ public class Perfil extends JFrame {
 				sobrenome = txtSobrenome.getText();
 				email = txtEmail.getText();
 				senha = new String(txtSenha.getPassword());
-				cpf = cepField.getText();
-				telefone = txtNum.getText();
+				telefone = telefoneField.getText(); // Ajuste aqui para pegar corretamente o telefone
+				cpf = cpfField.getText(); // Ajuste para pegar o CPF corretamente
 				cep = cepField.getText();
 				rua = txtRua.getText();
 				numero = txtNum.getText();
@@ -418,11 +468,40 @@ public class Perfil extends JFrame {
 					JOptionPane.showMessageDialog(null, "Preencha todos os campos.", "Erro de Alteração",
 							JOptionPane.ERROR_MESSAGE);
 				} else {
-					JOptionPane.showMessageDialog(null, "Alteração bem-sucedida!");
-					dispose();
+					// Aqui, faça o update no banco de dados
+					try {
+						String sqlUpdate = "UPDATE usuarios SET nome = ?, sobrenome = ?, senha = ?, telefone = ?, CPF = ?, endereco = ?, num_casa = ?, Cep = ?, bairro = ?, cidade = ?, estado = ? WHERE email = ?";
 
-					Cardapio cardapio = new Cardapio();
-					cardapio.setVisible(true);
+						PreparedStatement stmt = conn.openDB().prepareStatement(sqlUpdate);
+						stmt.setString(1, nome);
+						stmt.setString(2, sobrenome);
+						stmt.setString(3, senha);
+						stmt.setString(4, telefone);
+						stmt.setString(5, cpf);
+						stmt.setString(6, rua);
+						stmt.setString(7, numero);
+						stmt.setString(8, cep);
+						stmt.setString(9, bairro);
+						stmt.setString(10, cidade);
+						stmt.setString(11, estado);
+						stmt.setString(12, email); // Aqui você está utilizando o e-mail para identificar o usuário
+
+						int rowsAffected = stmt.executeUpdate();
+
+						if (rowsAffected > 0) {
+							JOptionPane.showMessageDialog(null, "Alteração bem-sucedida!");
+							dispose();
+							// Redireciona para o cardápio após alteração bem-sucedida
+							Cardapio cardapio = new Cardapio();
+							cardapio.setVisible(true);
+						} else {
+							JOptionPane.showMessageDialog(null, "Falha ao atualizar os dados. Tente novamente.",
+									"Erro de Atualização", JOptionPane.ERROR_MESSAGE);
+						}
+					} catch (SQLException ex) {
+						JOptionPane.showMessageDialog(null, "Erro ao atualizar dados no banco: " + ex.getMessage(),
+								"Erro de Banco de Dados", JOptionPane.ERROR_MESSAGE);
+					}
 				}
 			}
 		});

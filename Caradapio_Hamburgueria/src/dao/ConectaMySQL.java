@@ -1,8 +1,6 @@
 package dao;
 
 import java.sql.*;
-import java.util.ArrayList;
-import java.util.List;
 
 public class ConectaMySQL {
 
@@ -18,11 +16,13 @@ public class ConectaMySQL {
 		db.openDB();
 		db.closeDB();
 	}
-	
+
 	public Connection openDB() {
 		try {
-			// Conectar ao banco de dados
-			return DriverManager.getConnection(url, username, password);
+			if (con == null || con.isClosed()) {
+				con = DriverManager.getConnection(url, username, password);
+			}
+			return con;
 		} catch (SQLException ex) {
 			System.out.println("Erro de conexão: " + ex.getMessage());
 			return null;
@@ -52,25 +52,5 @@ public class ConectaMySQL {
 			st.close();
 		if (rs != null)
 			rs.close();
-	}
-
-	// Método para buscar os produtos por tipo
-	public List<String> getProdutosByTipo(String tipo) {
-		List<String> produtos = new ArrayList<>();
-		String query = "SELECT nome FROM produto WHERE tipo = ?";
-
-		// Garantir que a conexão esteja aberta antes de tentar executá-la
-		try (Connection con = openDB(); PreparedStatement pstmt = con.prepareStatement(query)) {
-			pstmt.setString(1, tipo);
-			ResultSet rs = pstmt.executeQuery();
-
-			// Recuperar os resultados
-			while (rs.next()) {
-				produtos.add(rs.getString("nome"));
-			}
-		} catch (SQLException e) {
-			System.out.println("Erro ao buscar produtos: " + e.getMessage());
-		}
-		return produtos;
 	}
 }

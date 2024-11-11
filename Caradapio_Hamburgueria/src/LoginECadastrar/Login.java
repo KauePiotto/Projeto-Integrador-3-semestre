@@ -20,6 +20,7 @@ import javax.swing.JOptionPane;
 import javax.swing.JPasswordField;
 import javax.swing.JTextField;
 import CadapioPrincipal.Cardapio;
+import HubDeBaixo.Perfil;
 import dao.ConectaMySQL;
 import entrada.BotaoArredondado;
 import entrada.PainelComFundo;
@@ -140,6 +141,15 @@ public class Login extends JFrame {
 
 		btnLogin.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
+				// Verificar se os campos estão vazios
+				email = txtEmail.getText();
+				senha = new String(txtSenha.getPassword());
+
+				if (email.isEmpty() || senha.isEmpty()) {
+					JOptionPane.showMessageDialog(null, "Por favor, preencha todos os campos.");
+					return;
+				}
+
 				conexao = new ConectaMySQL();
 				Connection conn = conexao.openDB();
 
@@ -147,9 +157,6 @@ public class Login extends JFrame {
 					JOptionPane.showMessageDialog(null, "Erro de conexão com o banco de dados.");
 					return;
 				}
-
-				email = txtEmail.getText();
-				senha = new String(txtSenha.getPassword());
 
 				String sql = "SELECT * FROM usuarios WHERE email = ? AND senha = ?";
 

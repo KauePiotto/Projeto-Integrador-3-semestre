@@ -1,5 +1,6 @@
 package CadapioPrincipal;
 
+import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.FlowLayout;
@@ -10,16 +11,16 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
-import java.util.ArrayList;
-import java.util.List;
-
+import javax.swing.BorderFactory;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JMenuItem;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JPopupMenu;
+import javax.swing.SwingConstants;
 import LoginECadastrar.Cadastrar;
 import LoginECadastrar.Login;
 import Produtos.Alterar_E_Excluir_Produto;
@@ -251,32 +252,33 @@ public class Cardapio extends JFrame {
 		return button;
 	}
 
+	private JPanel createProductPanel(String nome, String descricao, double preco) {
+		JPanel produtoPanel = new JPanel(new BorderLayout());
+		produtoPanel.setPreferredSize(new Dimension(200, 150));
+		produtoPanel.setBorder(BorderFactory.createLineBorder(Color.GRAY));
+
+		JLabel nomeLabel = new JLabel("<html><b>" + nome + "</b></html>", SwingConstants.CENTER);
+		JLabel descricaoLabel = new JLabel("<html><i>" + descricao + "</i></html>", SwingConstants.CENTER);
+		JLabel precoLabel = new JLabel("R$ " + String.format("%.2f", preco), SwingConstants.CENTER);
+
+		JButton addCarrinhoButton = new JButton("Adicionar ao Carrinho");
+		addCarrinhoButton.addActionListener(e -> adicionarAoCarrinho(nome, preco));
+
+		produtoPanel.add(nomeLabel, BorderLayout.NORTH);
+		produtoPanel.add(descricaoLabel, BorderLayout.CENTER);
+		produtoPanel.add(precoLabel, BorderLayout.SOUTH);
+		produtoPanel.add(addCarrinhoButton, BorderLayout.PAGE_END);
+
+		return produtoPanel;
+	}
+
+	private void adicionarAoCarrinho(String nome, double preco) {
+		JOptionPane.showMessageDialog(this, nome + " adicionado ao carrinho por R$ " + String.format("%.2f", preco));
+	}
+
 	private void updateItems(String filter) {
 		itemPainel.removeAll();
-		imageLabel = new JLabel();
 
-		// Definir o ícone da categoria selecionada
-		List<String> produtosBD = new ArrayList<>();
-		switch (filter) {
-		case "lanches":
-			produtosBD = conexao.getProdutosByTipo("Lanches");
-			break;
-		case "bebidas":
-			produtosBD = conexao.getProdutosByTipo("Bebidas");
-			break;
-		case "porcoes":
-			produtosBD = conexao.getProdutosByTipo("Porções");
-			break;
-		default:
-			produtosBD = conexao.getProdutosByTipo("Todos"); // Exemplo de todos os produtos
-			break;
-		}
-
-		// Atualizar o painel de itens com os produtos filtrados
-		for (String produto : produtosBD) {
-			JLabel produtoLabel = new JLabel(produto);
-			itemPainel.add(produtoLabel);
-		}
 		itemPainel.revalidate();
 		itemPainel.repaint();
 	}
