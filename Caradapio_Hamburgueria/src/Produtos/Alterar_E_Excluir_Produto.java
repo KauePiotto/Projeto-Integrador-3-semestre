@@ -104,7 +104,17 @@ public class Alterar_E_Excluir_Produto extends JFrame {
 		this.cmbTipoProduto = cmbTipoProduto;
 	}
 
+	public File getSelectedFile() {
+		return selectedFile;
+	}
+
+	public void setSelectedFile(File selectedFile) {
+		this.selectedFile = selectedFile;
+	}
+
 	public Alterar_E_Excluir_Produto() {
+		conexao = new ConectaMySQL();
+
 		setTitle("Aletrar Produto - Byell Hambúrgueria");
 		getContentPane().setBackground(Color.decode("#1e1e1e"));
 		setFont(new Font("Arial", Font.BOLD, 16));
@@ -121,13 +131,21 @@ public class Alterar_E_Excluir_Produto extends JFrame {
 	}
 
 	public Alterar_E_Excluir_Produto(String id, String nome, String descricao, String tipo, String preco, byte[] logo) {
-		// Aqui você deve armazenar os parâmetros passados nos atributos da classe
-		this.idProduto = id;
-		this.nomeProduto = nome;
-		this.descricaoProduto = descricao;
-		this.cmbTipoProduto = tipo;
-		this.precoProduto = preco;
-		this.logoProduto = logo;
+		
+		this.getTxtIdProduto().setText(id);
+		this.txtNome.setText(nome);
+		this.txtDescricao.setText(descricao);
+		this.cmbTipoProduto.setSelectedItem(tipo);
+		this.txtPreco.setText(preco);
+
+		// Exibindo a imagem, se houver
+		if (logo != null && logo.length > 0) {
+			ImageIcon productIcon = new ImageIcon(logo);
+			Image img = productIcon.getImage().getScaledInstance(lblFoto.getWidth(), lblFoto.getHeight(),
+					Image.SCALE_SMOOTH);
+			lblFoto.setIcon(new ImageIcon(img));
+			lblFoto.setText("");
+		}
 	}
 
 	public void Centralizar() {
@@ -220,7 +238,6 @@ public class Alterar_E_Excluir_Produto extends JFrame {
 
 				if (result == JFileChooser.APPROVE_OPTION) {
 					selectedFile = fileChooser.getSelectedFile();
-
 					try {
 						img2 = ImageIO.read(selectedFile);
 						scaledImage = img2.getScaledInstance(lblFoto.getWidth(), lblFoto.getHeight(),
@@ -235,6 +252,7 @@ public class Alterar_E_Excluir_Produto extends JFrame {
 				}
 			}
 		});
+
 		// Adiciona a descricao do produdo
 		lblDescricao = new JLabel("Descrição");
 		lblDescricao.setBounds(50, 170, 80, 25);
@@ -272,6 +290,7 @@ public class Alterar_E_Excluir_Produto extends JFrame {
 		txtPreco.setFont(new Font("Arial", Font.BOLD, 16));
 		add(txtPreco);
 
+		// Preço
 		((AbstractDocument) txtPreco.getDocument()).setDocumentFilter(new DocumentFilter() {
 			private final String currencySymbol = "R$ ";
 
