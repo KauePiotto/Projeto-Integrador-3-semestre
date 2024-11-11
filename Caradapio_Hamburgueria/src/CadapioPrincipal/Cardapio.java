@@ -11,13 +11,14 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.util.ArrayList;
+import java.util.List;
 import javax.swing.BorderFactory;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JMenuItem;
-import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JPopupMenu;
 import javax.swing.SwingConstants;
@@ -26,6 +27,7 @@ import LoginECadastrar.Login;
 import Produtos.Alterar_E_Excluir_Produto;
 import Produtos.BuscarProduto;
 import Produtos.CadastroProduto;
+import Produtos.Produto;
 import dao.ConectaMySQL;
 import entrada.BotaoArredondado;
 import entrada.PainelComFundo;
@@ -214,10 +216,18 @@ public class Cardapio extends JFrame {
 		btnBebidas = createImageButton("imagens/refrigerantes.png", "Bebidas");
 		btnPorcoes = createImageButton("imagens/porcoes.png", "Porções");
 
-		btnAll.addActionListener(e -> updateItems("all"));
-		btnLanches.addActionListener(e -> updateItems("lanches"));
-		btnBebidas.addActionListener(e -> updateItems("bebidas"));
-		btnPorcoes.addActionListener(e -> updateItems("porcoes"));
+		btnLanches.addActionListener(e -> {
+			updateItems("lanches");
+		});
+		btnBebidas.addActionListener(e -> {
+			updateItems("bebidas");
+		});
+		btnPorcoes.addActionListener(e -> {
+			updateItems("porcoes");
+		});
+		btnAll.addActionListener(e -> {
+			updateItems("all");
+		});
 
 		btnLanches.setBounds(170, 115, 100, 30);
 		btnBebidas.setBounds(286, 115, 100, 30);
@@ -252,32 +262,55 @@ public class Cardapio extends JFrame {
 		return button;
 	}
 
-	private JPanel createProductPanel(String nome, String descricao, double preco) {
+	private JPanel createProductPanel(String nome, String descricao, double preco, byte[] logo) {
 		JPanel produtoPanel = new JPanel(new BorderLayout());
-		produtoPanel.setPreferredSize(new Dimension(200, 150));
+
+		produtoPanel.setPreferredSize(new Dimension(280, 200));
 		produtoPanel.setBorder(BorderFactory.createLineBorder(Color.GRAY));
 
+		// Criação dos rótulos para nome, descrição e preço
 		JLabel nomeLabel = new JLabel("<html><b>" + nome + "</b></html>", SwingConstants.CENTER);
 		JLabel descricaoLabel = new JLabel("<html><i>" + descricao + "</i></html>", SwingConstants.CENTER);
 		JLabel precoLabel = new JLabel("R$ " + String.format("%.2f", preco), SwingConstants.CENTER);
 
-		JButton addCarrinhoButton = new JButton("Adicionar ao Carrinho");
-		addCarrinhoButton.addActionListener(e -> adicionarAoCarrinho(nome, preco));
+		// Exibir imagem se o logo não for nulo
+		JLabel imagemLabel = new JLabel();
+		if (logo != null && logo.length > 0) {
+			ImageIcon imagemIcon = new ImageIcon(logo); // Converte o byte[] para ImageIcon
+			Image img = imagemIcon.getImage().getScaledInstance(100, 100, Image.SCALE_SMOOTH);
+			imagemIcon = new ImageIcon(img);
+			imagemLabel.setIcon(imagemIcon);
+		}
 
-		produtoPanel.add(nomeLabel, BorderLayout.NORTH);
-		produtoPanel.add(descricaoLabel, BorderLayout.CENTER);
-		produtoPanel.add(precoLabel, BorderLayout.SOUTH);
-		produtoPanel.add(addCarrinhoButton, BorderLayout.PAGE_END);
+		JButton addCarrinhoButton = new JButton("Adicionar ao Carrinho");
+
+		// Alteração: coloque o preço no centro para garantir que tenha espaço
+		JPanel centroPanel = new JPanel();
+
+		centroPanel.setLayout(new BorderLayout());
+		centroPanel.add(nomeLabel, BorderLayout.NORTH);
+		centroPanel.add(descricaoLabel, BorderLayout.CENTER);
+		centroPanel.add(precoLabel, BorderLayout.SOUTH);
+		centroPanel.add(addCarrinhoButton, BorderLayout.PAGE_END);
+
+		produtoPanel.add(centroPanel, BorderLayout.CENTER);
+		produtoPanel.add(imagemLabel, BorderLayout.WEST);
 
 		return produtoPanel;
 	}
 
-	private void adicionarAoCarrinho(String nome, double preco) {
-		JOptionPane.showMessageDialog(this, nome + " adicionado ao carrinho por R$ " + String.format("%.2f", preco));
-	}
-
-	private void updateItems(String filter) {
+	private void updateItems(String filtro) {
 		itemPainel.removeAll();
+		System.out.println("Filtro aplicado: " + filtro);
+
+		ConectaMySQL db = new ConectaMySQL();
+		List<Produto> produtos = db.getProdutos(filtro);
+
+		for (Produto produto : produtos) {
+			JPanel produtoPanel = createProductPanel(produto.getNome(), produto.getDescricao(), produto.getPreco(),
+					produto.getLogo());
+			itemPainel.add(produtoPanel);
+		}
 
 		itemPainel.revalidate();
 		itemPainel.repaint();

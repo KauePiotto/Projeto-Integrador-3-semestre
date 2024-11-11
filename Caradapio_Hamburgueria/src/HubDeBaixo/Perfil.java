@@ -180,12 +180,43 @@ public class Perfil extends JFrame {
 		getContentPane().setLayout(null);
 		setSize(800, 600);
 
+		conn = new ConectaMySQL();
+
 		Centralizar();
 		PerfilUsuario();
 		BotaoVoltar();
-		recuperarDadosUsuario();
+		RecuperarDadosUsuario();
 
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+	}
+
+	// Esse método agora vai buscar os dados do usuário com base no email
+	public void RecuperarDadosUsuario() {
+		try {
+			String sql = "SELECT * FROM usuarios WHERE email = ?";
+			PreparedStatement stmt = conn.openDB().prepareStatement(sql);
+			stmt.setString(1, email);
+			ResultSet rs = stmt.executeQuery();
+
+			if (rs.next()) {
+				// Preenche os campos com os dados do banco
+				txtNome.setText(rs.getString("nome"));
+				txtSobrenome.setText(rs.getString("sobrenome"));
+				txtEmail.setText(rs.getString("email"));
+				txtSenha.setText(rs.getString("senha"));
+				telefoneField.setText(rs.getString("telefone"));
+				cpfField.setText(rs.getString("cpf"));
+				txtRua.setText(rs.getString("endereco"));
+				txtNum.setText(rs.getString("num_casa"));
+				cepField.setText(rs.getString("cep"));
+				txtBairro.setText(rs.getString("bairro"));
+				txtCidade.setText(rs.getString("cidade"));
+				txtEstado.setText(rs.getString("estado"));
+			}
+		} catch (SQLException e) {
+			JOptionPane.showMessageDialog(null, "Erro ao carregar dados do usuário: " + e.getMessage(), "Erro",
+					JOptionPane.ERROR_MESSAGE);
+		}
 	}
 
 	public void Centralizar() {
@@ -199,51 +230,6 @@ public class Perfil extends JFrame {
 			setSize(screen.width, janela.height);
 		}
 		setLocation((screen.width - janela.width) / 2, (screen.height - janela.height) / 2);
-	}
-
-	private void recuperarDadosUsuario() {
-		conn = new ConectaMySQL();
-		conn.openDB();
-
-		String sql = "SELECT * FROM usuarios WHERE email = ?";
-
-		try (PreparedStatement stmt = conn.openDB().prepareStatement(sql)) {
-			stmt.setString(1, email); // Aqui, o email que é passado para o método Perfil é utilizado para buscar o
-										// usuário
-			ResultSet rs = stmt.executeQuery();
-
-			if (rs.next()) {
-				nome = rs.getString("nome");
-				sobrenome = rs.getString("sobrenome");
-				email = rs.getString("email");
-				senha = rs.getString("senha");
-				telefone = rs.getString("telefone");
-				cpf = rs.getString("CPF");
-				rua = rs.getString("endereco");
-				numero = rs.getString("num_casa");
-				cep = rs.getString("Cep");
-				bairro = rs.getString("bairro");
-				cidade = rs.getString("cidade");
-				estado = rs.getString("estado");
-
-				// Preencher os campos de texto com os dados do banco
-				txtNome.setText(nome);
-				txtSobrenome.setText(sobrenome);
-				txtEmail.setText(email);
-				txtSenha.setText(senha);
-				telefoneField.setText(telefone);
-				cpfField.setText(cpf);
-				cepField.setText(cep);
-				txtRua.setText(rua);
-				txtNum.setText(numero);
-				txtBairro.setText(bairro);
-				txtCidade.setText(cidade);
-				txtEstado.setText(estado);
-			}
-		} catch (SQLException e) {
-			JOptionPane.showMessageDialog(null, "Erro ao recuperar dados do usuário: " + e.getMessage(),
-					"Erro de Recuperação", JOptionPane.ERROR_MESSAGE);
-		}
 	}
 
 	public void PerfilUsuario() {

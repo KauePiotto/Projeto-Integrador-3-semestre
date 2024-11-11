@@ -269,7 +269,7 @@ public class Alterar_E_Excluir_Produto extends JFrame {
 		txtDescricao.setLineWrap(true);
 		txtDescricao.setWrapStyleWord(true);
 		add(txtDescricao);
-		
+
 		// Adiciona o tipo de Produto
 		lblTipo = new JLabel("Tipo de Produto");
 		lblTipo.setBounds(50, 300, 180, 25);
@@ -425,7 +425,6 @@ public class Alterar_E_Excluir_Produto extends JFrame {
 				}
 
 				try {
-					// Verifica se o ID é um número válido
 					int produtoId = Integer.parseInt(id); // Tenta converter para inteiro
 
 					try (Connection conn = conexao.openDB();
@@ -446,7 +445,6 @@ public class Alterar_E_Excluir_Produto extends JFrame {
 						ex.printStackTrace();
 					}
 				} catch (NumberFormatException ex) {
-					// Captura erro se o ID não for um número válido
 					JOptionPane.showMessageDialog(Alterar_E_Excluir_Produto.this, "ID deve ser um número válido.",
 							"Erro", JOptionPane.ERROR_MESSAGE);
 				}

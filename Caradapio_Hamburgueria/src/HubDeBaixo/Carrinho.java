@@ -14,6 +14,7 @@ import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import CadapioPrincipal.Cardapio;
 import entrada.BotaoArredondado;
+import java.util.ArrayList;
 
 public class Carrinho extends JFrame {
 	private Dimension screen;
@@ -28,6 +29,8 @@ public class Carrinho extends JFrame {
 	private PainelArredondado rightPanel;
 	private JLabel valorLabel;
 	private BotaoArredondado botao;
+	private ArrayList<ItemCarrinho> itensCarrinho;
+	private double valorTotal;
 
 	public Carrinho() {
 		setTitle("Carrinho - Byell Hambúrgueria");
@@ -124,6 +127,45 @@ public class Carrinho extends JFrame {
 						JOptionPane.INFORMATION_MESSAGE);
 			}
 		});
+	}
+
+	// Método para adicionar item ao carrinho
+	public void adicionarItemAoCarrinho(String nome, int quantidade, double valorUnitario) {
+		ItemCarrinho item = new ItemCarrinho(nome, quantidade, valorUnitario);
+		itensCarrinho.add(item);
+
+		// Atualiza o valor total
+		valorTotal += item.getValorTotal();
+
+		// Atualiza a label de valor total
+		valorLabel.setText("Valor Total: R$ " + String.format("%.2f", valorTotal));
+
+		// Atualiza o painel com informações do item (opcional, exemplo)
+		atualizarPainelCarrinho();
+	}
+
+	// Método para atualizar o painel com informações dos itens no carrinho
+	public void atualizarPainelCarrinho() {
+		// Limpa o painel antes de adicionar os itens
+		rightPanel.removeAll();
+
+		valorLabel.setText("Valor Total: R$ " + String.format("%.2f", valorTotal));
+		rightPanel.add(valorLabel);
+
+		// Adiciona os itens no painel (simplesmente listando os itens no painel)
+		int yPosition = 60;
+		for (ItemCarrinho item : itensCarrinho) {
+			JLabel itemLabel = new JLabel(
+					item.getNome() + " x" + item.getQuantidade() + " - R$ " + item.getValorTotal());
+			itemLabel.setFont(new Font("Arial", Font.PLAIN, 14));
+			itemLabel.setForeground(Color.white);
+			itemLabel.setBounds(10, yPosition, 200, 30);
+			rightPanel.add(itemLabel);
+			yPosition += 30; // Ajusta a posição dos itens listados
+		}
+
+		rightPanel.revalidate();
+		rightPanel.repaint();
 	}
 
 	public static void main(String[] args) {
