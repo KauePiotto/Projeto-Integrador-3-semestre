@@ -87,6 +87,7 @@ public class Carrinho extends JFrame {
 			public void actionPerformed(ActionEvent e) {
 				Cardapio cardapio = new Cardapio();
 				cardapio.setVisible(true);
+				cardapio.ocultarBotoesLoginECadastrar();
 				dispose();
 			}
 		});

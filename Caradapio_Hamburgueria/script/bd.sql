@@ -1,3 +1,7 @@
+create database hamburgueria;
+
+use hamburgueria;
+
 CREATE table produto (
 id integer primary Key auto_increment,
 logo mediumblob,

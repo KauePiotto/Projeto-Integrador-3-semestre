@@ -143,6 +143,11 @@ public class Login extends JFrame {
 				conexao = new ConectaMySQL();
 				Connection conn = conexao.openDB();
 
+				if (conn == null) {
+					JOptionPane.showMessageDialog(null, "Erro de conexão com o banco de dados.");
+					return;
+				}
+
 				email = txtEmail.getText();
 				senha = new String(txtSenha.getPassword());
 
@@ -155,28 +160,33 @@ public class Login extends JFrame {
 					try (ResultSet rs = stmt.executeQuery()) {
 						if (rs.next()) {
 							String perfil = rs.getString("perfil");
+
+							// Após login bem-sucedido, define o usuário como logado
+							Cardapio.usuarioLogado = true;
+
+							// Cria a tela do cardápio e faz ela visível
 							Cardapio cardapio = new Cardapio();
 							cardapio.setVisible(true);
 
+							// Se for um administrador, mostra o menu de opções
 							if ("admin".equals(perfil)) {
-								cardapio.setVisible(true);
-								cardapio.ocultarBotoesLoginECadastrar();
 								cardapio.mostrarMenu();
-							} else {
-								cardapio.ocultarBotoesLoginECadastrar();
 							}
 
+							// Chama o método para ocultar os botões de login e cadastro
+							cardapio.ocultarBotoesLoginECadastrar();
+
+							// Fecha a tela de login
 							dispose();
 						} else {
 							JOptionPane.showMessageDialog(null, "E-mail/Senha incorreta ou não existe");
 						}
 					}
 				} catch (SQLException ex) {
-					ex.printStackTrace();
+					JOptionPane.showMessageDialog(null, "Erro ao acessar o banco de dados: " + ex.getMessage());
 				}
 			}
 		});
-
 	}
 
 	public void BotaoVoltar() {
@@ -197,6 +207,7 @@ public class Login extends JFrame {
 			public void actionPerformed(ActionEvent e) {
 				Cardapio cardapio = new Cardapio();
 				cardapio.setVisible(true);
+				cardapio.ocultarBotoesLoginECadastrar();
 				dispose();
 			}
 		});

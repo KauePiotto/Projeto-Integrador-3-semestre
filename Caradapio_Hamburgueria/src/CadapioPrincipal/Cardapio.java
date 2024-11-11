@@ -10,6 +10,9 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.util.ArrayList;
+import java.util.List;
+
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JFrame;
@@ -22,6 +25,7 @@ import LoginECadastrar.Login;
 import Produtos.Alterar_E_Excluir_Produto;
 import Produtos.BuscarProduto;
 import Produtos.CadastroProduto;
+import dao.ConectaMySQL;
 import entrada.BotaoArredondado;
 import entrada.PainelComFundo;
 
@@ -37,7 +41,6 @@ public class Cardapio extends JFrame {
 	private JLabel lblLogo;
 	private JLabel imageLabel;
 	private JPanel itemPainel;
-	private JLabel lblBemVindo;
 	private JMenuItem op1;
 	private JMenuItem op2;
 	private JMenuItem op3;
@@ -47,22 +50,21 @@ public class Cardapio extends JFrame {
 	private ImageIcon logoIcon;
 	private ImageIcon resizedLogoIcon;
 	private ImageIcon icon;
-	private ImageIcon imageIcon;
 	private ImageIcon menuicon;
 	private Image logoImage;
 	private Image img;
 	private PainelComFundo painel;
 	private NavigationPanel NavPanel;
-
-	private String[] lanches = { "Hamburguer", "Cheeseburguer", "Vegetariano" };
-	private String[] bebidas = { "Refrigerante", "Suco", "Água" };
-	private String[] porcoes = { "Batata Frita", "Batata Rústica" };
+	private ConectaMySQL conexao;
+	public static boolean usuarioLogado = false;
 
 	public Cardapio() {
 		setTitle("Cardápio - Byell Hambúrgueria");
 		setResizable(false);
 		getContentPane().setLayout(null);
 		setSize(800, 600);
+
+		conexao = new ConectaMySQL();
 
 		Centralizar();
 		Logo();
@@ -77,13 +79,6 @@ public class Cardapio extends JFrame {
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 	}
 
-	public void PainelItem() {
-		itemPainel = new JPanel();
-		itemPainel.setLayout(new FlowLayout());
-		itemPainel.setBounds(50, 150, 700, 350);
-		add(itemPainel);
-	}
-
 	public void NavPainel() {
 		NavPanel = new NavigationPanel(this);
 		NavPanel.setBounds(250, 515, 300, 40);
@@ -92,8 +87,10 @@ public class Cardapio extends JFrame {
 	}
 
 	public void ocultarBotoesLoginECadastrar() {
-		btnLogin.setVisible(false);
-		btnCadastrar.setVisible(false);
+		if (usuarioLogado) {
+			btnLogin.setVisible(false);
+			btnCadastrar.setVisible(false);
+		}
 	}
 
 	public void Centralizar() {
@@ -231,6 +228,13 @@ public class Cardapio extends JFrame {
 		add(btnPorcoes);
 	}
 
+	public void PainelItem() {
+		itemPainel = new JPanel();
+		itemPainel.setLayout(new FlowLayout());
+		itemPainel.setBounds(50, 150, 700, 350);
+		add(itemPainel);
+	}
+
 	private JButton createImageButton(String imagePath, String tooltip) {
 		button = new JButton();
 
@@ -250,69 +254,27 @@ public class Cardapio extends JFrame {
 		itemPainel.removeAll();
 		imageLabel = new JLabel();
 
-		imageIcon = null;
-		img = null;
-
+		// Definir o ícone da categoria selecionada
+		List<String> produtosBD = new ArrayList<>();
 		switch (filter) {
 		case "lanches":
-
-			imageIcon = new ImageIcon("imagens/hamburguer.png");
-			img = imageIcon.getImage().getScaledInstance(50, 50, Image.SCALE_SMOOTH);
-			imageLabel.setIcon(new ImageIcon(img));
-			itemPainel.add(imageLabel);
-
-			for (String lanche : lanches) {
-				JLabel lancheLabel = new JLabel(lanche);
-				itemPainel.add(lancheLabel);
-			}
+			produtosBD = conexao.getProdutosByTipo("Lanches");
 			break;
 		case "bebidas":
-
-			imageIcon = new ImageIcon("imagens/refrigerantes.png");
-			img = imageIcon.getImage().getScaledInstance(50, 50, Image.SCALE_SMOOTH);
-			imageLabel.setIcon(new ImageIcon(img));
-
-			itemPainel.add(imageLabel);
-
-			for (String bebida : bebidas) {
-				JLabel bebidaLabel = new JLabel(bebida);
-				itemPainel.add(bebidaLabel);
-			}
+			produtosBD = conexao.getProdutosByTipo("Bebidas");
 			break;
 		case "porcoes":
-
-			imageIcon = new ImageIcon("imagens/porcoes.png");
-			img = imageIcon.getImage().getScaledInstance(50, 50, Image.SCALE_SMOOTH);
-			imageLabel.setIcon(new ImageIcon(img));
-
-			itemPainel.add(imageLabel);
-
-			for (String porcao : porcoes) {
-				JLabel porcaoLabel = new JLabel(porcao);
-				itemPainel.add(porcaoLabel);
-			}
+			produtosBD = conexao.getProdutosByTipo("Porções");
 			break;
 		default:
-
-			imageIcon = new ImageIcon("imagens/todos.png");
-			img = imageIcon.getImage().getScaledInstance(50, 50, Image.SCALE_SMOOTH);
-			imageLabel.setIcon(new ImageIcon(img));
-
-			itemPainel.add(imageLabel);
-
-			for (String lanche : lanches) {
-				JLabel lancheLabel = new JLabel(lanche);
-				itemPainel.add(lancheLabel);
-			}
-			for (String bebida : bebidas) {
-				JLabel bebidaLabel = new JLabel(bebida);
-				itemPainel.add(bebidaLabel);
-			}
-			for (String porcao : porcoes) {
-				JLabel porcaoLabel = new JLabel(porcao);
-				itemPainel.add(porcaoLabel);
-			}
+			produtosBD = conexao.getProdutosByTipo("Todos"); // Exemplo de todos os produtos
 			break;
+		}
+
+		// Atualizar o painel de itens com os produtos filtrados
+		for (String produto : produtosBD) {
+			JLabel produtoLabel = new JLabel(produto);
+			itemPainel.add(produtoLabel);
 		}
 		itemPainel.revalidate();
 		itemPainel.repaint();
@@ -338,12 +300,21 @@ public class Cardapio extends JFrame {
 		op2 = new JMenuItem("Alterar Produto ou Excluir");
 		op3 = new JMenuItem("Buscar Produto");
 
-		CadastroProduto cadastro = new CadastroProduto();
-		BuscarProduto buscar = new BuscarProduto();
-		Alterar_E_Excluir_Produto altEecl = new Alterar_E_Excluir_Produto();
-		op1.addActionListener(e -> cadastro.setVisible(true));
-		op2.addActionListener(e -> buscar.setVisible(true));
-		op3.addActionListener(e -> altEecl.setVisible(true));
+		op1.addActionListener(e -> {
+			CadastroProduto cadastro = new CadastroProduto();
+			cadastro.setVisible(true);
+			dispose();
+		});
+		op2.addActionListener(e -> {
+			BuscarProduto buscar = new BuscarProduto();
+			buscar.setVisible(true);
+			dispose();
+		});
+		op3.addActionListener(e -> {
+			Alterar_E_Excluir_Produto altEecl = new Alterar_E_Excluir_Produto();
+			altEecl.setVisible(true);
+			dispose();
+		});
 
 		menuPopup.add(op1);
 		menuPopup.add(op2);
