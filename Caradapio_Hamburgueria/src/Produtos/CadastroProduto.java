@@ -11,6 +11,8 @@ import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.image.BufferedImage;
 import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -295,25 +297,46 @@ public class CadastroProduto extends JFrame {
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				conexao = new ConectaMySQL();
-
-				JOptionPane.showMessageDialog(null, "Produto cadastrado com sucesso!", "Cadastro Produto",
-						JOptionPane.INFORMATION_MESSAGE);
-
 				Connection conn = null;
 				PreparedStatement stmt = null;
+
 				try {
 					conn = conexao.openDB();
 
-					String sql = "INSERT INTO produtos (nome, sobrenome, email, senha, telefone, CPF, endereco, num_casa, cep, bairro, cidade, estado) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
-
+					String sql = "INSERT INTO produto (logo, nome, descricao, tipo, preco) VALUES (?, ?, ?, ?, ?)";
 					stmt = conn.prepareStatement(sql);
 
-					JOptionPane.showMessageDialog(null, "Cadastro realizado com sucesso!");
-					dispose();
+					if (selectedFile != null) {
+						FileInputStream fis = new FileInputStream(selectedFile);
+						stmt.setBinaryStream(1, fis, (int) selectedFile.length());
+					} else {
+						stmt.setNull(1, java.sql.Types.BLOB);
+					}
 
-					Cardapio cardapio = new Cardapio();
-					cardapio.setVisible(true);
-				} catch (Exception ex) {
+					stmt.setString(2, txtNome.getText());
+					stmt.setString(3, txtDescricao.getText());
+					stmt.setString(4, (String) cmbTipoProduto.getSelectedItem());
+
+					String precoText = txtPreco.getText().replace("R$ ", "").replace(",", ".");
+					try {
+						double preco = Double.parseDouble(precoText);
+						stmt.setDouble(5, preco);
+					} catch (NumberFormatException ex) {
+						JOptionPane.showMessageDialog(null, "Preço inválido! Insira um valor numérico.",
+								"Erro de Cadastro", JOptionPane.ERROR_MESSAGE);
+						return;
+					}
+
+					// Executa o comando de inserção
+					int rowsInserted = stmt.executeUpdate();
+					if (rowsInserted > 0) {
+						JOptionPane.showMessageDialog(null, "Produto cadastrado com sucesso!", "Cadastro Produto",
+								JOptionPane.INFORMATION_MESSAGE);
+					}
+				} catch (FileNotFoundException ex) {
+					JOptionPane.showMessageDialog(null, "Erro ao carregar a imagem: " + ex.getMessage(), "Erro",
+							JOptionPane.ERROR_MESSAGE);
+				} catch (SQLException ex) {
 					JOptionPane.showMessageDialog(null, "Erro ao conectar ao banco de dados: " + ex.getMessage(),
 							"Erro de Conexão", JOptionPane.ERROR_MESSAGE);
 				} finally {

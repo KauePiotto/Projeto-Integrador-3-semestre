@@ -7,9 +7,20 @@ import java.awt.Image;
 import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
+import java.awt.image.BufferedImage;
+import java.io.File;
+import java.io.IOException;
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import javax.imageio.ImageIO;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JComboBox;
+import javax.swing.JFileChooser;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
@@ -19,6 +30,7 @@ import javax.swing.text.AbstractDocument;
 import javax.swing.text.AttributeSet;
 import javax.swing.text.BadLocationException;
 import javax.swing.text.DocumentFilter;
+import dao.ConectaMySQL;
 import entrada.BotaoArredondado;
 
 public class Alterar_E_Excluir_Produto extends JFrame {
@@ -45,6 +57,52 @@ public class Alterar_E_Excluir_Produto extends JFrame {
 	private String[] TiposDeProduto = { "----------", "Lanche", "Bebida", "Porção" };
 	private BotaoArredondado btnAlterarProduto;
 	private BotaoArredondado btnExcluirProduto;
+	private ConectaMySQL conexao;
+	private JFileChooser fileChooser;
+	private File selectedFile;
+	private BufferedImage img2;
+	private int result;
+	private Image scaledImage;
+
+	public JTextField getTxtIdProduto() {
+		return txtIdProduto;
+	}
+
+	public void setTxtIdProduto(JTextField txtIdProduto) {
+		this.txtIdProduto = txtIdProduto;
+	}
+
+	public JTextField getTxtNome() {
+		return txtNome;
+	}
+
+	public void setTxtNome(JTextField txtNome) {
+		this.txtNome = txtNome;
+	}
+
+	public JTextField getTxtPreco() {
+		return txtPreco;
+	}
+
+	public void setTxtPreco(JTextField txtPreco) {
+		this.txtPreco = txtPreco;
+	}
+
+	public JTextArea getTxtDescricao() {
+		return txtDescricao;
+	}
+
+	public void setTxtDescricao(JTextArea txtDescricao) {
+		this.txtDescricao = txtDescricao;
+	}
+
+	public JComboBox<String> getCmbTipoProduto() {
+		return cmbTipoProduto;
+	}
+
+	public void setCmbTipoProduto(JComboBox<String> cmbTipoProduto) {
+		this.cmbTipoProduto = cmbTipoProduto;
+	}
 
 	public Alterar_E_Excluir_Produto() {
 		setTitle("Aletrar Produto - Byell Hambúrgueria");
@@ -60,6 +118,16 @@ public class Alterar_E_Excluir_Produto extends JFrame {
 		AlteExc();
 
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+	}
+
+	public Alterar_E_Excluir_Produto(String id, String nome, String descricao, String tipo, String preco, byte[] logo) {
+		// Aqui você deve armazenar os parâmetros passados nos atributos da classe
+		this.idProduto = id;
+		this.nomeProduto = nome;
+		this.descricaoProduto = descricao;
+		this.cmbTipoProduto = tipo;
+		this.precoProduto = preco;
+		this.logoProduto = logo;
 	}
 
 	public void Centralizar() {
@@ -144,6 +212,29 @@ public class Alterar_E_Excluir_Produto extends JFrame {
 		lblFoto.setBorder(javax.swing.BorderFactory.createLineBorder(Color.decode("#ffd96d")));
 		add(lblFoto);
 
+		lblFoto.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mouseClicked(MouseEvent e) {
+				fileChooser = new JFileChooser();
+				result = fileChooser.showOpenDialog(Alterar_E_Excluir_Produto.this);
+
+				if (result == JFileChooser.APPROVE_OPTION) {
+					selectedFile = fileChooser.getSelectedFile();
+
+					try {
+						img2 = ImageIO.read(selectedFile);
+						scaledImage = img2.getScaledInstance(lblFoto.getWidth(), lblFoto.getHeight(),
+								Image.SCALE_SMOOTH);
+						lblFoto.setIcon(new ImageIcon(scaledImage));
+						lblFoto.setText("");
+					} catch (IOException ex) {
+						ex.printStackTrace();
+						JOptionPane.showMessageDialog(Alterar_E_Excluir_Produto.this,
+								"Não foi possível carregar a imagem", "Erro", JOptionPane.ERROR_MESSAGE);
+					}
+				}
+			}
+		});
 		// Adiciona a descricao do produdo
 		lblDescricao = new JLabel("Descrição");
 		lblDescricao.setBounds(50, 170, 80, 25);
@@ -226,8 +317,33 @@ public class Alterar_E_Excluir_Produto extends JFrame {
 		btnAlterarProduto.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				JOptionPane.showMessageDialog(null, "Produto cadastrado com sucesso!", "Cadastro Produto",
-						JOptionPane.INFORMATION_MESSAGE);
+				String id = txtIdProduto.getText();
+				String nome = txtNome.getText();
+				String descricao = txtDescricao.getText();
+				String tipo = (String) cmbTipoProduto.getSelectedItem();
+				String preco = txtPreco.getText().replace("R$ ", "");
+
+				try (Connection conn = conexao.openDB()) {
+					String sql = "UPDATE produto SET nome = ?, descricao = ?, tipo = ?, preco = ? WHERE id = ?";
+					PreparedStatement stmt = conn.prepareStatement(sql);
+					stmt.setString(1, nome);
+					stmt.setString(2, descricao);
+					stmt.setString(3, tipo);
+					stmt.setString(4, preco);
+					stmt.setString(5, id);
+
+					int rowsUpdated = stmt.executeUpdate();
+					if (rowsUpdated > 0) {
+						JOptionPane.showMessageDialog(null, "Produto alterado com sucesso!", "Alteração",
+								JOptionPane.INFORMATION_MESSAGE);
+					} else {
+						JOptionPane.showMessageDialog(null, "Erro ao alterar produto.", "Erro",
+								JOptionPane.ERROR_MESSAGE);
+					}
+				} catch (SQLException ex) {
+					JOptionPane.showMessageDialog(null, "Erro ao alterar o produto: " + ex.getMessage(), "Erro",
+							JOptionPane.ERROR_MESSAGE);
+				}
 			}
 		});
 
@@ -239,10 +355,28 @@ public class Alterar_E_Excluir_Produto extends JFrame {
 		add(btnExcluirProduto);
 
 		btnExcluirProduto.addActionListener(new ActionListener() {
+			String id = txtIdProduto.getText();
+
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				JOptionPane.showMessageDialog(null, "Produto excluido com sucesso!", "Excluir Produto",
-						JOptionPane.INFORMATION_MESSAGE);
+				String id = txtIdProduto.getText();
+				try (Connection conn = conexao.openDB()) {
+					String sql = "DELETE FROM produto WHERE id = ?";
+					PreparedStatement stmt = conn.prepareStatement(sql);
+					stmt.setString(1, id);
+
+					int rowsDeleted = stmt.executeUpdate();
+					if (rowsDeleted > 0) {
+						JOptionPane.showMessageDialog(null, "Produto excluído com sucesso!", "Exclusão",
+								JOptionPane.INFORMATION_MESSAGE);
+					} else {
+						JOptionPane.showMessageDialog(null, "Erro ao excluir produto.", "Erro",
+								JOptionPane.ERROR_MESSAGE);
+					}
+				} catch (SQLException ex) {
+					JOptionPane.showMessageDialog(null, "Erro ao excluir o produto: " + ex.getMessage(), "Erro",
+							JOptionPane.ERROR_MESSAGE);
+				}
 			}
 		});
 	}
