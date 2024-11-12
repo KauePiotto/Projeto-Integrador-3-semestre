@@ -46,7 +46,7 @@ public class Login extends JFrame {
 	private PainelComFundo painel;
 	private BotaoArredondado btnLogin;
 	private ConectaMySQL conexao;
-
+//aa
 	public String getEmail() {
 		return email;
 	}
