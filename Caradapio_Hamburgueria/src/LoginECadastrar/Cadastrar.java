@@ -227,6 +227,54 @@ public class Cadastrar extends JFrame {
 		add(logoLabel);
 	}
 
+	public boolean validarCPF(String cpf) {
+		// Remove todos os caracteres não numéricos
+		cpf = cpf.replaceAll("[^0-9]", "");
+
+		// Verifica se o CPF possui 11 dígitos
+		if (cpf.length() != 11) {
+			return false;
+		}
+
+		// Verifica se todos os números são iguais (ex: 111.111.111-11)
+		if (cpf.equals("00000000000") || cpf.equals("11111111111") || cpf.equals("22222222222")
+				|| cpf.equals("33333333333") || cpf.equals("44444444444") || cpf.equals("55555555555")
+				|| cpf.equals("66666666666") || cpf.equals("77777777777") || cpf.equals("88888888888")
+				|| cpf.equals("99999999999")) {
+			return false;
+		}
+
+		// Validação dos dois dígitos verificadores
+		int soma = 0;
+		int peso = 10;
+
+		// Valida o primeiro dígito verificador
+		for (int i = 0; i < 9; i++) {
+			soma += Integer.parseInt(String.valueOf(cpf.charAt(i))) * peso--;
+		}
+
+		int digito1 = 11 - (soma % 11);
+		if (digito1 == 10 || digito1 == 11) {
+			digito1 = 0;
+		}
+
+		// Valida o segundo dígito verificador
+		soma = 0;
+		peso = 11;
+		for (int i = 0; i < 10; i++) {
+			soma += Integer.parseInt(String.valueOf(cpf.charAt(i))) * peso--;
+		}
+
+		int digito2 = 11 - (soma % 11);
+		if (digito2 == 10 || digito2 == 11) {
+			digito2 = 0;
+		}
+
+		// Compara os dígitos calculados com os fornecidos
+		return digito1 == Integer.parseInt(String.valueOf(cpf.charAt(9)))
+				&& digito2 == Integer.parseInt(String.valueOf(cpf.charAt(10)));
+	}
+
 	public void CadastrarDados() {
 		// Adiciona o Titulo
 		lblDados = new JLabel("Dados Pessoais");
@@ -428,15 +476,17 @@ public class Cadastrar extends JFrame {
 		add(btnCadastrar);
 
 		btnCadastrar.addActionListener(new ActionListener() {
-
 			public void actionPerformed(ActionEvent e) {
 				conexao = new ConectaMySQL();
+				Connection conn = null;
+				PreparedStatement stmt = null;
 
 				nome = txtNome.getText();
 				sobrenome = txtSobrenome.getText();
 				email = txtEmail.getText();
 				senha = new String(txtSenha.getPassword());
 				cpf = cpfField.getText().replaceAll("[^0-9]", "");
+				;
 				telefone = telefoneField.getText();
 				cep = cepField.getText().replaceAll("[^0-9]", "");
 				rua = txtRua.getText();
@@ -445,14 +495,27 @@ public class Cadastrar extends JFrame {
 				cidade = txtCidade.getText();
 				estado = txtEstado.getText();
 
+				// Validação de e-mail
+				if (!email.matches("^[\\w-\\.]+@([\\w-]+\\.)+[\\w-]{2,4}$")) {
+					JOptionPane.showMessageDialog(null, "E-mail inválido.", "Erro de Validação",
+							JOptionPane.ERROR_MESSAGE);
+					return;
+				}
+
+				// Verifica se o CPF é válido
+				if (!validarCPF(cpf)) {
+					JOptionPane.showMessageDialog(null, "CPF inválido.", "Erro de Validação",
+							JOptionPane.ERROR_MESSAGE);
+					return;
+				}
+
+				// Validação de campos vazios
 				if (nome.isEmpty() || sobrenome.isEmpty() || email.isEmpty() || senha.isEmpty() || cpf.isEmpty()
 						|| telefone.isEmpty() || cep.isEmpty() || rua.isEmpty() || numero.isEmpty() || bairro.isEmpty()
 						|| cidade.isEmpty() || estado.isEmpty()) {
 					JOptionPane.showMessageDialog(null, "Preencha todos os campos.", "Erro Cadastrado",
 							JOptionPane.ERROR_MESSAGE);
 				} else {
-					Connection conn = null;
-					PreparedStatement stmt = null;
 					try {
 						conn = conexao.openDB();
 
@@ -473,21 +536,16 @@ public class Cadastrar extends JFrame {
 						stmt.setString(12, estado);
 
 						stmt.executeUpdate();
-						
+
 						JOptionPane.showMessageDialog(null, "Cadastro realizado com sucesso!");
 						dispose();
 
 						Cardapio cardapio = new Cardapio();
 						cardapio.setVisible(true);
+
 					} catch (Exception ex) {
 						JOptionPane.showMessageDialog(null, "Erro ao conectar ao banco de dados: " + ex.getMessage(),
 								"Erro de Conexão", JOptionPane.ERROR_MESSAGE);
-					} finally {
-						try {
-							conexao.closeDB(conn, stmt, null);
-						} catch (SQLException ex) {
-							ex.printStackTrace();
-						}
 					}
 				}
 			}

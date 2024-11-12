@@ -18,6 +18,7 @@ import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JMenuItem;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JPopupMenu;
 import javax.swing.SwingConstants;
@@ -80,7 +81,7 @@ public class Cardapio extends JFrame {
 
 		// Adiciona o filtro "Todos" logo no início
 		updateItems("all");
-		
+
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 	}
 
@@ -272,6 +273,7 @@ public class Cardapio extends JFrame {
 
 	Carrinho carrinho = new Carrinho();
 
+	// Criação do painel para o produto
 	private JPanel createProductPanel(String nome, String descricao, double preco, byte[] logo, Carrinho carrinho) {
 		JPanel produtoPanel = new JPanel(new BorderLayout());
 		produtoPanel.setPreferredSize(new Dimension(280, 200));
@@ -286,26 +288,32 @@ public class Cardapio extends JFrame {
 		JLabel imagemLabel = new JLabel();
 		if (logo != null && logo.length > 0) {
 			ImageIcon imagemIcon = new ImageIcon(logo);
-			Image img = imagemIcon.getImage().getScaledInstance(100, 100, Image.SCALE_SMOOTH);
+			img = imagemIcon.getImage().getScaledInstance(100, 100, Image.SCALE_SMOOTH);
 			imagemIcon = new ImageIcon(img);
 			imagemLabel.setIcon(imagemIcon);
 		}
 
-		JButton addCarrinhoButton = new JButton("Adicionar ao Carrinho");
-		// Adicionando ação ao botão
-		addCarrinhoButton.addActionListener(new ActionListener() {
+		JButton AddCarrinho = new JButton("Adicionar ao Carrinho");
+		AddCarrinho.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				// Adiciona o item ao carrinho quando o botão for clicado
 				carrinho.adicionarItemAoCarrinho(nome, 1, preco); // Adiciona 1 unidade do item
+
+				// Atualiza o painel do carrinho
+				carrinho.atualizarPainelCarrinho();
+
+				// Exibe uma mensagem de confirmação
+				JOptionPane.showMessageDialog(null, nome + " foi adicionado ao carrinho.");
 			}
 		});
+
 		// Painel central para organizar os textos e botão
 		JPanel centroPanel = new JPanel(new BorderLayout());
 		centroPanel.add(nomeLabel, BorderLayout.NORTH);
 		centroPanel.add(descricaoLabel, BorderLayout.CENTER);
-		centroPanel.add(precoLabel, BorderLayout.SOUTH);
-		centroPanel.add(addCarrinhoButton, BorderLayout.PAGE_END);
+		centroPanel.add(precoLabel, BorderLayout.WEST);
+		centroPanel.add(AddCarrinho, BorderLayout.PAGE_END);
 
 		produtoPanel.add(centroPanel, BorderLayout.CENTER);
 		produtoPanel.add(imagemLabel, BorderLayout.WEST);
@@ -314,26 +322,24 @@ public class Cardapio extends JFrame {
 	}
 
 	private void updateItems(String filtro) {
-		itemPainel.removeAll(); // Limpa os produtos antigos exibidos
+		itemPainel.removeAll();
 
-		// Chama o método getProdutos com o filtro
 		ConectaMySQL db = new ConectaMySQL();
-		List<Produto> produtos = db.getProduto(filtro); // Filtro passado
+
+		List<Produto> produtos = db.getProduto(filtro);
 
 		if (produtos == null || produtos.isEmpty()) {
 			JLabel vazio = new JLabel("Nenhum produto encontrado.");
 			itemPainel.add(vazio);
 		} else {
-			// Adiciona os produtos no painel
 			for (Produto produto : produtos) {
-				// Passa a instância do Carrinho para cada produto
 				JPanel produtoPanel = createProductPanel(produto.getNome(), produto.getDescricao(), produto.getPreco(),
-						produto.getLogo(), carrinho); // Instância do carrinho
+						produto.getLogo(), carrinho);
 				itemPainel.add(produtoPanel);
 			}
 		}
-		itemPainel.revalidate(); // Revalida o painel para garantir que os novos produtos sejam exibidos
-		itemPainel.repaint(); // Redesenha o painel
+		itemPainel.revalidate();
+		itemPainel.repaint();
 	}
 
 	public void BotaoMenu() {

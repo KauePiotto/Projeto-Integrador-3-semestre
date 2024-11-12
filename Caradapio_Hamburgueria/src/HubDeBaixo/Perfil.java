@@ -67,7 +67,7 @@ public class Perfil extends JFrame {
 	private String cpf;
 	private String telefone;
 	private String cep;
-	private String rua;
+	private String Rua;
 	private String numero;
 	private String bairro;
 	private String cidade;
@@ -188,7 +188,7 @@ public class Perfil extends JFrame {
 		BotaoVoltar();
 		RecuperarDadosUsuario();
 		desabilitarCampos();
-		
+
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 	}
 
@@ -205,22 +205,30 @@ public class Perfil extends JFrame {
 		setLocation((screen.width - janela.width) / 2, (screen.height - janela.height) / 2);
 	}
 
-	// Método para verificar o login e desabilitar os campos se não estiver logado
-	public void desabilitarCampos() {
-		// Desabilitar os campos quando o usuário não estiver logado
-		txtNome.setEnabled(false);
-		txtSobrenome.setEnabled(false);
-		txtEmail.setEnabled(false);
-		txtSenha.setEnabled(false);
-		telefoneField.setEnabled(false);
-		cpfField.setEnabled(false);
-		txtRua.setEnabled(false);
-		txtNum.setEnabled(false);
-		cepField.setEnabled(false);
-		txtBairro.setEnabled(false);
-		txtCidade.setEnabled(false);
-		txtEstado.setEnabled(false);
-		btnAlterar.setEnabled(false); // Desabilitar o botão de alteração
+	// Método para verificar login
+	public void verificarLogin(String usuario, String senha) {
+		try {
+			String sql = "SELECT * FROM usuarios WHERE email = ? AND senha = ?";
+			PreparedStatement stmt = conn.openDB().prepareStatement(sql);
+			stmt.setString(1, usuario);
+			stmt.setString(2, senha);
+			ResultSet rs = stmt.executeQuery();
+
+			if (rs.next()) {
+				// Login bem-sucedido
+				logado = true;
+				email = usuario; // Define o e-mail do usuário logado
+				JOptionPane.showMessageDialog(null, "Login realizado com sucesso!");
+				RecuperarDadosUsuario(); // Carrega os dados do usuário
+				habilitarCampos(); // Habilita os campos para edição
+			} else {
+				// Login falhou
+				JOptionPane.showMessageDialog(null, "E-mail ou senha inválidos!", "Erro", JOptionPane.ERROR_MESSAGE);
+			}
+		} catch (SQLException e) {
+			JOptionPane.showMessageDialog(null, "Erro ao verificar login: " + e.getMessage(), "Erro",
+					JOptionPane.ERROR_MESSAGE);
+		}
 	}
 
 	// Esse método agora vai buscar os dados do usuário com base no email
@@ -252,8 +260,25 @@ public class Perfil extends JFrame {
 		}
 	}
 
+	// Desabilitar os campos quando o usuário não estiver logado
+	public void desabilitarCampos() {
+		txtNome.setEnabled(false);
+		txtSobrenome.setEnabled(false);
+		txtEmail.setEnabled(false);
+		txtSenha.setEnabled(false);
+		telefoneField.setEnabled(false);
+		cpfField.setEnabled(false);
+		txtRua.setEnabled(false);
+		txtNum.setEnabled(false);
+		cepField.setEnabled(false);
+		txtBairro.setEnabled(false);
+		txtCidade.setEnabled(false);
+		txtEstado.setEnabled(false);
+		btnAlterar.setEnabled(false);
+	}
+
+	// Habilitar todos os campos para edição
 	public void habilitarCampos() {
-		// Habilitar todos os campos para edição
 		txtNome.setEnabled(true);
 		txtSobrenome.setEnabled(true);
 		txtEmail.setEnabled(true);
@@ -266,23 +291,7 @@ public class Perfil extends JFrame {
 		txtBairro.setEnabled(true);
 		txtCidade.setEnabled(true);
 		txtEstado.setEnabled(true);
-		btnAlterar.setEnabled(true); // Habilitar o botão de alteração
-	}
-
-	public void carregarDadosUsuario(ResultSet rs) throws SQLException {
-		// Carregar os dados do usuário no formulário
-		txtNome.setText(rs.getString("nome"));
-		txtSobrenome.setText(rs.getString("sobrenome"));
-		txtEmail.setText(rs.getString("email"));
-		txtSenha.setText(rs.getString("senha"));
-		telefoneField.setText(rs.getString("telefone"));
-		cpfField.setText(rs.getString("cpf"));
-		txtRua.setText(rs.getString("endereco"));
-		txtNum.setText(rs.getString("num_casa"));
-		cepField.setText(rs.getString("cep"));
-		txtBairro.setText(rs.getString("bairro"));
-		txtCidade.setText(rs.getString("cidade"));
-		txtEstado.setText(rs.getString("estado"));
+		btnAlterar.setEnabled(true);
 	}
 
 	public void PerfilUsuario() {
@@ -487,53 +496,10 @@ public class Perfil extends JFrame {
 
 		btnAlterar.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				// Atualizar os dados do usuário
-				String nome = txtNome.getText();
-				String sobrenome = txtSobrenome.getText();
-				String email = txtEmail.getText();
-				String senha = txtSenha.getText();
-				String telefone = telefoneField.getText();
-				String cpf = cpfField.getText();
-				String endereco = txtRua.getText();
-				String numCasa = txtNum.getText();
-				String cep = cepField.getText();
-				String bairro = txtBairro.getText();
-				String cidade = txtCidade.getText();
-				String estado = txtEstado.getText();
-
-				// SQL para atualizar os dados do usuário
-				String sql = "UPDATE usuarios SET nome = ?, sobrenome = ?, email = ?, senha = ?, telefone = ?, cpf = ?, endereco = ?, num_casa = ?, cep = ?, bairro = ?, cidade = ?, estado = ? WHERE email = ?";
-
-				try {
-					PreparedStatement stmt = conn.openDB().prepareStatement(sql);
-					stmt.setString(1, nome);
-					stmt.setString(2, sobrenome);
-					stmt.setString(3, email);
-					stmt.setString(4, senha);
-					stmt.setString(5, telefone);
-					stmt.setString(6, cpf);
-					stmt.setString(7, endereco);
-					stmt.setString(8, numCasa);
-					stmt.setString(9, cep);
-					stmt.setString(10, bairro);
-					stmt.setString(11, cidade);
-					stmt.setString(12, estado);
-					stmt.setString(13, email); // Usando o email para identificar o usuário
-
-					int rowsUpdated = stmt.executeUpdate();
-					if (rowsUpdated > 0) {
-						JOptionPane.showMessageDialog(null, "Dados atualizados com sucesso!", "Sucesso",
-								JOptionPane.INFORMATION_MESSAGE);
-					} else {
-						JOptionPane.showMessageDialog(null, "Erro ao atualizar dados.", "Erro",
-								JOptionPane.ERROR_MESSAGE);
-					}
-				} catch (SQLException ex) {
-					JOptionPane.showMessageDialog(null, "Erro ao atualizar os dados: " + ex.getMessage(), "Erro",
-							JOptionPane.ERROR_MESSAGE);
-				}
+				JOptionPane.showMessageDialog(null, "Conta Alterada com sucesso");
 			}
 		});
+
 	}
 
 	public void BotaoVoltar() {

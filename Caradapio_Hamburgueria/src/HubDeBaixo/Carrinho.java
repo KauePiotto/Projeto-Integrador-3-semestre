@@ -7,11 +7,16 @@ import java.awt.Image;
 import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+
+import javax.swing.Box;
+import javax.swing.BoxLayout;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
+import javax.swing.JPanel;
+
 import CadapioPrincipal.Cardapio;
 import entrada.BotaoArredondado;
 import java.util.ArrayList;
@@ -30,20 +35,19 @@ public class Carrinho extends JFrame {
 	private PainelArredondado rightPanel;
 	private JLabel valorLabel;
 	private BotaoArredondado botao;
-	private ArrayList<ItemCarrinho> itensCarrinho;
 	private double valorTotal;
-	private List<ItemCarrinho> itens;
+	private ArrayList<ItemCarrinho> itensCarrinho;
+	private JPanel CarrinhoPainel;
 
 	public Carrinho() {
-
 		setTitle("Carrinho - Byell Hambúrgueria");
 		getContentPane().setBackground(Color.decode("#1e1e1e"));
 		setResizable(false);
 		getContentPane().setLayout(null);
 		setSize(800, 600);
 
-		itensCarrinho = new ArrayList<>(); // Inicializa a lista de itens
-		valorTotal = 0.0; // Inicializa o valor total como 0
+		itensCarrinho = new ArrayList<>();
+		valorTotal = 0.0;
 
 		Centralizar();
 		Logo();
@@ -133,9 +137,15 @@ public class Carrinho extends JFrame {
 						JOptionPane.INFORMATION_MESSAGE);
 			}
 		});
+
+		// Criação do painel para exibir os itens do carrinho
+		CarrinhoPainel = new JPanel();
+		CarrinhoPainel.setLayout(new BoxLayout(CarrinhoPainel, BoxLayout.Y_AXIS));
+		CarrinhoPainel.setBounds(35, 100, 500, 300);
+		CarrinhoPainel.setBackground(Color.decode("#1e1e1e"));
+		add(CarrinhoPainel);
 	}
 
-	// Método para adicionar item ao carrinho
 	public void adicionarItemAoCarrinho(String nome, int quantidade, double valorUnitario) {
 		ItemCarrinho item = new ItemCarrinho(nome, quantidade, valorUnitario);
 		itensCarrinho.add(item);
@@ -143,35 +153,64 @@ public class Carrinho extends JFrame {
 		// Atualiza o valor total
 		valorTotal += item.getValorTotal();
 
-		// Atualiza a label de valor total
+		// Atualiza o rótulo do valor total
 		valorLabel.setText("Valor Total: R$ " + String.format("%.2f", valorTotal));
 
-		// Atualiza o painel com informações do item (opcional, exemplo)
+		// Atualiza o painel do carrinho
 		atualizarPainelCarrinho();
 	}
 
-	// Método para atualizar o painel com informações dos itens no carrinho
 	public void atualizarPainelCarrinho() {
-		// Limpa o painel antes de adicionar os itens
-		rightPanel.removeAll();
+		CarrinhoPainel.removeAll();
 
-		valorLabel.setText("Valor Total: R$ " + String.format("%.2f", valorTotal));
-		rightPanel.add(valorLabel);
-
-		// Adiciona os itens no painel (simplesmente listando os itens no painel)
-		int yPosition = 60;
 		for (ItemCarrinho item : itensCarrinho) {
-			JLabel itemLabel = new JLabel(
-					item.getNome() + " x" + item.getQuantidade() + " - R$ " + item.getValorTotal());
-			itemLabel.setFont(new Font("Arial", Font.PLAIN, 14));
-			itemLabel.setForeground(Color.white);
-			itemLabel.setBounds(10, yPosition, 200, 30);
-			rightPanel.add(itemLabel);
-			yPosition += 30; // Ajusta a posição dos itens listados
+			CarrinhoPainel.add(createItemCarrinhoPanel(item));
 		}
 
-		rightPanel.revalidate();
-		rightPanel.repaint();
+		CarrinhoPainel.revalidate();
+		CarrinhoPainel.repaint();
+	}
+
+	// Método para criar o painel de cada item no carrinho
+	private JPanel createItemCarrinhoPanel(ItemCarrinho item) {
+
+		JPanel itemPanel = new PainelArredondado();
+		itemPanel.setLayout(new BoxLayout(itemPanel, BoxLayout.X_AXIS)); // Layout horizontal
+		itemPanel.setBackground(Color.GRAY);
+		itemPanel.setPreferredSize(new Dimension(480, 40)); // Tamanho do item
+
+		// Criação dos rótulos para o item
+		JLabel nomeLabel = new JLabel(item.getNome());
+		nomeLabel.setForeground(Color.white);
+		JLabel quantidadeLabel = new JLabel("x" + item.getQuantidade());
+		quantidadeLabel.setForeground(Color.white);
+		JLabel precoLabel = new JLabel("R$ " + String.format("%.2f", item.getValorTotal()));
+		precoLabel.setForeground(Color.white);
+
+		// Botão para remover o item do carrinho
+		JButton removeButton = new JButton("Remover");
+		removeButton.setBackground(Color.RED);
+		removeButton.setForeground(Color.WHITE);
+		removeButton.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				itensCarrinho.remove(item); // Remove o item da lista
+				valorTotal -= item.getValorTotal(); // Atualiza o valor total
+				valorLabel.setText("Valor Total: R$ " + String.format("%.2f", valorTotal)); // Atualiza o valor total
+				atualizarPainelCarrinho(); // Atualiza o painel de itens
+			}
+		});
+
+		// Adiciona os rótulos ao painel do item
+		itemPanel.add(nomeLabel);
+		itemPanel.add(Box.createHorizontalStrut(10)); // Espaçamento
+		itemPanel.add(quantidadeLabel);
+		itemPanel.add(Box.createHorizontalStrut(10)); // Espaçamento
+		itemPanel.add(precoLabel);
+		itemPanel.add(Box.createHorizontalStrut(10)); // Espaçamento
+		itemPanel.add(removeButton); // Adiciona o botão de remoção
+		
+		return itemPanel;
 	}
 
 	public static void main(String[] args) {
