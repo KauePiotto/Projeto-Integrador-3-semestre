@@ -336,11 +336,6 @@ public class Alterar_E_Excluir_Produto extends JFrame {
 		btnAlterarProduto.setBounds(150, 400, 200, 40);
 		add(btnAlterarProduto);
 
-		btnAlterarProduto = new BotaoArredondado("Alterar Produto", 30);
-		btnAlterarProduto.setFont(new Font("Arial", Font.BOLD, 16));
-		btnAlterarProduto.setBounds(150, 400, 200, 40);
-		add(btnAlterarProduto);
-
 		btnAlterarProduto.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
@@ -350,6 +345,7 @@ public class Alterar_E_Excluir_Produto extends JFrame {
 				String tipo = (String) cmbTipoProduto.getSelectedItem();
 				String precoTexto = txtPreco.getText().replace("R$ ", "").trim();
 
+				// Validação de campos obrigatórios
 				if (id.isEmpty() || nome.isEmpty() || descricao.isEmpty() || tipo.equals("----------")
 						|| precoTexto.isEmpty()) {
 					JOptionPane.showMessageDialog(Alterar_E_Excluir_Produto.this,
@@ -357,15 +353,17 @@ public class Alterar_E_Excluir_Produto extends JFrame {
 					return;
 				}
 
+				// Validação do preço
 				double preco;
 				try {
-					preco = Double.parseDouble(precoTexto);
+					preco = Double.parseDouble(precoTexto.replace(",", "."));
 				} catch (NumberFormatException ex) {
 					JOptionPane.showMessageDialog(Alterar_E_Excluir_Produto.this,
 							"Preço inválido. Insira um número válido.", "Erro", JOptionPane.ERROR_MESSAGE);
 					return;
 				}
 
+				// Processamento da imagem
 				byte[] foto = null;
 				if (selectedFile != null) {
 					try {
@@ -374,34 +372,44 @@ public class Alterar_E_Excluir_Produto extends JFrame {
 						ImageIO.write(img, "png", baos);
 						foto = baos.toByteArray();
 					} catch (IOException ex) {
-						JOptionPane.showMessageDialog(Alterar_E_Excluir_Produto.this, "Erro ao processar a imagem.",
+						JOptionPane.showMessageDialog(Alterar_E_Excluir_Produto.this,
+								"Erro ao processar a imagem. Certifique-se de que o arquivo é uma imagem válida.",
 								"Erro", JOptionPane.ERROR_MESSAGE);
 						ex.printStackTrace();
 						return;
 					}
 				}
 
-				try (Connection conn = conexao.openDB();
-						PreparedStatement stmt = conn.prepareStatement(
-								"UPDATE produtos SET nome = ?, descricao = ?, tipo = ?, preco = ?, logo = ? WHERE id = ?")) {
-
-					stmt.setString(1, nome);
-					stmt.setString(2, descricao);
-					stmt.setString(3, tipo);
-					stmt.setDouble(4, preco);
-					stmt.setBytes(5, foto != null ? foto : null);
-					stmt.setString(6, id);
-
-					int affectedRows = stmt.executeUpdate();
-					if (affectedRows > 0) {
+				// Atualização do banco de dados
+				try (Connection conn = conexao.openDB()) {
+					if (conn == null) {
 						JOptionPane.showMessageDialog(Alterar_E_Excluir_Produto.this,
-								"Produto atualizado com sucesso.");
-					} else {
-						JOptionPane.showMessageDialog(Alterar_E_Excluir_Produto.this, "Produto não encontrado.");
+								"Erro ao conectar ao banco de dados.", "Erro", JOptionPane.ERROR_MESSAGE);
+						return;
+					}
+
+					String sql = "UPDATE produto SET logo = ?, nome = ?, descricao = ?, tipo = ?, preco = ? WHERE id = ?";
+					try (PreparedStatement stmt = conn.prepareStatement(sql)) {
+						stmt.setBytes(1, foto != null ? foto : null); // Permite NULL se a imagem não for fornecida
+						stmt.setString(2, nome);
+						stmt.setString(3, descricao);
+						stmt.setString(4, tipo);
+						stmt.setDouble(5, preco);
+						stmt.setString(6, id);
+
+						int affectedRows = stmt.executeUpdate();
+						if (affectedRows > 0) {
+							JOptionPane.showMessageDialog(Alterar_E_Excluir_Produto.this,
+									"Produto atualizado com sucesso.");
+						} else {
+							JOptionPane.showMessageDialog(Alterar_E_Excluir_Produto.this,
+									"Produto não encontrado. Verifique o ID.", "Aviso", JOptionPane.WARNING_MESSAGE);
+						}
 					}
 				} catch (SQLException ex) {
 					JOptionPane.showMessageDialog(Alterar_E_Excluir_Produto.this,
-							"Ocorreu um erro ao atualizar o produto.", "Erro", JOptionPane.ERROR_MESSAGE);
+							"Erro ao atualizar o produto. Verifique a conexão e os dados informados.", "Erro",
+							JOptionPane.ERROR_MESSAGE);
 					ex.printStackTrace();
 				}
 			}
@@ -428,7 +436,7 @@ public class Alterar_E_Excluir_Produto extends JFrame {
 					int produtoId = Integer.parseInt(id); // Tenta converter para inteiro
 
 					try (Connection conn = conexao.openDB();
-							PreparedStatement stmt = conn.prepareStatement("DELETE FROM produtos WHERE id = ?")) {
+							PreparedStatement stmt = conn.prepareStatement("DELETE FROM produto WHERE id = ?")) {
 						stmt.setInt(1, produtoId); // Usa setInt para um campo INTEGER
 						int rowsAffected = stmt.executeUpdate();
 
