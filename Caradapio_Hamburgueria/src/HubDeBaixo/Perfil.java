@@ -187,7 +187,8 @@ public class Perfil extends JFrame {
 		PerfilUsuario();
 		BotaoVoltar();
 		RecuperarDadosUsuario();
-
+		desabilitarCampos();
+		
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 	}
 
