@@ -318,11 +318,8 @@ public class Cardapio extends JFrame {
 		btnAddCarrinho.setForeground(Color.decode("#ffd96d"));
 		btnAddCarrinho.setBackground(new Color(73, 71, 71));
 		btnAddCarrinho.addActionListener(e -> {
-			carrinho.adicionarItemAoCarrinho(nome, 1, preco);
-			carrinho.atualizarPainelCarrinho();
 			JOptionPane.showMessageDialog(null, nome + " foi adicionado ao carrinho.");
 		});
-
 		// Painel de informações
 		JPanel infoPanel = new JPanel();
 		infoPanel.setLayout(new BoxLayout(infoPanel, BoxLayout.Y_AXIS));
@@ -360,8 +357,8 @@ public class Cardapio extends JFrame {
 			}
 		}
 
-		int numRows = (produtos.size() + 2) / 3; 
-		itemPainel.setPreferredSize(new Dimension(700, numRows * 120)); 
+		int numRows = (produtos.size() + 2) / 3;
+		itemPainel.setPreferredSize(new Dimension(700, numRows * 120));
 
 		itemPainel.revalidate();
 		itemPainel.repaint();
