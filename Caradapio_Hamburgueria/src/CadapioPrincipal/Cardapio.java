@@ -252,38 +252,13 @@ public class Cardapio extends JFrame {
 
 	public void PainelItem() {
 		itemPainel = new JPanel();
-		itemPainel.setLayout(new GridLayout(0, 3, 5, 5)); // 3 colunas por linha
+		itemPainel.setLayout(new GridLayout(0, 3, 10, 10)); // 3 colunas por linha, espaçamento maior
 
-		// Supondo que você tenha uma lista de produtos que será obtida do banco de  dados
-		
-		List<Produto> produtos = getProdutos(); // Função que retorna os produtos cadastrados
-
-		int numProdutos = produtos.size();
-
-		// Calcule o número de produtos e ajuste a altura do painel de acordo
-		int larguraPanel = 1000;
-		int alturaPanel = (numProdutos / 3 + numProdutos % 3) * 200; // Cada linha terá 2 produtos e cada produto tem altura de 200px
-		itemPainel.setPreferredSize(new Dimension(larguraPanel, alturaPanel));
-
-		// Adicionar os produtos no painel
-		for (Produto produto : produtos) {
-			// Aqui você cria os componentes para exibir cada produto, como labels, botões,etc.
-			JButton botaoProduto = new JButton(produto.getNome());
-			itemPainel.add(botaoProduto); // Adiciona o botão (ou outro componente) ao painel
-		}
-
-		// Cria o JScrollPane para permitir a rolagem
 		JScrollPane scrollPane = new JScrollPane(itemPainel, JScrollPane.VERTICAL_SCROLLBAR_ALWAYS,
 				JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
-		scrollPane.setBounds(25, 150, 730, 360); // Define o tamanho da área de rolagem
+		scrollPane.setBounds(25, 150, 730, 360);
 
 		add(scrollPane);
-	}
-
-	private List<Produto> getProdutos() {
-		// Simulação de uma função que retorna uma lista de produtos (no seu caso, seria
-		// o banco de dados)
-		return new ArrayList<>(); // Retorna a lista de produtos cadastrados
 	}
 
 	private JButton createImageButton(String imagePath, String tooltip) {
@@ -306,63 +281,62 @@ public class Cardapio extends JFrame {
 
 	Carrinho carrinho = new Carrinho();
 
-	// Criação do painel para o produto
 	private JPanel createProductPanel(String nome, String descricao, double preco, byte[] logo, Carrinho carrinho) {
 		JPanel produtoPanel = new JPanel(new BorderLayout());
-		produtoPanel.setPreferredSize(new Dimension(350, 200));
+		produtoPanel.setPreferredSize(new Dimension(250, 100)); // Largura aumentada, altura reduzida
 		produtoPanel.setBorder(BorderFactory.createLineBorder(Color.GRAY));
 
-		// Criação dos rótulos para nome, descrição e preço
-		JLabel lblNome = new JLabel("<html><b>" + nome + "</b></html>", SwingConstants.CENTER);
-		lblNome.setFont(new Font("Arial", Font.BOLD, 16));
+		// Nome do produto
+		JLabel lblNome = new JLabel("<html><b>" + (nome != null ? nome : "Produto") + "</b></html>",
+				SwingConstants.CENTER);
+		lblNome.setFont(new Font("Arial", Font.BOLD, 14)); // Fonte um pouco maior para combinar com o layout
 
-		JLabel lblDescri = new JLabel("<html><i>" + descricao + "</i></html>", SwingConstants.CENTER);
-		lblDescri.setFont(new Font("Arial", Font.BOLD, 14));
+		// Descrição
+		JLabel lblDescri = new JLabel("<html><i>" + (descricao != null ? descricao : "Sem descrição") + "</i></html>",
+				SwingConstants.CENTER);
+		lblDescri.setFont(new Font("Arial", Font.PLAIN, 12)); // Ajuste da fonte
 
+		// Preço
 		JLabel lblPreco = new JLabel("R$ " + String.format("%.2f", preco), SwingConstants.CENTER);
-		lblPreco.setFont(new Font("Arial", Font.BOLD, 16));
+		lblPreco.setFont(new Font("Arial", Font.BOLD, 12));
 
-		// Exibir imagem se o logo não for nulo
+		// Logo do produto
 		JLabel imagemLabel = new JLabel();
 		if (logo != null && logo.length > 0) {
 			ImageIcon imagemIcon = new ImageIcon(logo);
-			img = imagemIcon.getImage().getScaledInstance(100, 100, Image.SCALE_SMOOTH);
+			Image img = imagemIcon.getImage().getScaledInstance(100, 100, Image.SCALE_SMOOTH); // Imagem mais larga
 			imagemIcon = new ImageIcon(img);
 			imagemLabel.setIcon(imagemIcon);
+		} else {
+			imagemLabel.setText("Sem imagem");
+			imagemLabel.setHorizontalAlignment(SwingConstants.CENTER);
 		}
 
-		JButton btnAddCarrinho = new BotaoArredondado("Adicionar ao Carrinho", 30);
-		btnAddCarrinho.setFont(new Font("Arial", Font.BOLD, 16));
+		// Botão para adicionar ao carrinho
+		JButton btnAddCarrinho = new BotaoArredondado("Adicionar", 20);
+		btnAddCarrinho.setFont(new Font("Arial", Font.PLAIN, 10));
 		btnAddCarrinho.setForeground(Color.decode("#ffd96d"));
 		btnAddCarrinho.setBackground(new Color(73, 71, 71));
-		btnAddCarrinho.addActionListener(new ActionListener() {
-			@Override
-			public void actionPerformed(ActionEvent e) {
-				// Adiciona o item ao carrinho quando o botão for clicado
-				carrinho.adicionarItemAoCarrinho(nome, 1, preco); // Adiciona 1 unidade do item
-
-				// Atualiza o painel do carrinho
-				carrinho.atualizarPainelCarrinho();
-
-				// Exibe uma mensagem de confirmação
-				JOptionPane.showMessageDialog(null, nome + " foi adicionado ao carrinho.");
-			}
+		btnAddCarrinho.addActionListener(e -> {
+			carrinho.adicionarItemAoCarrinho(nome, 1, preco);
+			carrinho.atualizarPainelCarrinho();
+			JOptionPane.showMessageDialog(null, nome + " foi adicionado ao carrinho.");
 		});
 
-		// Painel central para organizar os textos e botão
+		// Painel de informações
 		JPanel infoPanel = new JPanel();
 		infoPanel.setLayout(new BoxLayout(infoPanel, BoxLayout.Y_AXIS));
 		infoPanel.add(lblNome);
-		infoPanel.add(Box.createVerticalStrut(10)); // Espaçamento
+		infoPanel.add(Box.createVerticalStrut(5));
 		infoPanel.add(lblDescri);
-		infoPanel.add(Box.createVerticalStrut(20)); // Espaçamento
+		infoPanel.add(Box.createVerticalStrut(5));
 		infoPanel.add(lblPreco);
 
 		produtoPanel.add(infoPanel, BorderLayout.CENTER);
 		produtoPanel.add(imagemLabel, BorderLayout.WEST);
 
-		// Adicionar botão na parte inferior
-		JPanel buttonPanel = new JPanel(new FlowLayout(FlowLayout.RIGHT)); // Centraliza o botão
+		// Painel do botão
+		JPanel buttonPanel = new JPanel(new FlowLayout(FlowLayout.RIGHT));
 		buttonPanel.add(btnAddCarrinho);
 		produtoPanel.add(buttonPanel, BorderLayout.SOUTH);
 
@@ -373,7 +347,6 @@ public class Cardapio extends JFrame {
 		itemPainel.removeAll();
 
 		ConectaMySQL db = new ConectaMySQL();
-
 		List<Produto> produtos = db.getProduto(filtro);
 
 		if (produtos == null || produtos.isEmpty()) {
@@ -387,11 +360,8 @@ public class Cardapio extends JFrame {
 			}
 		}
 
-		// Ajuste dinâmico da altura do painel de itens com base na quantidade de
-		// produtos
-		int numRows = (produtos.size() + 2) / 3; // Calculando o número de linhas com 3 colunas
-		itemPainel.setPreferredSize(new Dimension(700, numRows * 250)); // Ajusta a altura com base no número de
-																		// produtos
+		int numRows = (produtos.size() + 2) / 3; 
+		itemPainel.setPreferredSize(new Dimension(700, numRows * 120)); 
 
 		itemPainel.revalidate();
 		itemPainel.repaint();
