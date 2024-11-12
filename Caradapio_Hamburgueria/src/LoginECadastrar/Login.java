@@ -184,9 +184,12 @@ public class Login extends JFrame {
 						if (rs.next()) {
 							String perfil = rs.getString("perfil");
 							Cardapio.usuarioLogado = true;
+							
 							Cardapio cardapio = new Cardapio();
 							cardapio.setVisible(true);
-
+							
+							Perfil perfill = new Perfil();
+							perfill.habilitarCampos();
 							if ("admin".equals(perfil)) {
 								cardapio.mostrarMenu();
 							}

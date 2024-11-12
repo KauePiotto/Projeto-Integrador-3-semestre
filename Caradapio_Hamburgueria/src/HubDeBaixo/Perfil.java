@@ -76,7 +76,7 @@ public class Perfil extends JFrame {
 	private Image img;
 	private JButton btnVoltar;
 	private ConectaMySQL conn;
-	private boolean logado = false;
+	private boolean usuariologado = false;
 
 	public JTextField getTxtNome() {
 		return txtNome;
@@ -206,18 +206,18 @@ public class Perfil extends JFrame {
 	}
 
 	// Método para verificar login
-	public void verificarLogin(String usuario, String senha) {
+	public void verificarLogin(String email, String senha) {
 		try {
 			String sql = "SELECT * FROM usuarios WHERE email = ? AND senha = ?";
 			PreparedStatement stmt = conn.openDB().prepareStatement(sql);
-			stmt.setString(1, usuario);
+			stmt.setString(1, email);
 			stmt.setString(2, senha);
 			ResultSet rs = stmt.executeQuery();
 
 			if (rs.next()) {
 				// Login bem-sucedido
-				logado = true;
-				email = usuario; // Define o e-mail do usuário logado
+				usuariologado = true;
+				email = email; // Define o e-mail do usuário logado
 				JOptionPane.showMessageDialog(null, "Login realizado com sucesso!");
 				RecuperarDadosUsuario(); // Carrega os dados do usuário
 				habilitarCampos(); // Habilita os campos para edição

@@ -3,6 +3,7 @@ package CadapioPrincipal;
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Dimension;
+import java.awt.FlowLayout;
 import java.awt.Font;
 import java.awt.GridLayout;
 import java.awt.Image;
@@ -11,8 +12,11 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.util.ArrayList;
 import java.util.List;
 import javax.swing.BorderFactory;
+import javax.swing.Box;
+import javax.swing.BoxLayout;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JFrame;
@@ -21,6 +25,7 @@ import javax.swing.JMenuItem;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JPopupMenu;
+import javax.swing.JScrollPane;
 import javax.swing.SwingConstants;
 
 import HubDeBaixo.Carrinho;
@@ -247,10 +252,38 @@ public class Cardapio extends JFrame {
 
 	public void PainelItem() {
 		itemPainel = new JPanel();
-		itemPainel.setLayout(new GridLayout(0, 2, 10, 10));
-		itemPainel.setBounds(50, 150, 700, 350);
-		itemPainel.setPreferredSize(new Dimension(700, 350));
-		add(itemPainel);
+		itemPainel.setLayout(new GridLayout(0, 3, 5, 5)); // 3 colunas por linha
+
+		// Supondo que você tenha uma lista de produtos que será obtida do banco de  dados
+		
+		List<Produto> produtos = getProdutos(); // Função que retorna os produtos cadastrados
+
+		int numProdutos = produtos.size();
+
+		// Calcule o número de produtos e ajuste a altura do painel de acordo
+		int larguraPanel = 1000;
+		int alturaPanel = (numProdutos / 3 + numProdutos % 3) * 200; // Cada linha terá 2 produtos e cada produto tem altura de 200px
+		itemPainel.setPreferredSize(new Dimension(larguraPanel, alturaPanel));
+
+		// Adicionar os produtos no painel
+		for (Produto produto : produtos) {
+			// Aqui você cria os componentes para exibir cada produto, como labels, botões,etc.
+			JButton botaoProduto = new JButton(produto.getNome());
+			itemPainel.add(botaoProduto); // Adiciona o botão (ou outro componente) ao painel
+		}
+
+		// Cria o JScrollPane para permitir a rolagem
+		JScrollPane scrollPane = new JScrollPane(itemPainel, JScrollPane.VERTICAL_SCROLLBAR_ALWAYS,
+				JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
+		scrollPane.setBounds(25, 150, 730, 360); // Define o tamanho da área de rolagem
+
+		add(scrollPane);
+	}
+
+	private List<Produto> getProdutos() {
+		// Simulação de uma função que retorna uma lista de produtos (no seu caso, seria
+		// o banco de dados)
+		return new ArrayList<>(); // Retorna a lista de produtos cadastrados
 	}
 
 	private JButton createImageButton(String imagePath, String tooltip) {
@@ -276,13 +309,18 @@ public class Cardapio extends JFrame {
 	// Criação do painel para o produto
 	private JPanel createProductPanel(String nome, String descricao, double preco, byte[] logo, Carrinho carrinho) {
 		JPanel produtoPanel = new JPanel(new BorderLayout());
-		produtoPanel.setPreferredSize(new Dimension(280, 200));
+		produtoPanel.setPreferredSize(new Dimension(350, 200));
 		produtoPanel.setBorder(BorderFactory.createLineBorder(Color.GRAY));
 
 		// Criação dos rótulos para nome, descrição e preço
-		JLabel nomeLabel = new JLabel("<html><b>" + nome + "</b></html>", SwingConstants.CENTER);
-		JLabel descricaoLabel = new JLabel("<html><i>" + descricao + "</i></html>", SwingConstants.CENTER);
-		JLabel precoLabel = new JLabel("R$ " + String.format("%.2f", preco), SwingConstants.CENTER);
+		JLabel lblNome = new JLabel("<html><b>" + nome + "</b></html>", SwingConstants.CENTER);
+		lblNome.setFont(new Font("Arial", Font.BOLD, 16));
+
+		JLabel lblDescri = new JLabel("<html><i>" + descricao + "</i></html>", SwingConstants.CENTER);
+		lblDescri.setFont(new Font("Arial", Font.BOLD, 14));
+
+		JLabel lblPreco = new JLabel("R$ " + String.format("%.2f", preco), SwingConstants.CENTER);
+		lblPreco.setFont(new Font("Arial", Font.BOLD, 16));
 
 		// Exibir imagem se o logo não for nulo
 		JLabel imagemLabel = new JLabel();
@@ -293,8 +331,11 @@ public class Cardapio extends JFrame {
 			imagemLabel.setIcon(imagemIcon);
 		}
 
-		JButton AddCarrinho = new JButton("Adicionar ao Carrinho");
-		AddCarrinho.addActionListener(new ActionListener() {
+		JButton btnAddCarrinho = new BotaoArredondado("Adicionar ao Carrinho", 30);
+		btnAddCarrinho.setFont(new Font("Arial", Font.BOLD, 16));
+		btnAddCarrinho.setForeground(Color.decode("#ffd96d"));
+		btnAddCarrinho.setBackground(new Color(73, 71, 71));
+		btnAddCarrinho.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				// Adiciona o item ao carrinho quando o botão for clicado
@@ -309,14 +350,21 @@ public class Cardapio extends JFrame {
 		});
 
 		// Painel central para organizar os textos e botão
-		JPanel centroPanel = new JPanel(new BorderLayout());
-		centroPanel.add(nomeLabel, BorderLayout.NORTH);
-		centroPanel.add(descricaoLabel, BorderLayout.CENTER);
-		centroPanel.add(precoLabel, BorderLayout.WEST);
-		centroPanel.add(AddCarrinho, BorderLayout.PAGE_END);
+		JPanel infoPanel = new JPanel();
+		infoPanel.setLayout(new BoxLayout(infoPanel, BoxLayout.Y_AXIS));
+		infoPanel.add(lblNome);
+		infoPanel.add(Box.createVerticalStrut(10)); // Espaçamento
+		infoPanel.add(lblDescri);
+		infoPanel.add(Box.createVerticalStrut(20)); // Espaçamento
+		infoPanel.add(lblPreco);
 
-		produtoPanel.add(centroPanel, BorderLayout.CENTER);
+		produtoPanel.add(infoPanel, BorderLayout.CENTER);
 		produtoPanel.add(imagemLabel, BorderLayout.WEST);
+
+		// Adicionar botão na parte inferior
+		JPanel buttonPanel = new JPanel(new FlowLayout(FlowLayout.RIGHT)); // Centraliza o botão
+		buttonPanel.add(btnAddCarrinho);
+		produtoPanel.add(buttonPanel, BorderLayout.SOUTH);
 
 		return produtoPanel;
 	}
@@ -338,6 +386,13 @@ public class Cardapio extends JFrame {
 				itemPainel.add(produtoPanel);
 			}
 		}
+
+		// Ajuste dinâmico da altura do painel de itens com base na quantidade de
+		// produtos
+		int numRows = (produtos.size() + 2) / 3; // Calculando o número de linhas com 3 colunas
+		itemPainel.setPreferredSize(new Dimension(700, numRows * 250)); // Ajusta a altura com base no número de
+																		// produtos
+
 		itemPainel.revalidate();
 		itemPainel.repaint();
 	}
