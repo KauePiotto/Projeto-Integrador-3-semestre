@@ -1,27 +1,21 @@
 package LoginECadastrar;
 
-import java.awt.Color;
-import java.awt.Dimension;
-import java.awt.Font;
-import java.awt.Image;
-import java.awt.Toolkit;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import java.text.ParseException;
-import javax.swing.ImageIcon;
-import javax.swing.JButton;
-import javax.swing.JFormattedTextField;
-import javax.swing.JFrame;
-import javax.swing.JLabel;
-import javax.swing.JOptionPane;
-import javax.swing.JPasswordField;
-import javax.swing.JSeparator;
-import javax.swing.JTextField;
-import javax.swing.text.MaskFormatter;
 import entrada.BotaoArredondado;
 import CadapioPrincipal.Cardapio;
 import dao.ConectaMySQL;
 import java.sql.*;
+import javax.swing.*;
+import javax.swing.text.MaskFormatter;
+
+import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.io.BufferedReader;
+import java.io.InputStreamReader;
+import java.net.HttpURLConnection;
+import java.net.URL;
+import org.json.JSONObject;
 
 public class Cadastrar extends JFrame {
 	private Dimension screen;
@@ -227,6 +221,38 @@ public class Cadastrar extends JFrame {
 		add(logoLabel);
 	}
 
+	private void buscarCep(String cep) {
+		try {
+			String url = "https://viacep.com.br/ws/" + cep + "/json/";
+			HttpURLConnection conn = (HttpURLConnection) new URL(url).openConnection();
+			conn.setRequestMethod("GET");
+
+			BufferedReader br = new BufferedReader(new InputStreamReader(conn.getInputStream()));
+			StringBuilder response = new StringBuilder();
+			String line;
+
+			while ((line = br.readLine()) != null) {
+				response.append(line);
+			}
+			br.close();
+
+			JSONObject json = new JSONObject(response.toString());
+
+			if (json.has("erro")) {
+				JOptionPane.showMessageDialog(this, "CEP inválido ou não encontrado!", "Erro",
+						JOptionPane.ERROR_MESSAGE);
+			} else {
+				txtRua.setText(json.optString("logradouro", ""));
+				txtBairro.setText(json.optString("bairro", ""));
+				txtCidade.setText(json.optString("localidade", ""));
+				txtEstado.setText(json.optString("uf", ""));
+			}
+		} catch (Exception e) {
+			JOptionPane.showMessageDialog(this, "Erro ao buscar o CEP: " + e.getMessage(), "Erro",
+					JOptionPane.ERROR_MESSAGE);
+		}
+	}
+
 	public boolean validarCPF(String cpf) {
 		// Remove todos os caracteres não numéricos
 		cpf = cpf.replaceAll("[^0-9]", "");
@@ -417,27 +443,47 @@ public class Cadastrar extends JFrame {
 		lblCEP.setFont(new Font("Arial", Font.BOLD, 16));
 		add(lblCEP);
 
+		// Configuração do campo de CEP para disparar busca automática
 		try {
-			// Máscara para o CEP
 			mascaraCEP = new MaskFormatter("#####-###");
 			mascaraCEP.setPlaceholderCharacter('_');
 			cepField = new JFormattedTextField(mascaraCEP);
 			cepField.setBounds(120, 350, 130, 25);
 			cepField.setFont(new Font("Arial", Font.BOLD, 16));
 			add(cepField);
+
+			JButton btnBuscarCep = new JButton("Buscar");
+			btnBuscarCep.setBounds(260, 350, 100, 25);
+			btnBuscarCep.setFont(new Font("Arial", Font.BOLD, 12));
+			btnBuscarCep.setBackground(Color.decode("#ffd96d"));
+			btnBuscarCep.setForeground(Color.BLACK);
+			add(btnBuscarCep);
+
+			btnBuscarCep.addActionListener(new ActionListener() {
+				public void actionPerformed(ActionEvent e) {
+					String cep = cepField.getText().replaceAll("[^0-9]", "");
+					if (!cep.isEmpty() && cep.length() == 8) {
+						buscarCep(cep);
+					} else {
+						JOptionPane.showMessageDialog(null, "Digite um CEP válido!", "Erro de Validação",
+								JOptionPane.ERROR_MESSAGE);
+					}
+				}
+			});
+
 		} catch (ParseException e) {
 			e.printStackTrace();
 		}
 
 		// Adiciona o Bairro
 		lblBairro = new JLabel("Bairro");
-		lblBairro.setBounds(270, 350, 80, 25);
+		lblBairro.setBounds(370, 350, 80, 25);
 		lblBairro.setForeground(Color.decode("#ffd96d"));
 		lblBairro.setFont(new Font("Arial", Font.BOLD, 16));
 		add(lblBairro);
 
 		txtBairro = new JTextField();
-		txtBairro.setBounds(330, 350, 200, 25);
+		txtBairro.setBounds(425, 350, 200, 25);
 		txtBairro.setFont(new Font("Arial", Font.BOLD, 16));
 		add(txtBairro);
 
@@ -461,7 +507,7 @@ public class Cadastrar extends JFrame {
 		add(lblEstado);
 
 		txtEstado = new JTextField();
-		txtEstado.setBounds(390, 400, 200, 25);
+		txtEstado.setBounds(390, 400, 60, 25);
 		txtEstado.setFont(new Font("Arial", Font.BOLD, 16));
 		add(txtEstado);
 
@@ -565,7 +611,7 @@ public class Cadastrar extends JFrame {
 
 		add(btnVoltar);
 
-		btnVoltar.addActionListener(new ActionListener() {
+		btnVoltar.addActionListener((ActionListener) new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				Cardapio cardapio = new Cardapio();

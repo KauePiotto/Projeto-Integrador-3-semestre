@@ -12,5 +12,6 @@
 	</classpathentry>
 	<classpathentry kind="src" path="src"/>
 	<classpathentry kind="src" path="imagens"/>
+	<classpathentry kind="lib" path="Conector/json-20240303.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>
