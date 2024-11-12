@@ -3,15 +3,14 @@ package CadapioPrincipal;
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Dimension;
-import java.awt.FlowLayout;
 import java.awt.Font;
+import java.awt.GridLayout;
 import java.awt.Image;
 import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
-import java.util.ArrayList;
 import java.util.List;
 import javax.swing.BorderFactory;
 import javax.swing.ImageIcon;
@@ -22,6 +21,8 @@ import javax.swing.JMenuItem;
 import javax.swing.JPanel;
 import javax.swing.JPopupMenu;
 import javax.swing.SwingConstants;
+
+import HubDeBaixo.Carrinho;
 import LoginECadastrar.Cadastrar;
 import LoginECadastrar.Login;
 import Produtos.Alterar_E_Excluir_Produto;
@@ -40,9 +41,7 @@ public class Cardapio extends JFrame {
 	private JButton btnLanches;
 	private JButton btnBebidas;
 	private JButton btnPorcoes;
-	private JButton button;
 	private JLabel lblLogo;
-	private JLabel imageLabel;
 	private JPanel itemPainel;
 	private JMenuItem op1;
 	private JMenuItem op2;
@@ -52,7 +51,6 @@ public class Cardapio extends JFrame {
 	private Dimension janela;
 	private ImageIcon logoIcon;
 	private ImageIcon resizedLogoIcon;
-	private ImageIcon icon;
 	private ImageIcon menuicon;
 	private Image logoImage;
 	private Image img;
@@ -80,6 +78,9 @@ public class Cardapio extends JFrame {
 		FotoFundo();
 		ocultarBotoesLoginECadastrar();
 
+		// Adiciona o filtro "Todos" logo no início
+		updateItems("all");
+		
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 	}
 
@@ -211,24 +212,27 @@ public class Cardapio extends JFrame {
 	}
 
 	public void CriarFiltros() {
+		// Cria os botões de filtro
 		btnAll = createImageButton("imagens/todos.png", "Todos");
 		btnLanches = createImageButton("imagens/hamburguer.png", "Lanches");
 		btnBebidas = createImageButton("imagens/refrigerantes.png", "Bebidas");
 		btnPorcoes = createImageButton("imagens/porcoes.png", "Porções");
 
+		// Adiciona os listeners de ação para os botões
 		btnLanches.addActionListener(e -> {
-			updateItems("lanches");
+			updateItems("lanche");
 		});
 		btnBebidas.addActionListener(e -> {
-			updateItems("bebidas");
+			updateItems("bebida");
 		});
 		btnPorcoes.addActionListener(e -> {
-			updateItems("porcoes");
+			updateItems("Porção");
 		});
 		btnAll.addActionListener(e -> {
 			updateItems("all");
 		});
 
+		// Define a posição e adiciona os botões ao painel
 		btnLanches.setBounds(170, 115, 100, 30);
 		btnBebidas.setBounds(286, 115, 100, 30);
 		btnPorcoes.setBounds(400, 115, 100, 30);
@@ -242,29 +246,34 @@ public class Cardapio extends JFrame {
 
 	public void PainelItem() {
 		itemPainel = new JPanel();
-		itemPainel.setLayout(new FlowLayout());
+		itemPainel.setLayout(new GridLayout(0, 2, 10, 10));
 		itemPainel.setBounds(50, 150, 700, 350);
+		itemPainel.setPreferredSize(new Dimension(700, 350));
 		add(itemPainel);
 	}
 
 	private JButton createImageButton(String imagePath, String tooltip) {
-		button = new JButton();
-
+		JButton button = new JButton();
 		button.setToolTipText(tooltip);
 		button.setContentAreaFilled(false);
 		button.setBorderPainted(false);
 		button.setFocusPainted(false);
 
-		icon = new ImageIcon(imagePath);
-		img = icon.getImage().getScaledInstance(30, 30, Image.SCALE_SMOOTH);
-		button.setIcon(new ImageIcon(img));
+		try {
+			ImageIcon icon = new ImageIcon(imagePath);
+			Image img = icon.getImage().getScaledInstance(30, 30, Image.SCALE_SMOOTH);
+			button.setIcon(new ImageIcon(img));
+		} catch (Exception ex) {
+			ex.printStackTrace();
+		}
 
 		return button;
 	}
 
-	private JPanel createProductPanel(String nome, String descricao, double preco, byte[] logo) {
-		JPanel produtoPanel = new JPanel(new BorderLayout());
+	Carrinho carrinho = new Carrinho();
 
+	private JPanel createProductPanel(String nome, String descricao, double preco, byte[] logo, Carrinho carrinho) {
+		JPanel produtoPanel = new JPanel(new BorderLayout());
 		produtoPanel.setPreferredSize(new Dimension(280, 200));
 		produtoPanel.setBorder(BorderFactory.createLineBorder(Color.GRAY));
 
@@ -276,18 +285,23 @@ public class Cardapio extends JFrame {
 		// Exibir imagem se o logo não for nulo
 		JLabel imagemLabel = new JLabel();
 		if (logo != null && logo.length > 0) {
-			ImageIcon imagemIcon = new ImageIcon(logo); // Converte o byte[] para ImageIcon
+			ImageIcon imagemIcon = new ImageIcon(logo);
 			Image img = imagemIcon.getImage().getScaledInstance(100, 100, Image.SCALE_SMOOTH);
 			imagemIcon = new ImageIcon(img);
 			imagemLabel.setIcon(imagemIcon);
 		}
 
 		JButton addCarrinhoButton = new JButton("Adicionar ao Carrinho");
-
-		// Alteração: coloque o preço no centro para garantir que tenha espaço
-		JPanel centroPanel = new JPanel();
-
-		centroPanel.setLayout(new BorderLayout());
+		// Adicionando ação ao botão
+		addCarrinhoButton.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				// Adiciona o item ao carrinho quando o botão for clicado
+				carrinho.adicionarItemAoCarrinho(nome, 1, preco); // Adiciona 1 unidade do item
+			}
+		});
+		// Painel central para organizar os textos e botão
+		JPanel centroPanel = new JPanel(new BorderLayout());
 		centroPanel.add(nomeLabel, BorderLayout.NORTH);
 		centroPanel.add(descricaoLabel, BorderLayout.CENTER);
 		centroPanel.add(precoLabel, BorderLayout.SOUTH);
@@ -300,20 +314,26 @@ public class Cardapio extends JFrame {
 	}
 
 	private void updateItems(String filtro) {
-		itemPainel.removeAll();
-		System.out.println("Filtro aplicado: " + filtro);
+		itemPainel.removeAll(); // Limpa os produtos antigos exibidos
 
+		// Chama o método getProdutos com o filtro
 		ConectaMySQL db = new ConectaMySQL();
-		List<Produto> produtos = db.getProdutos(filtro);
+		List<Produto> produtos = db.getProduto(filtro); // Filtro passado
 
-		for (Produto produto : produtos) {
-			JPanel produtoPanel = createProductPanel(produto.getNome(), produto.getDescricao(), produto.getPreco(),
-					produto.getLogo());
-			itemPainel.add(produtoPanel);
+		if (produtos == null || produtos.isEmpty()) {
+			JLabel vazio = new JLabel("Nenhum produto encontrado.");
+			itemPainel.add(vazio);
+		} else {
+			// Adiciona os produtos no painel
+			for (Produto produto : produtos) {
+				// Passa a instância do Carrinho para cada produto
+				JPanel produtoPanel = createProductPanel(produto.getNome(), produto.getDescricao(), produto.getPreco(),
+						produto.getLogo(), carrinho); // Instância do carrinho
+				itemPainel.add(produtoPanel);
+			}
 		}
-
-		itemPainel.revalidate();
-		itemPainel.repaint();
+		itemPainel.revalidate(); // Revalida o painel para garantir que os novos produtos sejam exibidos
+		itemPainel.repaint(); // Redesenha o painel
 	}
 
 	public void BotaoMenu() {

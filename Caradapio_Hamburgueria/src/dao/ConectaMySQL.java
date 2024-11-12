@@ -58,23 +58,24 @@ public class ConectaMySQL {
 			rs.close();
 	}
 
-	public List<Produto> getProdutos(String tipo) {
+	public List<Produto> getProduto(String tipo) {
 		List<Produto> produtos = new ArrayList<>();
-		String sql = "SELECT * FROM produtos";
+		String sql = "SELECT * FROM produto"; // Filtro padrão para todos os produtos
 
 		// Se não for "all", adicione o filtro pelo tipo
 		if (!tipo.equals("all")) {
-			sql += " WHERE tipo = ?";
+			sql += " WHERE tipo = ?"; // Filtro para o tipo específico
 		}
 
-		try (Connection conn = DriverManager.getConnection(url, username, password);
+		try (Connection conn = openDB(); // Usar openDB() para a conexão
 				PreparedStatement stmt = conn.prepareStatement(sql)) {
 
+			// Se o filtro não for "all", setar o tipo
 			if (!tipo.equals("all")) {
 				stmt.setString(1, tipo); // Define o tipo de filtro
 			}
-			ResultSet rs = stmt.executeQuery();
 
+			ResultSet rs = stmt.executeQuery();
 			while (rs.next()) {
 				Produto produto = new Produto(rs.getString("nome"), rs.getString("descricao"), rs.getDouble("preco"),
 						rs.getString("tipo"), rs.getBytes("logo"));

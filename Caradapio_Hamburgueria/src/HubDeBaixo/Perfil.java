@@ -76,6 +76,7 @@ public class Perfil extends JFrame {
 	private Image img;
 	private JButton btnVoltar;
 	private ConectaMySQL conn;
+	private boolean logado = false;
 
 	public JTextField getTxtNome() {
 		return txtNome;
@@ -190,6 +191,37 @@ public class Perfil extends JFrame {
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 	}
 
+	public void Centralizar() {
+		screen = Toolkit.getDefaultToolkit().getScreenSize();
+		janela = getSize();
+
+		if (janela.height > screen.height) {
+			setSize(janela.height, screen.height);
+		}
+		if (janela.width > screen.width) {
+			setSize(screen.width, janela.height);
+		}
+		setLocation((screen.width - janela.width) / 2, (screen.height - janela.height) / 2);
+	}
+
+	// Método para verificar o login e desabilitar os campos se não estiver logado
+	public void desabilitarCampos() {
+		// Desabilitar os campos quando o usuário não estiver logado
+		txtNome.setEnabled(false);
+		txtSobrenome.setEnabled(false);
+		txtEmail.setEnabled(false);
+		txtSenha.setEnabled(false);
+		telefoneField.setEnabled(false);
+		cpfField.setEnabled(false);
+		txtRua.setEnabled(false);
+		txtNum.setEnabled(false);
+		cepField.setEnabled(false);
+		txtBairro.setEnabled(false);
+		txtCidade.setEnabled(false);
+		txtEstado.setEnabled(false);
+		btnAlterar.setEnabled(false); // Desabilitar o botão de alteração
+	}
+
 	// Esse método agora vai buscar os dados do usuário com base no email
 	public void RecuperarDadosUsuario() {
 		try {
@@ -219,17 +251,37 @@ public class Perfil extends JFrame {
 		}
 	}
 
-	public void Centralizar() {
-		screen = Toolkit.getDefaultToolkit().getScreenSize();
-		janela = getSize();
+	public void habilitarCampos() {
+		// Habilitar todos os campos para edição
+		txtNome.setEnabled(true);
+		txtSobrenome.setEnabled(true);
+		txtEmail.setEnabled(true);
+		txtSenha.setEnabled(true);
+		telefoneField.setEnabled(true);
+		cpfField.setEnabled(true);
+		txtRua.setEnabled(true);
+		txtNum.setEnabled(true);
+		cepField.setEnabled(true);
+		txtBairro.setEnabled(true);
+		txtCidade.setEnabled(true);
+		txtEstado.setEnabled(true);
+		btnAlterar.setEnabled(true); // Habilitar o botão de alteração
+	}
 
-		if (janela.height > screen.height) {
-			setSize(janela.height, screen.height);
-		}
-		if (janela.width > screen.width) {
-			setSize(screen.width, janela.height);
-		}
-		setLocation((screen.width - janela.width) / 2, (screen.height - janela.height) / 2);
+	public void carregarDadosUsuario(ResultSet rs) throws SQLException {
+		// Carregar os dados do usuário no formulário
+		txtNome.setText(rs.getString("nome"));
+		txtSobrenome.setText(rs.getString("sobrenome"));
+		txtEmail.setText(rs.getString("email"));
+		txtSenha.setText(rs.getString("senha"));
+		telefoneField.setText(rs.getString("telefone"));
+		cpfField.setText(rs.getString("cpf"));
+		txtRua.setText(rs.getString("endereco"));
+		txtNum.setText(rs.getString("num_casa"));
+		cepField.setText(rs.getString("cep"));
+		txtBairro.setText(rs.getString("bairro"));
+		txtCidade.setText(rs.getString("cidade"));
+		txtEstado.setText(rs.getString("estado"));
 	}
 
 	public void PerfilUsuario() {
@@ -423,10 +475,10 @@ public class Perfil extends JFrame {
 		add(txtEstado);
 
 		// Adiciona o Botao Cadastrar
-		btnAlterar = new BotaoArredondado("Alterar", 30);
+		btnAlterar = new BotaoArredondado("Salvar Alteração", 30);
 
-		btnAlterar.setText("Salvar");
-		btnAlterar.setBounds(300, 500, 150, 30);
+		btnAlterar.setText("Salvar Alteração");
+		btnAlterar.setBounds(300, 500, 200, 35);
 		btnAlterar.setFont(new Font("Arial", Font.BOLD, 16));
 		btnAlterar.setBackground(Color.gray);
 		btnAlterar.setForeground(Color.decode("#ffd96d"));
@@ -434,60 +486,50 @@ public class Perfil extends JFrame {
 
 		btnAlterar.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
+				// Atualizar os dados do usuário
+				String nome = txtNome.getText();
+				String sobrenome = txtSobrenome.getText();
+				String email = txtEmail.getText();
+				String senha = txtSenha.getText();
+				String telefone = telefoneField.getText();
+				String cpf = cpfField.getText();
+				String endereco = txtRua.getText();
+				String numCasa = txtNum.getText();
+				String cep = cepField.getText();
+				String bairro = txtBairro.getText();
+				String cidade = txtCidade.getText();
+				String estado = txtEstado.getText();
 
-				nome = txtNome.getText();
-				sobrenome = txtSobrenome.getText();
-				email = txtEmail.getText();
-				senha = new String(txtSenha.getPassword());
-				telefone = telefoneField.getText(); // Ajuste aqui para pegar corretamente o telefone
-				cpf = cpfField.getText(); // Ajuste para pegar o CPF corretamente
-				cep = cepField.getText();
-				rua = txtRua.getText();
-				numero = txtNum.getText();
-				bairro = txtBairro.getText();
-				cidade = txtCidade.getText();
-				estado = txtEstado.getText();
+				// SQL para atualizar os dados do usuário
+				String sql = "UPDATE usuarios SET nome = ?, sobrenome = ?, email = ?, senha = ?, telefone = ?, cpf = ?, endereco = ?, num_casa = ?, cep = ?, bairro = ?, cidade = ?, estado = ? WHERE email = ?";
 
-				if (nome.isEmpty() || sobrenome.isEmpty() || email.isEmpty() || senha.isEmpty() || cpf.isEmpty()
-						|| telefone.isEmpty() || cep.isEmpty() || rua.isEmpty() || numero.isEmpty() || bairro.isEmpty()
-						|| cidade.isEmpty() || estado.isEmpty()) {
-					JOptionPane.showMessageDialog(null, "Preencha todos os campos.", "Erro de Alteração",
-							JOptionPane.ERROR_MESSAGE);
-				} else {
-					// Aqui, faça o update no banco de dados
-					try {
-						String sqlUpdate = "UPDATE usuarios SET nome = ?, sobrenome = ?, senha = ?, telefone = ?, CPF = ?, endereco = ?, num_casa = ?, Cep = ?, bairro = ?, cidade = ?, estado = ? WHERE email = ?";
+				try {
+					PreparedStatement stmt = conn.openDB().prepareStatement(sql);
+					stmt.setString(1, nome);
+					stmt.setString(2, sobrenome);
+					stmt.setString(3, email);
+					stmt.setString(4, senha);
+					stmt.setString(5, telefone);
+					stmt.setString(6, cpf);
+					stmt.setString(7, endereco);
+					stmt.setString(8, numCasa);
+					stmt.setString(9, cep);
+					stmt.setString(10, bairro);
+					stmt.setString(11, cidade);
+					stmt.setString(12, estado);
+					stmt.setString(13, email); // Usando o email para identificar o usuário
 
-						PreparedStatement stmt = conn.openDB().prepareStatement(sqlUpdate);
-						stmt.setString(1, nome);
-						stmt.setString(2, sobrenome);
-						stmt.setString(3, senha);
-						stmt.setString(4, telefone);
-						stmt.setString(5, cpf);
-						stmt.setString(6, rua);
-						stmt.setString(7, numero);
-						stmt.setString(8, cep);
-						stmt.setString(9, bairro);
-						stmt.setString(10, cidade);
-						stmt.setString(11, estado);
-						stmt.setString(12, email); // Aqui você está utilizando o e-mail para identificar o usuário
-
-						int rowsAffected = stmt.executeUpdate();
-
-						if (rowsAffected > 0) {
-							JOptionPane.showMessageDialog(null, "Alteração bem-sucedida!");
-							dispose();
-							// Redireciona para o cardápio após alteração bem-sucedida
-							Cardapio cardapio = new Cardapio();
-							cardapio.setVisible(true);
-						} else {
-							JOptionPane.showMessageDialog(null, "Falha ao atualizar os dados. Tente novamente.",
-									"Erro de Atualização", JOptionPane.ERROR_MESSAGE);
-						}
-					} catch (SQLException ex) {
-						JOptionPane.showMessageDialog(null, "Erro ao atualizar dados no banco: " + ex.getMessage(),
-								"Erro de Banco de Dados", JOptionPane.ERROR_MESSAGE);
+					int rowsUpdated = stmt.executeUpdate();
+					if (rowsUpdated > 0) {
+						JOptionPane.showMessageDialog(null, "Dados atualizados com sucesso!", "Sucesso",
+								JOptionPane.INFORMATION_MESSAGE);
+					} else {
+						JOptionPane.showMessageDialog(null, "Erro ao atualizar dados.", "Erro",
+								JOptionPane.ERROR_MESSAGE);
 					}
+				} catch (SQLException ex) {
+					JOptionPane.showMessageDialog(null, "Erro ao atualizar os dados: " + ex.getMessage(), "Erro",
+							JOptionPane.ERROR_MESSAGE);
 				}
 			}
 		});

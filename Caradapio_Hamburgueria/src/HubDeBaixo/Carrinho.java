@@ -15,6 +15,7 @@ import javax.swing.JOptionPane;
 import CadapioPrincipal.Cardapio;
 import entrada.BotaoArredondado;
 import java.util.ArrayList;
+import java.util.List;
 
 public class Carrinho extends JFrame {
 	private Dimension screen;
@@ -31,13 +32,18 @@ public class Carrinho extends JFrame {
 	private BotaoArredondado botao;
 	private ArrayList<ItemCarrinho> itensCarrinho;
 	private double valorTotal;
+	private List<ItemCarrinho> itens;
 
 	public Carrinho() {
+
 		setTitle("Carrinho - Byell Hambúrgueria");
 		getContentPane().setBackground(Color.decode("#1e1e1e"));
 		setResizable(false);
 		getContentPane().setLayout(null);
 		setSize(800, 600);
+
+		itensCarrinho = new ArrayList<>(); // Inicializa a lista de itens
+		valorTotal = 0.0; // Inicializa o valor total como 0
 
 		Centralizar();
 		Logo();
