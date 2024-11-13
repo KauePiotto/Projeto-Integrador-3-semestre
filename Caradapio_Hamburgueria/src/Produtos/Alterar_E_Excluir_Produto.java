@@ -42,7 +42,8 @@ import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.ImageIcon;
 import java.awt.Component;
 
-public class Alterar_E_Excluir_Produto extends JFrame {
+public class Alterar_E_Excluir_Produto extends JFrame {//Alterar e Excluir Porduto herda JFrame
+	//Atributos privados(encapsulamento)
 	private Dimension screen;
 	private Dimension janela;
 	private ImageIcon logoIcon;

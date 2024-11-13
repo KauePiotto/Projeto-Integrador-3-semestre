@@ -36,7 +36,8 @@ import javax.swing.JOptionPane;
 import javax.swing.JTextArea;
 import javax.swing.JTextField;
 
-public class CadastroProduto extends JFrame {
+public class CadastroProduto extends JFrame {//Herda o JFrame
+	//Encapsulamento
 	private Dimension screen;
 	private Dimension janela;
 	private ImageIcon logoIcon;
@@ -294,7 +295,8 @@ public class CadastroProduto extends JFrame {
 		btnCadastrarProduto.setBounds(300, 330, 200, 40);
 
 		add(btnCadastrarProduto);
-
+		
+		//Polimorfismo
 		btnCadastrarProduto.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {

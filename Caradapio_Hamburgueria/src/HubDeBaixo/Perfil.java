@@ -30,7 +30,8 @@ import entrada.BotaoArredondado;
 import CadapioPrincipal.Cardapio;
 import dao.ConectaMySQL;
 
-public class Perfil extends JFrame {
+public class Perfil extends JFrame {// A classe herda o JFrame
+	// Atributos privados (encapsulados)
 	private Dimension screen;
 	private Dimension janela;
 	private BotaoArredondado btnAlterar;
@@ -136,7 +137,7 @@ public class Perfil extends JFrame {
 		Centralizar();
 		PerfilUsuario();
 		BotaoVoltar();
-		RecuperarDadosUsuario(email);
+		RecuperarDadosUsuario();
 		desabilitarCampos();
 		habilitarCampos();
 
@@ -156,13 +157,13 @@ public class Perfil extends JFrame {
 		setLocation((screen.width - janela.width) / 2, (screen.height - janela.height) / 2);
 	}
 
-	// Esse método agora vai buscar os dados do usuário com base no email
-	public void RecuperarDadosUsuario(String email) {
+	//Polimorfismo
+	public void RecuperarDadosUsuario() {
 		try {
-			// Consulta os dados do banco de dados
+			// Usa a variável global 'email' para buscar o usuário
 			String sql = "SELECT * FROM usuarios WHERE email = ?";
 			PreparedStatement stmt = conn.openDB().prepareStatement(sql);
-			stmt.setString(1, email); // Passando o e-mail para buscar os dados
+			stmt.setString(1, email); // Utiliza o e-mail global do usuário logado
 			ResultSet rs = stmt.executeQuery();
 
 			// Se o usuário for encontrado, preenche os campos
@@ -522,7 +523,8 @@ public class Perfil extends JFrame {
 		btnAlterar.setBackground(Color.gray);
 		btnAlterar.setForeground(Color.decode("#ffd96d"));
 		add(btnAlterar);
-
+		
+		//Polimorfismo
 		btnAlterar.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				// Obtém os valores dos campos do formulário
@@ -574,23 +576,22 @@ public class Perfil extends JFrame {
 					stmt.setString(10, bairro);
 					stmt.setString(11, cidade);
 					stmt.setString(12, estado);
-					stmt.setString(13, email); // Passando o email para garantir que está alterando o usuário certo
+					stmt.setString(13, email); // Garante que está alterando o usuário correto
 
-					// Executa a atualização
-					int rowsAffected = stmt.executeUpdate();
-					if (rowsAffected > 0) {
+					// Executa a atualização no banco de dados
+					int updatedRows = stmt.executeUpdate();
+					if (updatedRows > 0) {
 						JOptionPane.showMessageDialog(null, "Dados atualizados com sucesso!", "Sucesso",
 								JOptionPane.INFORMATION_MESSAGE);
 					} else {
-						JOptionPane.showMessageDialog(null, "Erro ao atualizar dados.", "Erro",
-								JOptionPane.ERROR_MESSAGE);
+						JOptionPane.showMessageDialog(null, "Erro ao atualizar os dados. Verifique as informações.",
+								"Erro", JOptionPane.ERROR_MESSAGE);
 					}
 				} catch (SQLException ex) {
 					JOptionPane.showMessageDialog(null, "Erro ao atualizar os dados: " + ex.getMessage(), "Erro",
 							JOptionPane.ERROR_MESSAGE);
 				}
 			}
-
 		});
 	}
 

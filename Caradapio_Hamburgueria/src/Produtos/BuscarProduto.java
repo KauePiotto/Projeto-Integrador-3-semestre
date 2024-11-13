@@ -22,7 +22,8 @@ import CadapioPrincipal.Cardapio;
 import dao.ConectaMySQL;
 import entrada.BotaoArredondado;
 
-public class BuscarProduto extends JFrame {
+public class BuscarProduto extends JFrame {// Herda JFrame
+	// Encapsulamento
 	private Dimension screen;
 	private Dimension janela;
 	private ImageIcon logoIcon;
@@ -109,12 +110,13 @@ public class BuscarProduto extends JFrame {
 
 		add(btnVoltar);
 
+		// Polimorfismo
 		btnVoltar.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				Cardapio cardapio = new Cardapio();
-				cardapio.adminLogado = Cardapio.adminLogado; 
-				cardapio.mostrarMenu(); 
+				cardapio.adminLogado = Cardapio.adminLogado;
+				cardapio.mostrarMenu();
 				cardapio.setVisible(true);
 				dispose();
 			}
@@ -154,6 +156,7 @@ public class BuscarProduto extends JFrame {
 
 		add(btnBucarProduto);
 
+		// Polimorfismo
 		btnBucarProduto.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {

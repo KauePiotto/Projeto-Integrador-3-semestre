@@ -16,7 +16,8 @@ import java.net.HttpURLConnection;
 import java.net.URL;
 import org.json.JSONObject;
 
-public class Cadastrar extends JFrame {
+public class Cadastrar extends JFrame {//A Classe Cadastrar Herda o JFrame
+	//Atributos Privados(Encapsulamento)
 	private Dimension screen;
 	private Dimension janela;
 	private ImageIcon logoIcon;
@@ -519,7 +520,8 @@ public class Cadastrar extends JFrame {
 		btnCadastrar.setBackground(Color.gray);
 		btnCadastrar.setForeground(Color.decode("#ffd96d"));
 		add(btnCadastrar);
-
+		
+		//Polimorfismo
 		btnCadastrar.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				conexao = new ConectaMySQL();

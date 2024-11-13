@@ -30,7 +30,8 @@ import dao.ConectaMySQL;
 import entrada.BotaoArredondado;
 import entrada.PainelComFundo;
 
-public class Login extends JFrame {
+public class Login extends JFrame {//Login herda o JFrame
+	//Atributos privados(encapsulamento)
 	private Dimension screen;
 	private Dimension janela;
 	private ImageIcon logoIcon;
@@ -151,7 +152,7 @@ public class Login extends JFrame {
 		btnLogin.setBackground(Color.gray);
 		btnLogin.setForeground(Color.decode("#ffd96d"));
 		add(btnLogin);
-
+		//Polimorfismo
 		btnLogin.addActionListener(new ActionListener() {
 		    public void actionPerformed(ActionEvent e) {
 		        email = txtEmail.getText();
@@ -202,7 +203,7 @@ public class Login extends JFrame {
 
 		                        // Chama o método RecuperarDadosUsuario passando o email
 		                        Perfil perfil = new Perfil();
-		                       perfil.RecuperarDadosUsuario(email);
+		                       perfil.RecuperarDadosUsuario();
 
 		                        // Cria a instância do cardápio e faz a transição
 		                        Cardapio cardapio = new Cardapio();

@@ -15,8 +15,8 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 
 import CadapioPrincipal.Cardapio;
-//A
-public class EntradaCardapio extends JFrame {
+
+public class EntradaCardapio extends JFrame { //Herança da classe JFrame
 	private Dimension screen;
 	private Dimension janela;
 	private ImageIcon logoIcon;
@@ -70,6 +70,7 @@ public class EntradaCardapio extends JFrame {
 		setContentPane(painel);
 	}
 
+	// Sobrecarga
 	public void BotaoEntrada(JPanel painel) {
 		btnCardapio = new BotaoArredondado("Ver Cardápio", 30);
 

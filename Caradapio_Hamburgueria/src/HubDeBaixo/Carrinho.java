@@ -17,7 +17,8 @@ import CadapioPrincipal.Cardapio;
 import dao.ConectaMySQL;
 import entrada.BotaoArredondado;
 
-public class Carrinho extends JFrame {
+public class Carrinho extends JFrame { // Carrinho herda de JFrame
+	// Atributos privados (encapsulados)
 	private Dimension screen;
 	private Dimension janela;
 	private ImageIcon logoIcon;
@@ -123,7 +124,7 @@ public class Carrinho extends JFrame {
 
 		rightPanel.add(valorLabel);
 		rightPanel.add(botao);
-
+		// Polimorfismo
 		botao.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {

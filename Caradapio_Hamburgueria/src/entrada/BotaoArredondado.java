@@ -7,9 +7,26 @@ import java.awt.geom.RoundRectangle2D;
 
 import javax.swing.JButton;
 
-public class BotaoArredondado extends JButton {
+public class BotaoArredondado extends JButton { // Heranca de JButton
+	// Atributos privados (encapsulado)
 	private int raio;
 	private String texto;
+
+	public int getRaio() {
+		return raio;
+	}
+
+	public void setRaio(int raio) {
+		this.raio = raio;
+	}
+
+	public String getTexto() {
+		return texto;
+	}
+
+	public void setTexto(String texto) {
+		this.texto = texto;
+	}
 
 	public BotaoArredondado(String texto, int raio) {
 		super(texto);
@@ -19,6 +36,7 @@ public class BotaoArredondado extends JButton {
 		setBorderPainted(false);
 	}
 
+	// Polimorfismo
 	@Override
 	protected void paintComponent(Graphics g) {
 		Graphics2D g2 = (Graphics2D) g.create();

@@ -39,7 +39,7 @@ import dao.ConectaMySQL;
 import entrada.BotaoArredondado;
 import entrada.PainelComFundo;
 
-public class Cardapio extends JFrame {
+public class Cardapio extends JFrame {// Cardapio herda de JFrame
 	private JButton btnLogin;
 	private JButton btnCadastrar;
 	private JButton btnMenu;
@@ -64,8 +64,8 @@ public class Cardapio extends JFrame {
 	private NavigationPanel NavPanel;
 	private ConectaMySQL conexao;
 	public static boolean usuarioLogado = false;
-	public static boolean adminLogado = false;
-	public static String nomeUsuarioLogado;	
+	public static boolean adminLogado = false; // Define se o usuário está logado ou não
+	public static String nomeUsuarioLogado;
 
 	public Cardapio() {
 		setTitle("Cardápio - Byell Hambúrgueria");
@@ -99,22 +99,24 @@ public class Cardapio extends JFrame {
 		add(NavPanel);
 	}
 
+	// Método para ocultar botões de login e cadastro, que encapsula a lógica
+	// interna
 	public void ocultarBotoesLoginECadastrar() {
-	    if (usuarioLogado) {
-	        btnLogin.setVisible(false);
-	        btnCadastrar.setVisible(false);
-	    }
+		if (usuarioLogado) {
+			btnLogin.setVisible(false);
+			btnCadastrar.setVisible(false);
+		}
 
-	    // Exibir mensagem de boas-vindas
-	    JLabel lblBemVindo = new JLabel("Bem-vindo, " + Cardapio.nomeUsuarioLogado + SwingConstants.RIGHT);
-	    lblBemVindo.setFont(new Font("Arial", Font.BOLD, 16));
-	    lblBemVindo.setForeground(Color.decode("#ffd96d"));
-	    lblBemVindo.setBounds(565, 75, 200, 25); // Ajuste a posição conforme necessário
+		// Exibir mensagem de boas-vindas
+		JLabel lblBemVindo = new JLabel("Bem-vindo, " + Cardapio.nomeUsuarioLogado + SwingConstants.RIGHT);
+		lblBemVindo.setFont(new Font("Arial", Font.BOLD, 16));
+		lblBemVindo.setForeground(Color.decode("#ffd96d"));
+		lblBemVindo.setBounds(565, 75, 200, 25); // Ajuste a posição conforme necessário
 
-	    add(lblBemVindo);
-	    
-	    lblBemVindo.getParent().revalidate();
-	    lblBemVindo.getParent().repaint();
+		add(lblBemVindo);
+
+		lblBemVindo.getParent().revalidate();
+		lblBemVindo.getParent().repaint();
 	}
 
 	public void Centralizar() {
@@ -286,6 +288,7 @@ public class Cardapio extends JFrame {
 		add(scrollPane);
 	}
 
+	// Sobrecarga do método createProductPanel
 	private JButton createImageButton(String imagePath, String tooltip) {
 		JButton button = new JButton();
 		button.setToolTipText(tooltip);
@@ -306,6 +309,7 @@ public class Cardapio extends JFrame {
 
 	Carrinho carrinho = new Carrinho();
 
+	// Sobrecarga do método createProductPanel
 	private JPanel createProductPanel(String nome, String descricao, double preco, byte[] logo, Carrinho carrinho) {
 		JPanel produtoPanel = new JPanel(new BorderLayout());
 		produtoPanel.setPreferredSize(new Dimension(250, 100)); // Largura aumentada, altura reduzida
