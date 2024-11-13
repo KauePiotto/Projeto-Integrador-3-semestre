@@ -15,7 +15,7 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 
 import CadapioPrincipal.Cardapio;
-
+//A
 public class EntradaCardapio extends JFrame {
 	private Dimension screen;
 	private Dimension janela;
