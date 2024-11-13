@@ -1,6 +1,7 @@
 package Produtos;
 
 import java.awt.Color;
+import java.awt.Component;
 import java.awt.Dimension;
 import java.awt.Font;
 import java.awt.Image;
@@ -25,14 +26,21 @@ import javax.swing.JFileChooser;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
+import javax.swing.JScrollPane;
+import javax.swing.JTable;
 import javax.swing.JTextArea;
 import javax.swing.JTextField;
+import javax.swing.table.DefaultTableCellRenderer;
+import javax.swing.table.DefaultTableModel;
 import javax.swing.text.AbstractDocument;
 import javax.swing.text.AttributeSet;
 import javax.swing.text.BadLocationException;
 import javax.swing.text.DocumentFilter;
 import dao.ConectaMySQL;
 import entrada.BotaoArredondado;
+import javax.swing.table.DefaultTableCellRenderer;
+import javax.swing.ImageIcon;
+import java.awt.Component;
 
 public class Alterar_E_Excluir_Produto extends JFrame {
 	private Dimension screen;
@@ -64,6 +72,8 @@ public class Alterar_E_Excluir_Produto extends JFrame {
 	private BufferedImage img2;
 	private int result;
 	private Image scaledImage;
+	private String[] columnNames = { "ID", "Nome", "Descrição", "Tipo", "Preço", "Foto" };
+	private DefaultTableModel tableModel = new DefaultTableModel(null, columnNames);
 
 	public JTextField getTxtIdProduto() {
 		return txtIdProduto;
@@ -127,6 +137,7 @@ public class Alterar_E_Excluir_Produto extends JFrame {
 		BotaoVoltar();
 		Logo();
 		AlteExc();
+		carregarTabela();
 
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 	}
@@ -272,13 +283,13 @@ public class Alterar_E_Excluir_Produto extends JFrame {
 
 		// Adiciona o tipo de Produto
 		lblTipo = new JLabel("Tipo de Produto");
-		lblTipo.setBounds(50, 300, 180, 25);
+		lblTipo.setBounds(320, 300, 180, 25);
 		lblTipo.setForeground(Color.decode("#ffd96d"));
 		lblTipo.setFont(new Font("Arial", Font.BOLD, 16));
 		add(lblTipo);
 
 		cmbTipoProduto = new JComboBox<>(TiposDeProduto);
-		cmbTipoProduto.setBounds(180, 300, 225, 25);
+		cmbTipoProduto.setBounds(450, 300, 225, 25);
 		cmbTipoProduto.setFont(new Font("Arial", Font.PLAIN, 16));
 		add(cmbTipoProduto);
 
@@ -333,7 +344,7 @@ public class Alterar_E_Excluir_Produto extends JFrame {
 		// Adiciona o Botao Alterar Porduto
 		btnAlterarProduto = new BotaoArredondado("Alterar Produto", 30);
 		btnAlterarProduto.setFont(new Font("Arial", Font.BOLD, 16));
-		btnAlterarProduto.setBounds(150, 400, 200, 40);
+		btnAlterarProduto.setBounds(550, 350, 200, 40);
 		add(btnAlterarProduto);
 
 		btnAlterarProduto.addActionListener(new ActionListener() {
@@ -367,10 +378,11 @@ public class Alterar_E_Excluir_Produto extends JFrame {
 				byte[] foto = null;
 				if (selectedFile != null) {
 					try {
-						BufferedImage img = ImageIO.read(selectedFile);
-						ByteArrayOutputStream baos = new ByteArrayOutputStream();
-						ImageIO.write(img, "png", baos);
-						foto = baos.toByteArray();
+						BufferedImage img = ImageIO.read(selectedFile); // Lê a imagem
+						ByteArrayOutputStream baos = new ByteArrayOutputStream(); // Prepara para escrever no fluxo de
+																					// bytes
+						ImageIO.write(img, "png", baos); // Converte para PNG
+						foto = baos.toByteArray(); // Armazena a imagem como um array de bytes
 					} catch (IOException ex) {
 						JOptionPane.showMessageDialog(Alterar_E_Excluir_Produto.this,
 								"Erro ao processar a imagem. Certifique-se de que o arquivo é uma imagem válida.",
@@ -390,7 +402,7 @@ public class Alterar_E_Excluir_Produto extends JFrame {
 
 					String sql = "UPDATE produto SET logo = ?, nome = ?, descricao = ?, tipo = ?, preco = ? WHERE id = ?";
 					try (PreparedStatement stmt = conn.prepareStatement(sql)) {
-						stmt.setBytes(1, foto != null ? foto : null); // Permite NULL se a imagem não for fornecida
+						stmt.setBytes(1, foto != null ? foto : null); // Se a foto for null, armazena null no banco
 						stmt.setString(2, nome);
 						stmt.setString(3, descricao);
 						stmt.setString(4, tipo);
@@ -401,6 +413,7 @@ public class Alterar_E_Excluir_Produto extends JFrame {
 						if (affectedRows > 0) {
 							JOptionPane.showMessageDialog(Alterar_E_Excluir_Produto.this,
 									"Produto atualizado com sucesso.");
+							carregarTabela(); // Recarrega a tabela após a atualização
 						} else {
 							JOptionPane.showMessageDialog(Alterar_E_Excluir_Produto.this,
 									"Produto não encontrado. Verifique o ID.", "Aviso", JOptionPane.WARNING_MESSAGE);
@@ -418,7 +431,7 @@ public class Alterar_E_Excluir_Produto extends JFrame {
 		// Adiciona o Botao Excluir Porduto
 		btnExcluirProduto = new BotaoArredondado("Excluir Produto", 30);
 		btnExcluirProduto.setFont(new Font("Arial", Font.BOLD, 16));
-		btnExcluirProduto.setBounds(400, 400, 200, 40);
+		btnExcluirProduto.setBounds(550, 400, 200, 40);
 
 		add(btnExcluirProduto);
 
@@ -443,6 +456,7 @@ public class Alterar_E_Excluir_Produto extends JFrame {
 						if (rowsAffected > 0) {
 							JOptionPane.showMessageDialog(Alterar_E_Excluir_Produto.this,
 									"Produto excluído com sucesso.");
+							carregarTabela(); // Recarrega a tabela após a exclusão
 						} else {
 							JOptionPane.showMessageDialog(Alterar_E_Excluir_Produto.this, "Produto não encontrado.",
 									"Erro", JOptionPane.ERROR_MESSAGE);
@@ -458,6 +472,88 @@ public class Alterar_E_Excluir_Produto extends JFrame {
 				}
 			}
 		});
+
+		JTable tblProdutos = new JTable(tableModel);
+		JScrollPane scrollPane = new JScrollPane(tblProdutos);
+		scrollPane.setBounds(25, 350, 500, 200); // Ajuste a posição e o tamanho conforme necessário
+		add(scrollPane);
+
+		// Evento de clique na tabela para preencher os campos
+		tblProdutos.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mouseClicked(MouseEvent e) {
+				// Verifica qual linha foi clicada
+				int row = tblProdutos.rowAtPoint(e.getPoint());
+				if (row >= 0) {
+					// Pega os dados da linha
+					int id = (int) tblProdutos.getValueAt(row, 0); // ID do produto
+					String nome = (String) tblProdutos.getValueAt(row, 1); // Nome
+					String descricao = (String) tblProdutos.getValueAt(row, 2); // Descrição
+					String tipo = (String) tblProdutos.getValueAt(row, 3); // Tipo
+					Double preco = (Double) tblProdutos.getValueAt(row, 4); // Preço
+					ImageIcon foto = (ImageIcon) tblProdutos.getValueAt(row, 5); // Foto
+
+					// Preenche os campos de texto com os dados da linha
+					txtNome.setText(nome);
+					txtDescricao.setText(descricao);
+					cmbTipoProduto.setSelectedItem(tipo); // Definir tipo corretamente
+					txtPreco.setText(preco.toString());
+
+					// Exibe a foto na JLabel sem redimensionar
+					lblFoto.setIcon(foto);
+
+					// Atualiza o ID
+					txtIdProduto.setText(String.valueOf(id));
+				}
+			}
+		});
+	}
+
+	// Método para carregar dados na JTable
+	public void carregarTabela() {
+		try (Connection conn = conexao.openDB()) {
+			if (conn == null) {
+				JOptionPane.showMessageDialog(Alterar_E_Excluir_Produto.this, "Erro ao conectar ao banco de dados.",
+						"Erro", JOptionPane.ERROR_MESSAGE);
+				return;
+			}
+
+			// Consulta para buscar todos os produtos
+			String sql = "SELECT id, nome, descricao, tipo, preco, logo FROM produto";
+			try (PreparedStatement stmt = conn.prepareStatement(sql); ResultSet rs = stmt.executeQuery()) {
+
+				// Limpa a tabela antes de carregar os novos dados
+				tableModel.setRowCount(0);
+
+				// Preenche a tabela com os dados do banco de dados
+				while (rs.next()) {
+					int id = rs.getInt("id");
+					String nome = rs.getString("nome");
+					String descricao = rs.getString("descricao");
+					String tipo = rs.getString("tipo");
+					double preco = rs.getDouble("preco");
+
+					// Obtém a foto do produto (logo)
+					byte[] fotoBytes = rs.getBytes("logo");
+					ImageIcon fotoIcon = null;
+					if (fotoBytes != null && fotoBytes.length > 0) {
+						fotoIcon = new ImageIcon(fotoBytes);
+						// Ajusta a imagem (opcional)
+						fotoIcon = new ImageIcon(fotoIcon.getImage().getScaledInstance(50, 50, Image.SCALE_SMOOTH));
+					}
+
+					// Adiciona a linha à tabela, incluindo a imagem
+					tableModel.addRow(new Object[] { id, nome, descricao, tipo, preco, fotoIcon });
+				}
+			} catch (SQLException ex) {
+				JOptionPane.showMessageDialog(Alterar_E_Excluir_Produto.this, "Erro ao carregar os dados do produto.",
+						"Erro", JOptionPane.ERROR_MESSAGE);
+				ex.printStackTrace();
+			}
+		} catch (SQLException ex) {
+			JOptionPane.showMessageDialog(Alterar_E_Excluir_Produto.this, "Erro ao conectar ao banco de dados.", "Erro",
+					JOptionPane.ERROR_MESSAGE);
+		}
 	}
 
 	public static void main(String[] args) {

@@ -3,6 +3,7 @@ package CadapioPrincipal;
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Dimension;
+import java.awt.FlowLayout;
 import java.awt.Font;
 import java.awt.GridLayout;
 import java.awt.Image;
@@ -11,8 +12,11 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.util.ArrayList;
 import java.util.List;
 import javax.swing.BorderFactory;
+import javax.swing.Box;
+import javax.swing.BoxLayout;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JFrame;
@@ -21,6 +25,7 @@ import javax.swing.JMenuItem;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JPopupMenu;
+import javax.swing.JScrollPane;
 import javax.swing.SwingConstants;
 
 import HubDeBaixo.Carrinho;
@@ -59,6 +64,7 @@ public class Cardapio extends JFrame {
 	private NavigationPanel NavPanel;
 	private ConectaMySQL conexao;
 	public static boolean usuarioLogado = false;
+	public static boolean adminLogado = false;
 
 	public Cardapio() {
 		setTitle("Cardápio - Byell Hambúrgueria");
@@ -219,19 +225,17 @@ public class Cardapio extends JFrame {
 		btnBebidas = createImageButton("imagens/refrigerantes.png", "Bebidas");
 		btnPorcoes = createImageButton("imagens/porcoes.png", "Porções");
 
+		// Método para adicionar MouseListener genérico aos botões
+		addMouseListeners(btnAll);
+		addMouseListeners(btnLanches);
+		addMouseListeners(btnBebidas);
+		addMouseListeners(btnPorcoes);
+
 		// Adiciona os listeners de ação para os botões
-		btnLanches.addActionListener(e -> {
-			updateItems("lanche");
-		});
-		btnBebidas.addActionListener(e -> {
-			updateItems("bebida");
-		});
-		btnPorcoes.addActionListener(e -> {
-			updateItems("Porção");
-		});
-		btnAll.addActionListener(e -> {
-			updateItems("all");
-		});
+		btnLanches.addActionListener(e -> updateItems("lanche"));
+		btnBebidas.addActionListener(e -> updateItems("bebida"));
+		btnPorcoes.addActionListener(e -> updateItems("Porção"));
+		btnAll.addActionListener(e -> updateItems("all"));
 
 		// Define a posição e adiciona os botões ao painel
 		btnLanches.setBounds(170, 115, 100, 30);
@@ -245,12 +249,30 @@ public class Cardapio extends JFrame {
 		add(btnPorcoes);
 	}
 
+	// Método auxiliar para adicionar o MouseListener
+	private void addMouseListeners(JButton button) {
+		button.addMouseListener(new java.awt.event.MouseAdapter() {
+			@Override
+			public void mouseEntered(MouseEvent e) {
+				button.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+			}
+
+			@Override
+			public void mouseExited(MouseEvent e) {
+				button.setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
+			}
+		});
+	}
+
 	public void PainelItem() {
 		itemPainel = new JPanel();
-		itemPainel.setLayout(new GridLayout(0, 2, 10, 10));
-		itemPainel.setBounds(50, 150, 700, 350);
-		itemPainel.setPreferredSize(new Dimension(700, 350));
-		add(itemPainel);
+		itemPainel.setLayout(new GridLayout(0, 3, 10, 10)); // 3 colunas por linha, espaçamento maior
+
+		JScrollPane scrollPane = new JScrollPane(itemPainel, JScrollPane.VERTICAL_SCROLLBAR_ALWAYS,
+				JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
+		scrollPane.setBounds(25, 150, 730, 360);
+
+		add(scrollPane);
 	}
 
 	private JButton createImageButton(String imagePath, String tooltip) {
@@ -273,50 +295,61 @@ public class Cardapio extends JFrame {
 
 	Carrinho carrinho = new Carrinho();
 
-	// Criação do painel para o produto
 	private JPanel createProductPanel(String nome, String descricao, double preco, byte[] logo, Carrinho carrinho) {
 		JPanel produtoPanel = new JPanel(new BorderLayout());
-		produtoPanel.setPreferredSize(new Dimension(280, 200));
+		produtoPanel.setPreferredSize(new Dimension(250, 100)); // Largura aumentada, altura reduzida
 		produtoPanel.setBorder(BorderFactory.createLineBorder(Color.GRAY));
 
-		// Criação dos rótulos para nome, descrição e preço
-		JLabel nomeLabel = new JLabel("<html><b>" + nome + "</b></html>", SwingConstants.CENTER);
-		JLabel descricaoLabel = new JLabel("<html><i>" + descricao + "</i></html>", SwingConstants.CENTER);
-		JLabel precoLabel = new JLabel("R$ " + String.format("%.2f", preco), SwingConstants.CENTER);
+		// Nome do produto
+		JLabel lblNome = new JLabel("<html><b>" + (nome != null ? nome : "Produto") + "</b></html>",
+				SwingConstants.CENTER);
+		lblNome.setFont(new Font("Arial", Font.BOLD, 14)); // Fonte um pouco maior para combinar com o layout
 
-		// Exibir imagem se o logo não for nulo
+		// Descrição
+		JLabel lblDescri = new JLabel("<html><i>" + (descricao != null ? descricao : "Sem descrição") + "</i></html>",
+				SwingConstants.CENTER);
+		lblDescri.setFont(new Font("Arial", Font.PLAIN, 12)); // Ajuste da fonte
+
+		// Preço
+		JLabel lblPreco = new JLabel("R$ " + String.format("%.2f", preco), SwingConstants.CENTER);
+		lblPreco.setFont(new Font("Arial", Font.BOLD, 12));
+
+		// Logo do produto
 		JLabel imagemLabel = new JLabel();
 		if (logo != null && logo.length > 0) {
 			ImageIcon imagemIcon = new ImageIcon(logo);
-			img = imagemIcon.getImage().getScaledInstance(100, 100, Image.SCALE_SMOOTH);
+			Image img = imagemIcon.getImage().getScaledInstance(100, 100, Image.SCALE_SMOOTH); // Imagem mais larga
 			imagemIcon = new ImageIcon(img);
 			imagemLabel.setIcon(imagemIcon);
+		} else {
+			imagemLabel.setText("Sem imagem");
+			imagemLabel.setHorizontalAlignment(SwingConstants.CENTER);
 		}
 
-		JButton AddCarrinho = new JButton("Adicionar ao Carrinho");
-		AddCarrinho.addActionListener(new ActionListener() {
-			@Override
-			public void actionPerformed(ActionEvent e) {
-				// Adiciona o item ao carrinho quando o botão for clicado
-				carrinho.adicionarItemAoCarrinho(nome, 1, preco); // Adiciona 1 unidade do item
-
-				// Atualiza o painel do carrinho
-				carrinho.atualizarPainelCarrinho();
-
-				// Exibe uma mensagem de confirmação
-				JOptionPane.showMessageDialog(null, nome + " foi adicionado ao carrinho.");
-			}
+		// Botão para adicionar ao carrinho
+		JButton btnAddCarrinho = new BotaoArredondado("Adicionar ao carrinho", 20);
+		btnAddCarrinho.setFont(new Font("Arial", Font.PLAIN, 10));
+		btnAddCarrinho.setForeground(Color.decode("#ffd96d"));
+		btnAddCarrinho.setBackground(new Color(73, 71, 71));
+		btnAddCarrinho.addActionListener(e -> {
+			JOptionPane.showMessageDialog(null, nome + " foi adicionado ao carrinho.");
 		});
+		// Painel de informações
+		JPanel infoPanel = new JPanel();
+		infoPanel.setLayout(new BoxLayout(infoPanel, BoxLayout.Y_AXIS));
+		infoPanel.add(lblNome);
+		infoPanel.add(Box.createVerticalStrut(5));
+		infoPanel.add(lblDescri);
+		infoPanel.add(Box.createVerticalStrut(5));
+		infoPanel.add(lblPreco);
 
-		// Painel central para organizar os textos e botão
-		JPanel centroPanel = new JPanel(new BorderLayout());
-		centroPanel.add(nomeLabel, BorderLayout.NORTH);
-		centroPanel.add(descricaoLabel, BorderLayout.CENTER);
-		centroPanel.add(precoLabel, BorderLayout.WEST);
-		centroPanel.add(AddCarrinho, BorderLayout.PAGE_END);
-
-		produtoPanel.add(centroPanel, BorderLayout.CENTER);
+		produtoPanel.add(infoPanel, BorderLayout.CENTER);
 		produtoPanel.add(imagemLabel, BorderLayout.WEST);
+
+		// Painel do botão
+		JPanel buttonPanel = new JPanel(new FlowLayout(FlowLayout.RIGHT));
+		buttonPanel.add(btnAddCarrinho);
+		produtoPanel.add(buttonPanel, BorderLayout.SOUTH);
 
 		return produtoPanel;
 	}
@@ -325,7 +358,6 @@ public class Cardapio extends JFrame {
 		itemPainel.removeAll();
 
 		ConectaMySQL db = new ConectaMySQL();
-
 		List<Produto> produtos = db.getProduto(filtro);
 
 		if (produtos == null || produtos.isEmpty()) {
@@ -338,6 +370,10 @@ public class Cardapio extends JFrame {
 				itemPainel.add(produtoPanel);
 			}
 		}
+
+		int numRows = (produtos.size() + 2) / 3;
+		itemPainel.setPreferredSize(new Dimension(700, numRows * 120));
+
 		itemPainel.revalidate();
 		itemPainel.repaint();
 	}
@@ -388,7 +424,11 @@ public class Cardapio extends JFrame {
 	}
 
 	public void mostrarMenu() {
-		btnMenu.setVisible(true);
+		if (adminLogado) {
+			btnMenu.setVisible(true);
+			btnMenu.getParent().revalidate();
+			btnMenu.getParent().repaint();
+		}
 	}
 
 	public static void main(String[] args) {

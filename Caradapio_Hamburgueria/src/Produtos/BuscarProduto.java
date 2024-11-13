@@ -113,6 +113,8 @@ public class BuscarProduto extends JFrame {
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				Cardapio cardapio = new Cardapio();
+				cardapio.adminLogado = Cardapio.adminLogado; 
+				cardapio.mostrarMenu(); 
 				cardapio.setVisible(true);
 				dispose();
 			}
@@ -208,10 +210,12 @@ public class BuscarProduto extends JFrame {
 							fotoLabel.setBounds(50, 270, 200, 200); // Ajuste conforme necessário
 							add(fotoLabel);
 						}
-						// Instancia e exibe a tela Alterar_E_Excluir_Produto passando os dados do produto
-		                Alterar_E_Excluir_Produto alterarProduto = new Alterar_E_Excluir_Produto(id, nome, descricao, tipo, preco, logo);
-		                alterarProduto.setVisible(true);
-		                dispose(); // Fecha a tela de BuscarProduto
+						// Instancia e exibe a tela Alterar_E_Excluir_Produto passando os dados do
+						// produto
+						Alterar_E_Excluir_Produto alterarProduto = new Alterar_E_Excluir_Produto(id, nome, descricao,
+								tipo, preco, logo);
+						alterarProduto.setVisible(true);
+						dispose(); // Fecha a tela de BuscarProduto
 
 					} else {
 						// Produto não encontrado, mostra mensagem de erro

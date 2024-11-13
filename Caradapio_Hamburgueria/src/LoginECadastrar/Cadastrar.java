@@ -148,7 +148,7 @@ public class Cadastrar extends JFrame {
 	public String getNumero() {
 		return numero;
 	}
-
+	
 	public void setNumero(String numero) {
 		this.numero = numero;
 		txtNum.setText(numero);

@@ -161,6 +161,8 @@ public class CadastroProduto extends JFrame {
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				Cardapio cardapio = new Cardapio();
+				cardapio.adminLogado = Cardapio.adminLogado;
+				cardapio.mostrarMenu();
 				cardapio.setVisible(true);
 				dispose();
 			}
@@ -332,6 +334,15 @@ public class CadastroProduto extends JFrame {
 					if (rowsInserted > 0) {
 						JOptionPane.showMessageDialog(null, "Produto cadastrado com sucesso!", "Cadastro Produto",
 								JOptionPane.INFORMATION_MESSAGE);
+
+						// Limpa os campos após o cadastro
+						txtNome.setText("");
+						txtDescricao.setText("");
+						txtPreco.setText("R$ ");
+						cmbTipoProduto.setSelectedIndex(0); // Reseta para o valor padrão "----------"
+						lblFoto.setIcon(null); // Remove a imagem carregada
+						lblFoto.setText("Foto"); // Restaura o texto no JLabel
+						selectedFile = null; // Reseta a variável da imagem
 					}
 				} catch (FileNotFoundException ex) {
 					JOptionPane.showMessageDialog(null, "Erro ao carregar a imagem: " + ex.getMessage(), "Erro",
