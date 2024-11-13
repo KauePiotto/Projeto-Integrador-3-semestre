@@ -7,6 +7,10 @@ import java.awt.Image;
 import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.io.BufferedReader;
+import java.io.InputStreamReader;
+import java.net.HttpURLConnection;
+import java.net.URL;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -21,6 +25,7 @@ import javax.swing.JPasswordField;
 import javax.swing.JSeparator;
 import javax.swing.JTextField;
 import javax.swing.text.MaskFormatter;
+import org.json.JSONObject;
 import entrada.BotaoArredondado;
 import CadapioPrincipal.Cardapio;
 import dao.ConectaMySQL;
@@ -76,105 +81,50 @@ public class Perfil extends JFrame {
 	private Image img;
 	private JButton btnVoltar;
 	private ConectaMySQL conn;
-	private boolean usuariologado = false;
+	private static boolean usuariologado = false;
 
-	public JTextField getTxtNome() {
-		return txtNome;
+	public void setTxtNome(String nome) {
+		this.txtNome.setText(nome);
 	}
 
-	public void setTxtNome(JTextField txtNome) {
-		this.txtNome = txtNome;
+	public void setTxtSobrenome(String sobrenome) {
+		this.txtSobrenome.setText(sobrenome);
 	}
 
-	public JTextField getTxtSobrenome() {
-		return txtSobrenome;
+	public void setTelefoneField(String telefone) {
+		this.telefoneField.setText(telefone);
 	}
 
-	public void setTxtSobrenome(JTextField txtSobrenome) {
-		this.txtSobrenome = txtSobrenome;
+	public void setCpfField(String cpf) {
+		this.cpfField.setText(cpf);
 	}
 
-	public JTextField getTxtEmail() {
-		return txtEmail;
+	public void setTxtRua(String endereco) {
+		this.txtRua.setText(endereco);
 	}
 
-	public void setTxtEmail(JTextField txtEmail) {
-		this.txtEmail = txtEmail;
+	public void setTxtNum(String num_casa) {
+		this.txtNum.setText(num_casa);
 	}
 
-	public JPasswordField getTxtSenha() {
-		return txtSenha;
+	public void setCepField(String cep) {
+		this.cepField.setText(cep);
 	}
 
-	public void setTxtSenha(JPasswordField txtSenha) {
-		this.txtSenha = txtSenha;
+	public void setTxtBairro(String bairro) {
+		this.txtBairro.setText(bairro);
 	}
 
-	public JFormattedTextField getTelefoneField() {
-		return telefoneField;
+	public void setTxtCidade(String cidade) {
+		this.txtCidade.setText(cidade);
 	}
 
-	public void setTelefoneField(JFormattedTextField telefoneField) {
-		this.telefoneField = telefoneField;
-	}
-
-	public JFormattedTextField getCpfField() {
-		return cpfField;
-	}
-
-	public void setCpfField(JFormattedTextField cpfField) {
-		this.cpfField = cpfField;
-	}
-
-	public JTextField getTxtRua() {
-		return txtRua;
-	}
-
-	public void setTxtRua(JTextField txtRua) {
-		this.txtRua = txtRua;
-	}
-
-	public JTextField getTxtNum() {
-		return txtNum;
-	}
-
-	public void setTxtNum(JTextField txtNum) {
-		this.txtNum = txtNum;
-	}
-
-	public JFormattedTextField getCepField() {
-		return cepField;
-	}
-
-	public void setCepField(JFormattedTextField cepField) {
-		this.cepField = cepField;
-	}
-
-	public JTextField getTxtBairro() {
-		return txtBairro;
-	}
-
-	public void setTxtBairro(JTextField txtBairro) {
-		this.txtBairro = txtBairro;
-	}
-
-	public JTextField getTxtCidade() {
-		return txtCidade;
-	}
-
-	public void setTxtCidade(JTextField txtCidade) {
-		this.txtCidade = txtCidade;
-	}
-
-	public JTextField getTxtEstado() {
-		return txtEstado;
-	}
-
-	public void setTxtEstado(JTextField txtEstado) {
-		this.txtEstado = txtEstado;
+	public void setTxtEstado(String estado) {
+		this.txtEstado.setText(estado);
 	}
 
 	public Perfil() {
+
 		setTitle("Perfil - Byell Hambúrgueria");
 		getContentPane().setBackground(Color.decode("#1e1e1e"));
 		setResizable(false);
@@ -203,32 +153,6 @@ public class Perfil extends JFrame {
 			setSize(screen.width, janela.height);
 		}
 		setLocation((screen.width - janela.width) / 2, (screen.height - janela.height) / 2);
-	}
-
-	// Método para verificar login
-	public void verificarLogin(String email, String senha) {
-		try {
-			String sql = "SELECT * FROM usuarios WHERE email = ? AND senha = ?";
-			PreparedStatement stmt = conn.openDB().prepareStatement(sql);
-			stmt.setString(1, email);
-			stmt.setString(2, senha);
-			ResultSet rs = stmt.executeQuery();
-
-			if (rs.next()) {
-				// Login bem-sucedido
-				usuariologado = true;
-				email = email; // Define o e-mail do usuário logado
-				JOptionPane.showMessageDialog(null, "Login realizado com sucesso!");
-				RecuperarDadosUsuario(); // Carrega os dados do usuário
-				habilitarCampos(); // Habilita os campos para edição
-			} else {
-				// Login falhou
-				JOptionPane.showMessageDialog(null, "E-mail ou senha inválidos!", "Erro", JOptionPane.ERROR_MESSAGE);
-			}
-		} catch (SQLException e) {
-			JOptionPane.showMessageDialog(null, "Erro ao verificar login: " + e.getMessage(), "Erro",
-					JOptionPane.ERROR_MESSAGE);
-		}
 	}
 
 	// Esse método agora vai buscar os dados do usuário com base no email
@@ -277,21 +201,104 @@ public class Perfil extends JFrame {
 		btnAlterar.setEnabled(false);
 	}
 
-	// Habilitar todos os campos para edição
+	// Habilitar todos os campos para edição quando estiver logado
 	public void habilitarCampos() {
-		txtNome.setEnabled(true);
-		txtSobrenome.setEnabled(true);
-		txtEmail.setEnabled(true);
-		txtSenha.setEnabled(true);
-		telefoneField.setEnabled(true);
-		cpfField.setEnabled(true);
-		txtRua.setEnabled(true);
-		txtNum.setEnabled(true);
-		cepField.setEnabled(true);
-		txtBairro.setEnabled(true);
-		txtCidade.setEnabled(true);
-		txtEstado.setEnabled(true);
-		btnAlterar.setEnabled(true);
+		if (usuariologado) {
+			txtNome.setEnabled(true);
+			txtSobrenome.setEnabled(true);
+			txtEmail.setEnabled(true);
+			txtSenha.setEnabled(true);
+			telefoneField.setEnabled(true);
+			cpfField.setEnabled(true);
+			txtRua.setEnabled(true);
+			txtNum.setEnabled(true);
+			cepField.setEnabled(true);
+			txtBairro.setEnabled(true);
+			txtCidade.setEnabled(true);
+			txtEstado.setEnabled(true);
+			btnAlterar.setEnabled(true);
+		}
+
+	}
+
+	private void buscarCep(String cep) {
+		try {
+			String url = "https://viacep.com.br/ws/" + cep + "/json/";
+			HttpURLConnection conn = (HttpURLConnection) new URL(url).openConnection();
+			conn.setRequestMethod("GET");
+
+			BufferedReader br = new BufferedReader(new InputStreamReader(conn.getInputStream()));
+			StringBuilder response = new StringBuilder();
+			String line;
+
+			while ((line = br.readLine()) != null) {
+				response.append(line);
+			}
+			br.close();
+
+			JSONObject json = new JSONObject(response.toString());
+
+			if (json.has("erro")) {
+				JOptionPane.showMessageDialog(this, "CEP inválido ou não encontrado!", "Erro",
+						JOptionPane.ERROR_MESSAGE);
+			} else {
+				txtRua.setText(json.optString("logradouro", ""));
+				txtBairro.setText(json.optString("bairro", ""));
+				txtCidade.setText(json.optString("localidade", ""));
+				txtEstado.setText(json.optString("uf", ""));
+			}
+		} catch (Exception e) {
+			JOptionPane.showMessageDialog(this, "Erro ao buscar o CEP: " + e.getMessage(), "Erro",
+					JOptionPane.ERROR_MESSAGE);
+		}
+	}
+
+	public boolean validarCPF(String cpf) {
+		// Remove todos os caracteres não numéricos
+		cpf = cpf.replaceAll("[^0-9]", "");
+
+		// Verifica se o CPF possui 11 dígitos
+		if (cpf.length() != 11) {
+			return false;
+		}
+
+		// Verifica se todos os números são iguais (ex: 111.111.111-11)
+		if (cpf.equals("00000000000") || cpf.equals("11111111111") || cpf.equals("22222222222")
+				|| cpf.equals("33333333333") || cpf.equals("44444444444") || cpf.equals("55555555555")
+				|| cpf.equals("66666666666") || cpf.equals("77777777777") || cpf.equals("88888888888")
+				|| cpf.equals("99999999999")) {
+			return false;
+		}
+
+		// Validação dos dois dígitos verificadores
+		int soma = 0;
+		int peso = 10;
+
+		// Valida o primeiro dígito verificador
+		for (int i = 0; i < 9; i++) {
+			soma += Integer.parseInt(String.valueOf(cpf.charAt(i))) * peso--;
+		}
+
+		int digito1 = 11 - (soma % 11);
+		if (digito1 == 10 || digito1 == 11) {
+			digito1 = 0;
+		}
+
+		// Valida o segundo dígito verificador
+		soma = 0;
+		peso = 11;
+		for (int i = 0; i < 10; i++) {
+			soma += Integer.parseInt(String.valueOf(cpf.charAt(i))) * peso--;
+		}
+
+		int digito2 = 11 - (soma % 11);
+		if (digito2 == 10 || digito2 == 11) {
+			digito2 = 0;
+		}
+
+		// Compara os dígitos calculados com os fornecidos
+		return digito1 == Integer.parseInt(String.valueOf(cpf.charAt(9)))
+				&& digito2 == Integer.parseInt(String.valueOf(cpf.charAt(10)));
 	}
 
 	public void PerfilUsuario() {
@@ -436,27 +443,47 @@ public class Perfil extends JFrame {
 		lblCEP.setFont(new Font("Arial", Font.BOLD, 16));
 		add(lblCEP);
 
+		// Configuração do campo de CEP para disparar busca automática
 		try {
-			// Máscara para o CEP
 			mascaraCEP = new MaskFormatter("#####-###");
 			mascaraCEP.setPlaceholderCharacter('_');
 			cepField = new JFormattedTextField(mascaraCEP);
 			cepField.setBounds(120, 350, 130, 25);
 			cepField.setFont(new Font("Arial", Font.BOLD, 16));
 			add(cepField);
+
+			JButton btnBuscarCep = new JButton("Buscar");
+			btnBuscarCep.setBounds(260, 350, 100, 25);
+			btnBuscarCep.setFont(new Font("Arial", Font.BOLD, 12));
+			btnBuscarCep.setBackground(Color.decode("#ffd96d"));
+			btnBuscarCep.setForeground(Color.BLACK);
+			add(btnBuscarCep);
+
+			btnBuscarCep.addActionListener(new ActionListener() {
+				public void actionPerformed(ActionEvent e) {
+					String cep = cepField.getText().replaceAll("[^0-9]", "");
+					if (!cep.isEmpty() && cep.length() == 8) {
+						buscarCep(cep);
+					} else {
+						JOptionPane.showMessageDialog(null, "Digite um CEP válido!", "Erro de Validação",
+								JOptionPane.ERROR_MESSAGE);
+					}
+				}
+			});
+
 		} catch (ParseException e) {
 			e.printStackTrace();
 		}
 
 		// Adiciona o Bairro
 		lblBairro = new JLabel("Bairro");
-		lblBairro.setBounds(270, 350, 80, 25);
+		lblBairro.setBounds(370, 350, 80, 25);
 		lblBairro.setForeground(Color.decode("#ffd96d"));
 		lblBairro.setFont(new Font("Arial", Font.BOLD, 16));
 		add(lblBairro);
 
 		txtBairro = new JTextField();
-		txtBairro.setBounds(330, 350, 200, 25);
+		txtBairro.setBounds(425, 350, 200, 25);
 		txtBairro.setFont(new Font("Arial", Font.BOLD, 16));
 		add(txtBairro);
 
@@ -480,7 +507,7 @@ public class Perfil extends JFrame {
 		add(lblEstado);
 
 		txtEstado = new JTextField();
-		txtEstado.setBounds(390, 400, 200, 25);
+		txtEstado.setBounds(390, 400, 60, 25);
 		txtEstado.setFont(new Font("Arial", Font.BOLD, 16));
 		add(txtEstado);
 

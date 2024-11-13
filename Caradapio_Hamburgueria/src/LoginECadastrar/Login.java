@@ -16,6 +16,7 @@ import java.util.regex.Pattern;
 
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
+import javax.swing.JFormattedTextField;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
@@ -46,8 +47,8 @@ public class Login extends JFrame {
 	private PainelComFundo painel;
 	private BotaoArredondado btnLogin;
 	private ConectaMySQL conexao;
+	public static boolean usuarioLogado = false;
 
-//aa
 	public String getEmail() {
 		return email;
 	}
@@ -155,6 +156,7 @@ public class Login extends JFrame {
 				email = txtEmail.getText();
 				senha = new String(txtSenha.getPassword());
 
+				// Verifica se os campos estão vazios
 				if (email.isEmpty() || senha.isEmpty()) {
 					JOptionPane.showMessageDialog(null, "Por favor, preencha todos os campos.");
 					return;
@@ -166,42 +168,67 @@ public class Login extends JFrame {
 					return;
 				}
 
+				// Criação da conexão com o banco
 				conexao = new ConectaMySQL();
-				Connection conn = conexao.openDB();
+				Connection conn = null;
 
-				if (conn == null) {
-					JOptionPane.showMessageDialog(null, "Erro de conexão com o banco de dados.");
-					return;
-				}
+				try {
+					// Tentando abrir a conexão com o banco de dados
+					conn = conexao.openDB();
 
-				String sql = "SELECT * FROM usuarios WHERE email = ? AND senha = ?";
+					if (conn == null) {
+						JOptionPane.showMessageDialog(null, "Erro de conexão com o banco de dados.");
+						return;
+					}
 
-				try (PreparedStatement stmt = conn.prepareStatement(sql)) {
-					stmt.setString(1, email);
-					stmt.setString(2, senha);
+					// A consulta SQL
+					String sql = "SELECT * FROM usuarios WHERE email = ? AND senha = ?";
 
-					try (ResultSet rs = stmt.executeQuery()) {
-						if (rs.next()) {
-							String perfil = rs.getString("perfil");
-							Cardapio.usuarioLogado = true;
-							
-							Cardapio cardapio = new Cardapio();
-							cardapio.setVisible(true);
-							
-							Perfil perfill = new Perfil();
-							perfill.habilitarCampos();
-							if ("admin".equals(perfil)) {
-								cardapio.mostrarMenu();
+					// Preparando a consulta
+					try (PreparedStatement stmt = conn.prepareStatement(sql)) {
+						stmt.setString(1, email); // Passando o e-mail para o PreparedStatement
+						stmt.setString(2, senha); // Passando a senha para o PreparedStatement
+
+						// Executando a consulta
+						try (ResultSet rs = stmt.executeQuery()) {
+							if (rs.next()) {
+								String perfilUsuario = rs.getString("perfil");
+
+								// Alterar a variável estática para indicar que o usuário está logado
+								Cardapio.usuarioLogado = true;
+
+								// Cria a instância do cardápio e faz a transição
+								Cardapio cardapio = new Cardapio();
+								cardapio.setVisible(true); // Torna a tela do Cardápio visível
+								cardapio.ocultarBotoesLoginECadastrar(); // Oculta os botões de login e cadastro
+
+								Perfil perfil = new Perfil();
+								perfil.habilitarCampos();
+
+								// Se o usuário for administrador, adicionar o menu de administração
+								if ("admin".equals(perfilUsuario)) {
+									cardapio.mostrarMenu();
+								}
+
+								dispose(); // Fecha a tela de login
+							} else {
+								JOptionPane.showMessageDialog(null, "E-mail/Senha incorreta ou não existe");
 							}
-
-							cardapio.ocultarBotoesLoginECadastrar();
-							dispose();
-						} else {
-							JOptionPane.showMessageDialog(null, "E-mail/Senha incorreta ou não existe");
+						}
+					} catch (SQLException ex) {
+						// Captura qualquer erro de execução da consulta SQL
+						ex.printStackTrace(); // Exibe a pilha de erro no console
+						JOptionPane.showMessageDialog(null, "Erro ao acessar o banco de dados: " + ex.getMessage());
+					}
+				} finally {
+					// Fecha a conexão com o banco (se aberta)
+					if (conn != null) {
+						try {
+							conn.close();
+						} catch (SQLException ex) {
+							ex.printStackTrace(); // Caso haja erro ao fechar a conexão
 						}
 					}
-				} catch (SQLException ex) {
-					JOptionPane.showMessageDialog(null, "Erro ao acessar o banco de dados: " + ex.getMessage());
 				}
 			}
 		});

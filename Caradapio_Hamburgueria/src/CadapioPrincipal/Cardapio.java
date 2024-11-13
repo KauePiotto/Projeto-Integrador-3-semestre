@@ -313,7 +313,7 @@ public class Cardapio extends JFrame {
 		}
 
 		// Botão para adicionar ao carrinho
-		JButton btnAddCarrinho = new BotaoArredondado("Adicionar", 20);
+		JButton btnAddCarrinho = new BotaoArredondado("Adicionar ao carrinho", 20);
 		btnAddCarrinho.setFont(new Font("Arial", Font.PLAIN, 10));
 		btnAddCarrinho.setForeground(Color.decode("#ffd96d"));
 		btnAddCarrinho.setBackground(new Color(73, 71, 71));
