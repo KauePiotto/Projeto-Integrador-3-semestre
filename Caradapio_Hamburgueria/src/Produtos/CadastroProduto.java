@@ -161,6 +161,8 @@ public class CadastroProduto extends JFrame {
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				Cardapio cardapio = new Cardapio();
+				cardapio.adminLogado = Cardapio.adminLogado;
+				cardapio.mostrarMenu();
 				cardapio.setVisible(true);
 				dispose();
 			}

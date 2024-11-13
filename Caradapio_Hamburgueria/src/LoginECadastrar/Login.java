@@ -47,8 +47,7 @@ public class Login extends JFrame {
 	private PainelComFundo painel;
 	private BotaoArredondado btnLogin;
 	private ConectaMySQL conexao;
-	public static boolean usuarioLogado = false;
-
+	
 	public String getEmail() {
 		return email;
 	}
@@ -207,6 +206,8 @@ public class Login extends JFrame {
 
 								// Se o usuário for administrador, adicionar o menu de administração
 								if ("admin".equals(perfilUsuario)) {
+									Cardapio.adminLogado = true;
+									
 									cardapio.mostrarMenu();
 								}
 
