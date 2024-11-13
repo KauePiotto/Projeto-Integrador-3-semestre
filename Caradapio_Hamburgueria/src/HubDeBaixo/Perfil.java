@@ -159,13 +159,14 @@ public class Perfil extends JFrame {
 	// Esse método agora vai buscar os dados do usuário com base no email
 	public void RecuperarDadosUsuario(String email) {
 		try {
+			// Consulta os dados do banco de dados
 			String sql = "SELECT * FROM usuarios WHERE email = ?";
 			PreparedStatement stmt = conn.openDB().prepareStatement(sql);
-			stmt.setString(1, email); // Envia o email do usuário
+			stmt.setString(1, email); // Passando o e-mail para buscar os dados
 			ResultSet rs = stmt.executeQuery();
 
+			// Se o usuário for encontrado, preenche os campos
 			if (rs.next()) {
-				// Preenche os campos com os dados do banco
 				txtNome.setText(rs.getString("nome"));
 				txtSobrenome.setText(rs.getString("sobrenome"));
 				txtEmail.setText(rs.getString("email"));
@@ -524,10 +525,73 @@ public class Perfil extends JFrame {
 
 		btnAlterar.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				JOptionPane.showMessageDialog(null, "Conta Alterada com sucesso");
-			}
-		});
+				// Obtém os valores dos campos do formulário
+				String nome = txtNome.getText();
+				String sobrenome = txtSobrenome.getText();
+				String email = txtEmail.getText();
+				String senha = new String(txtSenha.getPassword());
+				String telefone = telefoneField.getText();
+				String cpf = cpfField.getText();
+				String endereco = txtRua.getText();
+				String numCasa = txtNum.getText();
+				String cep = cepField.getText();
+				String bairro = txtBairro.getText();
+				String cidade = txtCidade.getText();
+				String estado = txtEstado.getText();
 
+				// Validação simples dos campos
+				if (nome.isEmpty() || sobrenome.isEmpty() || email.isEmpty() || senha.isEmpty() || telefone.isEmpty()
+						|| cpf.isEmpty() || endereco.isEmpty() || numCasa.isEmpty() || cep.isEmpty() || bairro.isEmpty()
+						|| cidade.isEmpty() || estado.isEmpty()) {
+					JOptionPane.showMessageDialog(null, "Por favor, preencha todos os campos.", "Erro de Validação",
+							JOptionPane.ERROR_MESSAGE);
+					return;
+				}
+
+				// Verifica se o CPF é válido
+				if (!validarCPF(cpf)) {
+					JOptionPane.showMessageDialog(null, "CPF inválido.", "Erro de Validação",
+							JOptionPane.ERROR_MESSAGE);
+					return;
+				}
+
+				// Prepara o SQL para atualizar os dados no banco de dados
+				String sql = "UPDATE usuarios SET nome = ?, sobrenome = ?, email = ?, senha = ?, telefone = ?, cpf = ?, "
+						+ "endereco = ?, num_casa = ?, cep = ?, bairro = ?, cidade = ?, estado = ? WHERE email = ?";
+
+				try {
+					// Prepara a instrução SQL
+					PreparedStatement stmt = conn.openDB().prepareStatement(sql);
+					stmt.setString(1, nome);
+					stmt.setString(2, sobrenome);
+					stmt.setString(3, email);
+					stmt.setString(4, senha);
+					stmt.setString(5, telefone);
+					stmt.setString(6, cpf);
+					stmt.setString(7, endereco);
+					stmt.setString(8, numCasa);
+					stmt.setString(9, cep);
+					stmt.setString(10, bairro);
+					stmt.setString(11, cidade);
+					stmt.setString(12, estado);
+					stmt.setString(13, email); // Passando o email para garantir que está alterando o usuário certo
+
+					// Executa a atualização
+					int rowsAffected = stmt.executeUpdate();
+					if (rowsAffected > 0) {
+						JOptionPane.showMessageDialog(null, "Dados atualizados com sucesso!", "Sucesso",
+								JOptionPane.INFORMATION_MESSAGE);
+					} else {
+						JOptionPane.showMessageDialog(null, "Erro ao atualizar dados.", "Erro",
+								JOptionPane.ERROR_MESSAGE);
+					}
+				} catch (SQLException ex) {
+					JOptionPane.showMessageDialog(null, "Erro ao atualizar os dados: " + ex.getMessage(), "Erro",
+							JOptionPane.ERROR_MESSAGE);
+				}
+			}
+
+		});
 	}
 
 	public void BotaoVoltar() {
