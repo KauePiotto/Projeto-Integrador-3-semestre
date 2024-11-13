@@ -50,7 +50,7 @@ public class NavigationPanel extends JPanel {
 			perfil.setVisible(true);
 			cardapio.dispose();
 		});
-
+		
 		add(btnHome);
 		add(btnCart);
 		add(btnAccount);
@@ -68,6 +68,7 @@ public class NavigationPanel extends JPanel {
 		g2.dispose();
 	}
 
+	
 	public void setBackgroundColor(Color color) {
 		this.backgorund = color;
 		repaint();
@@ -89,6 +90,8 @@ public class NavigationPanel extends JPanel {
 		img = icon.getImage().getScaledInstance(30, 30, Image.SCALE_SMOOTH);
 		button.setIcon(new ImageIcon(img));
 
+		 button.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+		
 		return button;
 	}
 }

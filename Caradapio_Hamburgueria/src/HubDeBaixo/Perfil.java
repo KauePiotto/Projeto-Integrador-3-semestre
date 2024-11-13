@@ -138,6 +138,7 @@ public class Perfil extends JFrame {
 		BotaoVoltar();
 		RecuperarDadosUsuario();
 		desabilitarCampos();
+		habilitarCampos();
 
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 	}
@@ -160,7 +161,7 @@ public class Perfil extends JFrame {
 		try {
 			String sql = "SELECT * FROM usuarios WHERE email = ?";
 			PreparedStatement stmt = conn.openDB().prepareStatement(sql);
-			stmt.setString(1, email);
+			stmt.setString(1, email); // Envia o email do usuário
 			ResultSet rs = stmt.executeQuery();
 
 			if (rs.next()) {
@@ -203,7 +204,7 @@ public class Perfil extends JFrame {
 
 	// Habilitar todos os campos para edição quando estiver logado
 	public void habilitarCampos() {
-		if (usuariologado) {
+		if (Cardapio.usuarioLogado) {
 			txtNome.setEnabled(true);
 			txtSobrenome.setEnabled(true);
 			txtEmail.setEnabled(true);

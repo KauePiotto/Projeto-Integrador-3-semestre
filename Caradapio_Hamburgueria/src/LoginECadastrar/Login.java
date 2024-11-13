@@ -22,6 +22,8 @@ import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPasswordField;
 import javax.swing.JTextField;
+import javax.swing.SwingUtilities;
+
 import CadapioPrincipal.Cardapio;
 import HubDeBaixo.Perfil;
 import dao.ConectaMySQL;
@@ -47,7 +49,7 @@ public class Login extends JFrame {
 	private PainelComFundo painel;
 	private BotaoArredondado btnLogin;
 	private ConectaMySQL conexao;
-	
+
 	public String getEmail() {
 		return email;
 	}
@@ -181,7 +183,7 @@ public class Login extends JFrame {
 					}
 
 					// A consulta SQL
-					String sql = "SELECT * FROM usuarios WHERE email = ? AND senha = ?";
+					String sql = "SELECT nome, perfil FROM usuarios WHERE email = ? AND senha = ?";
 
 					// Preparando a consulta
 					try (PreparedStatement stmt = conn.prepareStatement(sql)) {
@@ -191,23 +193,29 @@ public class Login extends JFrame {
 						// Executando a consulta
 						try (ResultSet rs = stmt.executeQuery()) {
 							if (rs.next()) {
+								String nomeUsuario = rs.getString("nome"); // Recupera o nome do banco de dados
 								String perfilUsuario = rs.getString("perfil");
 
-								// Alterar a variável estática para indicar que o usuário está logado
+								// Define a variável estática nomeUsuarioLogado na classe Cardapio
 								Cardapio.usuarioLogado = true;
+								Cardapio.nomeUsuarioLogado = nomeUsuario; // Atribui o nome ao Cardapio
 
 								// Cria a instância do cardápio e faz a transição
 								Cardapio cardapio = new Cardapio();
 								cardapio.setVisible(true); // Torna a tela do Cardápio visível
 								cardapio.ocultarBotoesLoginECadastrar(); // Oculta os botões de login e cadastro
 
-								Perfil perfil = new Perfil();
-								perfil.habilitarCampos();
+								SwingUtilities.invokeLater(new Runnable() {
+									@Override
+									public void run() {
+										Perfil perfil = new Perfil();
+										perfil.habilitarCampos(); // Habilita os campos no thread da interface gráfica
+									}
+								});
 
 								// Se o usuário for administrador, adicionar o menu de administração
 								if ("admin".equals(perfilUsuario)) {
 									Cardapio.adminLogado = true;
-									
 									cardapio.mostrarMenu();
 								}
 
@@ -216,20 +224,11 @@ public class Login extends JFrame {
 								JOptionPane.showMessageDialog(null, "E-mail/Senha incorreta ou não existe");
 							}
 						}
-					} catch (SQLException ex) {
-						// Captura qualquer erro de execução da consulta SQL
-						ex.printStackTrace(); // Exibe a pilha de erro no console
-						JOptionPane.showMessageDialog(null, "Erro ao acessar o banco de dados: " + ex.getMessage());
 					}
-				} finally {
-					// Fecha a conexão com o banco (se aberta)
-					if (conn != null) {
-						try {
-							conn.close();
-						} catch (SQLException ex) {
-							ex.printStackTrace(); // Caso haja erro ao fechar a conexão
-						}
-					}
+				} catch (SQLException ex) {
+					// Captura qualquer erro de execução da consulta SQL
+					ex.printStackTrace(); // Exibe a pilha de erro no console
+					JOptionPane.showMessageDialog(null, "Erro ao acessar o banco de dados: " + ex.getMessage());
 				}
 			}
 		});

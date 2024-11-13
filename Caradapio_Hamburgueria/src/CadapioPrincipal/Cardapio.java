@@ -65,6 +65,7 @@ public class Cardapio extends JFrame {
 	private ConectaMySQL conexao;
 	public static boolean usuarioLogado = false;
 	public static boolean adminLogado = false;
+	public static String nomeUsuarioLogado;	
 
 	public Cardapio() {
 		setTitle("Cardápio - Byell Hambúrgueria");
@@ -99,10 +100,21 @@ public class Cardapio extends JFrame {
 	}
 
 	public void ocultarBotoesLoginECadastrar() {
-		if (usuarioLogado) {
-			btnLogin.setVisible(false);
-			btnCadastrar.setVisible(false);
-		}
+	    if (usuarioLogado) {
+	        btnLogin.setVisible(false);
+	        btnCadastrar.setVisible(false);
+	    }
+
+	    // Exibir mensagem de boas-vindas
+	    JLabel lblBemVindo = new JLabel("Bem-vindo, " + Cardapio.nomeUsuarioLogado + SwingConstants.RIGHT);
+	    lblBemVindo.setFont(new Font("Arial", Font.BOLD, 16));
+	    lblBemVindo.setForeground(Color.decode("#ffd96d"));
+	    lblBemVindo.setBounds(565, 75, 200, 25); // Ajuste a posição conforme necessário
+
+	    add(lblBemVindo);
+	    
+	    lblBemVindo.getParent().revalidate();
+	    lblBemVindo.getParent().repaint();
 	}
 
 	public void Centralizar() {
@@ -249,7 +261,6 @@ public class Cardapio extends JFrame {
 		add(btnPorcoes);
 	}
 
-	// Método auxiliar para adicionar o MouseListener
 	private void addMouseListeners(JButton button) {
 		button.addMouseListener(new java.awt.event.MouseAdapter() {
 			@Override
