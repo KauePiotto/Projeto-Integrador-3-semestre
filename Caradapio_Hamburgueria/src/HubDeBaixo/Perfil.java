@@ -136,7 +136,7 @@ public class Perfil extends JFrame {
 		Centralizar();
 		PerfilUsuario();
 		BotaoVoltar();
-		RecuperarDadosUsuario();
+		RecuperarDadosUsuario(email);
 		desabilitarCampos();
 		habilitarCampos();
 
@@ -157,7 +157,7 @@ public class Perfil extends JFrame {
 	}
 
 	// Esse método agora vai buscar os dados do usuário com base no email
-	public void RecuperarDadosUsuario() {
+	public void RecuperarDadosUsuario(String email) {
 		try {
 			String sql = "SELECT * FROM usuarios WHERE email = ?";
 			PreparedStatement stmt = conn.openDB().prepareStatement(sql);

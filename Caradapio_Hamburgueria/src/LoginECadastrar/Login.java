@@ -153,84 +153,88 @@ public class Login extends JFrame {
 		add(btnLogin);
 
 		btnLogin.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				email = txtEmail.getText();
-				senha = new String(txtSenha.getPassword());
+		    public void actionPerformed(ActionEvent e) {
+		        email = txtEmail.getText();
+		        senha = new String(txtSenha.getPassword());
 
-				// Verifica se os campos estão vazios
-				if (email.isEmpty() || senha.isEmpty()) {
-					JOptionPane.showMessageDialog(null, "Por favor, preencha todos os campos.");
-					return;
-				}
+		        // Verifica se os campos estão vazios
+		        if (email.isEmpty() || senha.isEmpty()) {
+		            JOptionPane.showMessageDialog(null, "Por favor, preencha todos os campos.");
+		            return;
+		        }
 
-				// Validar formato do email
-				if (!ValidacaoEmail(email)) {
-					JOptionPane.showMessageDialog(null, "Por favor, insira um e-mail válido.");
-					return;
-				}
+		        // Validar formato do email
+		        if (!ValidacaoEmail(email)) {
+		            JOptionPane.showMessageDialog(null, "Por favor, insira um e-mail válido.");
+		            return;
+		        }
 
-				// Criação da conexão com o banco
-				conexao = new ConectaMySQL();
-				Connection conn = null;
+		        // Criação da conexão com o banco
+		        conexao = new ConectaMySQL();
+		        Connection conn = null;
 
-				try {
-					// Tentando abrir a conexão com o banco de dados
-					conn = conexao.openDB();
+		        try {
+		            // Tentando abrir a conexão com o banco de dados
+		            conn = conexao.openDB();
 
-					if (conn == null) {
-						JOptionPane.showMessageDialog(null, "Erro de conexão com o banco de dados.");
-						return;
-					}
+		            if (conn == null) {
+		                JOptionPane.showMessageDialog(null, "Erro de conexão com o banco de dados.");
+		                return;
+		            }
 
-					// A consulta SQL
-					String sql = "SELECT nome, perfil FROM usuarios WHERE email = ? AND senha = ?";
+		            // A consulta SQL
+		            String sql = "SELECT nome, perfil FROM usuarios WHERE email = ? AND senha = ?";
 
-					// Preparando a consulta
-					try (PreparedStatement stmt = conn.prepareStatement(sql)) {
-						stmt.setString(1, email); // Passando o e-mail para o PreparedStatement
-						stmt.setString(2, senha); // Passando a senha para o PreparedStatement
+		            // Preparando a consulta
+		            try (PreparedStatement stmt = conn.prepareStatement(sql)) {
+		                stmt.setString(1, email); // Passando o e-mail para o PreparedStatement
+		                stmt.setString(2, senha); // Passando a senha para o PreparedStatement
 
-						// Executando a consulta
-						try (ResultSet rs = stmt.executeQuery()) {
-							if (rs.next()) {
-								String nomeUsuario = rs.getString("nome"); // Recupera o nome do banco de dados
-								String perfilUsuario = rs.getString("perfil");
+		                // Executando a consulta
+		                try (ResultSet rs = stmt.executeQuery()) {
+		                    if (rs.next()) {
+		                        String nomeUsuario = rs.getString("nome"); // Recupera o nome do banco de dados
+		                        String perfilUsuario = rs.getString("perfil");
 
-								// Define a variável estática nomeUsuarioLogado na classe Cardapio
-								Cardapio.usuarioLogado = true;
-								Cardapio.nomeUsuarioLogado = nomeUsuario; // Atribui o nome ao Cardapio
+		                        // Define a variável estática nomeUsuarioLogado na classe Cardapio
+		                        Cardapio.usuarioLogado = true;
+		                        Cardapio.nomeUsuarioLogado = nomeUsuario; // Atribui o nome ao Cardapio
 
-								// Cria a instância do cardápio e faz a transição
-								Cardapio cardapio = new Cardapio();
-								cardapio.setVisible(true); // Torna a tela do Cardápio visível
-								cardapio.ocultarBotoesLoginECadastrar(); // Oculta os botões de login e cadastro
+		                        // Chama o método RecuperarDadosUsuario passando o email
+		                        Perfil perfil = new Perfil();
+		                       perfil.RecuperarDadosUsuario(email);
 
-								SwingUtilities.invokeLater(new Runnable() {
-									@Override
-									public void run() {
-										Perfil perfil = new Perfil();
-										perfil.habilitarCampos(); // Habilita os campos no thread da interface gráfica
-									}
-								});
+		                        // Cria a instância do cardápio e faz a transição
+		                        Cardapio cardapio = new Cardapio();
+		                        cardapio.setVisible(true); // Torna a tela do Cardápio visível
+		                        cardapio.ocultarBotoesLoginECadastrar(); // Oculta os botões de login e cadastro
 
-								// Se o usuário for administrador, adicionar o menu de administração
-								if ("admin".equals(perfilUsuario)) {
-									Cardapio.adminLogado = true;
-									cardapio.mostrarMenu();
-								}
+		                        SwingUtilities.invokeLater(new Runnable() {
+		                            @Override
+		                            public void run() {
+		                                Perfil perfil = new Perfil();
+		                                perfil.habilitarCampos(); // Habilita os campos no thread da interface gráfica
+		                            }
+		                        });
 
-								dispose(); // Fecha a tela de login
-							} else {
-								JOptionPane.showMessageDialog(null, "E-mail/Senha incorreta ou não existe");
-							}
-						}
-					}
-				} catch (SQLException ex) {
-					// Captura qualquer erro de execução da consulta SQL
-					ex.printStackTrace(); // Exibe a pilha de erro no console
-					JOptionPane.showMessageDialog(null, "Erro ao acessar o banco de dados: " + ex.getMessage());
-				}
-			}
+		                        // Se o usuário for administrador, adicionar o menu de administração
+		                        if ("admin".equals(perfilUsuario)) {
+		                            Cardapio.adminLogado = true;
+		                            cardapio.mostrarMenu();
+		                        }
+
+		                        dispose(); // Fecha a tela de login
+		                    } else {
+		                        JOptionPane.showMessageDialog(null, "E-mail/Senha incorreta ou não existe");
+		                    }
+		                }
+		            }
+		        } catch (SQLException ex) {
+		            // Captura qualquer erro de execução da consulta SQL
+		            ex.printStackTrace(); // Exibe a pilha de erro no console
+		            JOptionPane.showMessageDialog(null, "Erro ao acessar o banco de dados: " + ex.getMessage());
+		        }
+		    }
 		});
 	}
 
